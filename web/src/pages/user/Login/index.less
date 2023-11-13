@@ -1,0 +1,242 @@
+@import '~antd/es/style/themes/default.less';
+
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  overflow: auto;
+  background: #fff;
+}
+
+.lang {
+  width: 100%;
+  height: 40px;
+  line-height: 44px;
+  text-align: right;
+  :global(.ant-dropdown-trigger) {
+    margin-right: 24px;
+  }
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
+  justify-content: center;
+  width: 500px;
+  flex: 1;
+}
+
+.image {
+  position: relative;
+  z-index: 1;
+  width: 0;
+  background-image: url('../../../assets/PTIT_Cover2.jpg');
+  // background-repeat: no-repeat;
+  // background-position: center center;
+  background-size: 100% 100%;
+}
+
+.iconhuongdan {
+  margin-right: 16px;
+  color: #0033CD !important;
+  font-size: 25px;
+  box-shadow: 0 1px 2px -2px rgb(0, 0, 0, 0.1), 0 3px 6px 0 rgb(0, 0, 0, 0.05), 0 5px 12px 4px #ccc !important;
+}
+
+.containericonhuongdan {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+}
+
+.main {
+  position: relative;
+  display: block;
+  width: 400px;
+  // min-height: 100vh;
+  padding: 40px 40px 0 40px;
+  @media screen and (max-width: @screen-sm) {
+    width: 95%;
+    max-width: 450px;
+  }
+
+  :global {
+    .@{ant-prefix}-tabs-nav-list {
+      margin: auto;
+      font-size: 16px;
+    }
+  }
+
+  .icon {
+    margin-left: 16px;
+    color: rgba(0, 0, 0, 0.2);
+    font-size: 24px;
+    vertical-align: middle;
+    cursor: pointer;
+    transition: color 0.3s;
+
+    &:hover {
+      color: @primary-color;
+    }
+  }
+
+  .other {
+    margin-top: 24px;
+    line-height: 22px;
+    text-align: left;
+    .register {
+      float: right;
+    }
+  }
+
+  .prefixIcon {
+    margin-right: 6px;
+    color: @primary-color;
+    font-size: @font-size-base;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .content {
+    width: 400px;
+  }
+  .image {
+    width: calc(100% - 400px);
+    // display: none;
+  }
+
+  .main {
+    padding-top: 70px;
+  }
+}
+
+@media (min-width: @screen-xxl-min) {
+  .content {
+    width: 450px;
+  }
+
+  .image {
+    width: calc(100% - 450px);
+  }
+
+  .main {
+    width: 450px;
+    padding-top: 70px;
+  }
+}
+
+.top {
+  text-align: center;
+}
+
+.header {
+  height: 44px;
+  line-height: 44px;
+  a {
+    text-decoration: none;
+  }
+}
+
+.logo {
+  height: 44px;
+  margin-right: 16px;
+  vertical-align: top;
+}
+
+.title {
+  position: relative;
+  top: 2px;
+  color: @heading-color;
+  font-weight: 600;
+  font-size: 30px;
+}
+
+.desc {
+  margin-top: 12px;
+  margin-bottom: 40px;
+  color: @text-color-secondary;
+  font-size: @font-size-base;
+}
+
+@media screen and (max-width: @screen-xl) {
+  .title {
+    font-size: 25px;
+  }
+}
+
+@media screen and (max-width: @screen-lg) {
+  .title {
+    font-size: 20px;
+  }
+}
+
+@media screen and (max-width: 899px) {
+  .title {
+    font-size: 19px;
+  }
+}
+
+@media screen and (max-width: 695px) {
+  .header {
+    margin-bottom: 30px;
+  }
+}
+
+@media screen and (max-width: 377px) {
+  .header {
+    margin-bottom: 80px;
+  }
+}
+
+.googleButton {
+  // margin-left: 20%;
+  justify-content: center;
+  width: 100%;
+  height: 38px;
+  border: 1px solid #ccc !important;
+  border-radius: 6px !important;
+  @media screen and(max-width: @screen-xs) {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+.googleButton:hover {
+  cursor: pointer;
+}
+
+.facebookButton {
+  width: 100%;
+  height: 40px;
+  padding: 8px;
+  color: #fff;
+  text-align: center;
+  // margin: 20px;
+  // margin-left: 20%;
+  background-color: #4c69ba;
+  border: none;
+  border-radius: 6px;
+  outline: none;
+  i {
+    margin: 0 15 0 -35px;
+  }
+  @media screen and(max-width: @screen-xs) {
+    width: 80%;
+    margin-left: 10%;
+  }
+}
+
+.facebookButton:hover {
+  cursor: pointer;
+}
+
+.titleSystemName {
+  color: #0033CD;
+  font-size: 33px;
+  line-height: 40px;
+  text-align: center;
+}

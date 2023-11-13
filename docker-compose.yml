@@ -1,0 +1,70 @@
+version: '3.8'
+
+networks:
+  ssadapter:
+    driver: bridge
+
+services:
+  ssadapterdbhost:
+    container_name: ssadapterdbhost
+    hostname: ssadapterdbhost
+    image: postgres:12
+    env_file:
+      - ./.env
+    ports:
+      - $POSTGRES_EXTERNAL_PORT:$POSTGRES_INTERNAL_PORT
+    networks:
+      ssadapter:
+          null
+    restart: unless-stopped
+    volumes:
+      - $MOUNT_PGDATA:$PGDATA
+  ssadapterapi:
+    container_name: ssadapterapi
+    hostname: ssadapterapi
+    env_file:
+      - ./.env
+    build:
+      context: ./ssadapter
+      dockerfile: Dockerfile
+      args:
+        - SERVER_INTERNAL_PORT=$SERVER_INTERNAL_PORT
+        - POSTGRES_HOST=$POSTGRES_HOST
+        - POSTGRES_INTERNAL_PORT=$POSTGRES_INTERNAL_PORT
+        - POSTGRES_DB=$POSTGRES_DB
+        - POSTGRES_USER=$POSTGRES_USER
+        - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+        - API_WORK_DIR=$API_WORK_DIR
+    depends_on:
+      - ssadapterdbhost
+    ports:
+      - $SERVER_EXTERNAL_PORT:$SERVER_INTERNAL_PORT
+    networks:
+      ssadapter:
+          null
+    restart: unless-stopped
+    volumes:
+      - ./ssadapter/src/main/:$API_WORK_DIR/src/main
+      - ./ssadapter/src/test:$API_WORK_DIR/src/test
+      - ./ssadapter/target:$API_WORK_DIR/target
+      - ./ssadapter/libs:$API_WORK_DIR/libs
+      - ./ssadapter/:$API_WORK_DIR
+  ssadapterweb:
+    container_name: ssadapterweb
+    hostname: ssadapterweb
+    env_file:
+      - ./.env
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - WEB_WORK_DIR=$WEB_WORK_DIR
+    ports:
+      - 8008:8000
+    volumes:
+      - ./web/src:$WEB_WORK_DIR/src
+      - ./web/config:$WEB_WORK_DIR/config
+    networks:
+      ssadapter:
+          null
+    restart: unless-stopped

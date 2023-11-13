@@ -1,5 +1,5 @@
-const ip3 = 'http://localhost:9999'; // ip dev
-const ip = 'http://localhost:9999'; // ip dev
+const ip3 = 'http://192.168.10.171:9999'; // ip dev
+const ip = 'http://192.168.10.171:9999'; // ip dev
 
 const ipPayment = 'https://tssv3.aisenote.com/payment'; // ip dev
 

@@ -193,8 +193,9 @@ public class EdXMLBuild {
 		ed.setHeader(new Header(header, trList, signature));
 
 		// khoi tao file dinh kem
-		ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment("209", fileName,
-				fileName, ResourceUtils.getFile("classpath:sendAttachs/" + fileName)));
+		System.out.println("abcabcabcabacbacbacbacba");
+		ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment("209", fileName, fileName, ResourceUtils.getFile(Utils.uploadDir + fileName)));
+		System.out.println("abcabcabcabacbacbacbacba");
 
 		// ghi file ra thu muc
 		Content content = EdXmlBuilder.build(ed, Utils.EDocDir);

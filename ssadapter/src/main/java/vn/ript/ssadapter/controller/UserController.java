@@ -40,23 +40,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.google.common.collect.ArrayListMultimap;
 
-import vn.ript.ssadapter.utils.Response;
+import vn.ript.ssadapter.utils.CustomResponse;
+import vn.ript.ssadapter.utils.CustomResponseData;
+import vn.ript.ssadapter.utils.Utils;
 
 @RestController
 @RequestMapping("/api/v1")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class User {
+public class UserController {
 
     @RequestMapping(path = "/user", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> login(@RequestHeader Map<String, String> headers) {
-        // HttpResponse httpResponse;
-        // httpResponse = httpClient.execute(httpPost);
-        // if (httpResponse.getStatusLine().getStatusCode() == 200) {
-        // System.out.println("Form data uploaded successfully!");
-        // } else {
-        // System.out.println("Error uploading form data: " +
-        // httpResponse.getStatusLine());
-        // }
         System.out.println(headers);
         Map<String, Object> resData = new HashMap<String, Object>();
         resData.put("_id", 1);
@@ -66,7 +60,7 @@ public class User {
         resData.put("ten", "Tung");
         resData.put("gioiTinh", "nam");
         resData.put("email", "tungbv5122001@gmail.com");
-        return Response.Response_data(200, resData);
+        return CustomResponse.Response_data(200, resData);
     }
 
     @RequestMapping(path = "/members", method = RequestMethod.GET)
@@ -82,7 +76,7 @@ public class User {
                     .setSSLSocketFactory(sslConnectionSocketFactory)
                     .build();
 
-            HttpGet httpGet = new HttpGet("https://10.29.1.228/listClients");
+            HttpGet httpGet = new HttpGet("https://10.231.216.165/listClients");
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");
@@ -102,7 +96,7 @@ public class User {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             List<Object> members = jsonObject.getJSONArray("member").toList();
 
-            return Response.Response_data(httpResponse.getStatusLine().getStatusCode(), members);
+            return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), members);
         } catch (IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -132,7 +126,7 @@ public class User {
                     .build();
 
             String subsystem_code = subsystemCode.replace(':', '/');
-            HttpGet httpGet = new HttpGet("https://10.29.1.228/r1/" + subsystem_code + "/listMethods");
+            HttpGet httpGet = new HttpGet("https://10.231.216.165/r1/" + subsystem_code + "/listMethods");
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");
@@ -153,13 +147,14 @@ public class User {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             List<Object> services = jsonObject.getJSONArray("service").toList();
 
-            return Response.Response_data(httpResponse.getStatusLine().getStatusCode(), services);
+            return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), services);
         } catch (IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
+
     @RequestMapping(path = "/getEndpoints", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> getEndpoints(
             // @PathVariable String subsystemId,
@@ -183,7 +178,7 @@ public class User {
                     .build();
 
             String subsystem_code = subsystemCode.replace(':', '/');
-            HttpGet httpGet = new HttpGet("https://10.29.1.228/r1/" + subsystem_code + "/" + serviceCode + "/" + serviceEndpoint);
+            HttpGet httpGet = new HttpGet("https://10.231.216.165/r1/" + subsystem_code + "/" + serviceCode + "/" + serviceEndpoint);
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");
@@ -204,11 +199,12 @@ public class User {
             JSONObject jsonObject = new JSONObject(jsonResponse);
             Map<String, Object> endpoints = jsonObject.toMap();
 
-            return Response.Response_data(httpResponse.getStatusLine().getStatusCode(), endpoints);
+            return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), endpoints);
         } catch (IOException | NoSuchAlgorithmException | KeyStoreException | KeyManagementException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return null;
     }
+
 }

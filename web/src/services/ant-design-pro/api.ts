@@ -30,7 +30,7 @@ export async function login(payload: {
 }
 
 export async function adminlogin(payload: {username?: string; password?: string }) {
-  return axios.post(`${ip3}/auth/login`, payload);
+  return axios.post(`${ip3}/api/v1/auth/login`, payload);
 }
 
 export async function changePassword(payload: { oldPassword: string; newPassword: string }) {

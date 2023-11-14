@@ -15,7 +15,7 @@ public class Utils {
 
     public static String EDocDir = System.getenv("API_WORK_DIR") + "/src/main/resources/edocs/";
     public static String uploadDir = System.getenv("API_WORK_DIR") + "/src/main/resources/vanban/";
-    public static String ipSS = System.getenv("IP_SS") != null ? System.getenv("IP_SS") : "10.231.216.165";
+    public static String ipSS = System.getenv("IP_SS") != null ? System.getenv("IP_SS") : "localhost";
     public static Map<String, String> envs = System.getenv();
 
     public static String UUID() {

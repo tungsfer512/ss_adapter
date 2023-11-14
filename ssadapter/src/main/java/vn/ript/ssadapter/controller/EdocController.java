@@ -75,6 +75,8 @@ public class EdocController {
                 
                 EDoc eDoc = new EDoc(fileUUID, fileUUID, fileUUID, fileUUID, serviceType, messageType, Utils.datetime_now(), Utils.datetime_now(), edoc_64, from, "to", "wait", "wait", originFileName, "notation", "send status desc", "receive status desc");
                 
+                // Call api Xroad lienthongvanban
+
                 System.out.println(attachFilePath);
                 eDocService.saveEDoc(eDoc);
                 System.out.println(attachFilePath);
@@ -109,8 +111,7 @@ public class EdocController {
     @GetMapping("/getSentEdocList")
     public ResponseEntity<Map<String, Object>> getSentEdocList(
             @RequestHeader(name = "servicetype", required = true) String serviceType,
-            @RequestHeader(name = "messagetype", required = true) String messageType,
-            @RequestHeader(name = "docId", required = true) String docId) {
+            @RequestHeader(name = "messagetype", required = true) String messageType) {
         try {
             List<EDoc> edocs = eDocService.getSentEdocList();
             return CustomResponse.Response_data(200, edocs);

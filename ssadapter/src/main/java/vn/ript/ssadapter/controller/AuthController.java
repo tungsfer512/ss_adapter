@@ -41,7 +41,7 @@ public class AuthController {
     @RequestMapping(path = "/login", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> login(@RequestBody Map<String, String> login) {
         
-        String url = "https://10.231.216.165:4000/login";
+        String url = "https://" + Utils.ipSS + ":4000/login";
 
         CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url);
 

@@ -76,7 +76,7 @@ public class UserController {
                     .setSSLSocketFactory(sslConnectionSocketFactory)
                     .build();
 
-            HttpGet httpGet = new HttpGet("https://10.231.216.165/listClients");
+            HttpGet httpGet = new HttpGet("https://" + Utils.ipSS + "/listClients");
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");
@@ -126,7 +126,7 @@ public class UserController {
                     .build();
 
             String subsystem_code = subsystemCode.replace(':', '/');
-            HttpGet httpGet = new HttpGet("https://10.231.216.165/r1/" + subsystem_code + "/listMethods");
+            HttpGet httpGet = new HttpGet("https://" + Utils.ipSS + "/r1/" + subsystem_code + "/listMethods");
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");
@@ -178,7 +178,7 @@ public class UserController {
                     .build();
 
             String subsystem_code = subsystemCode.replace(':', '/');
-            HttpGet httpGet = new HttpGet("https://10.231.216.165/r1/" + subsystem_code + "/" + serviceCode + "/" + serviceEndpoint);
+            HttpGet httpGet = new HttpGet("https://" + Utils.ipSS + "/r1/" + subsystem_code + "/" + serviceCode + "/" + serviceEndpoint);
 
             // Set header accept json
             httpGet.setHeader("Accept", "application/json");

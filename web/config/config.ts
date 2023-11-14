@@ -127,6 +127,27 @@ export default defineConfig({
       component: './Home/subsystem',
     },
     {
+      hideInMenu: false,
+      path: `/edocs`,
+      icon: 'FileOutlined',
+      name: 'Liên thông văn bản',
+      // component: './LienThongVanBan',
+      routes: [
+        {
+          name: 'Văn bản đến',
+          icon: 'FileSyncOutlined',
+          path: '/edocs/received',
+          component: './LienThongVanBan/VanBanDen',
+        },
+        {
+          name: 'Văn bản đi',
+          icon: 'FileTextOutlined',
+          path: '/edocs/sent',
+          component: './LienThongVanBan/VanBanDi',
+        },
+      ],
+    },
+    {
       component: '404',
     },
   ],

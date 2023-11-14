@@ -125,19 +125,4 @@ public class EdocLienThongController {
         }
     }
 
-    @PostMapping(value = "/test")
-    public ResponseEntity<Map<String, Object>> test(
-            @RequestPart(name = "certificate", required = true) MultipartFile certificate,
-            @RequestPart(name = "certificate_profile_info", required = true) String certificate_profile_info) {
-        try {
-            if (!certificate.isEmpty()) {
-                String originFileName = certificate.getOriginalFilename();
-                return CustomResponse.Response_data(200, originFileName + " " + certificate_profile_info);
-            } else {
-                return CustomResponse.Response_data(500, "Loi loi");
-            }
-        } catch (Exception e) {
-            return CustomResponse.Response_data(500, e);
-        }
-    }
 }

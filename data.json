@@ -1,0 +1,28 @@
+{
+    "auth": {
+        "username": "xrd",
+        "password": "secret"
+    },
+    "organizations" : [
+        {
+            "code": "CS:GOV:SS1MC:SS1SUB1",
+            "pid": "",
+            "name": "SS1 Subsystem 1",
+            "address": "SS1 Subsystem 1 Address",
+            "email": "ss1sub1@gmail.com",
+            "telephone": "0123456789",
+            "fax": "0123456789",
+            "website": "ss1sub1.com.vn"
+        },
+        {
+            "code": "CS:GOV:SS2MC:SS2SUB1",
+            "pid": "",
+            "name": "SS2 Subsystem 1",
+            "address": "SS2 Subsystem 1 Address",
+            "email": "ss2sub1@gmail.com",
+            "telephone": "0123456780",
+            "fax": "0123456780",
+            "website": "ss2sub1.com.vn"
+        }
+    ]
+}

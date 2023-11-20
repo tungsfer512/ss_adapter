@@ -31,3 +31,10 @@ build/
 
 ### VS Code ###
 .vscode/
+
+
+### Resource files ###
+**/resources/edocs/*
+**/resources/attachments/*
+!**/resources/edocs/.gitkeep
+!**/resources/attachments/.gitkeep

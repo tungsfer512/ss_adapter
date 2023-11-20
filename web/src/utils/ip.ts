@@ -1,5 +1,5 @@
-const ip3 = 'http://222.252.29.85:17199'; // ip dev
-const ip = 'http://222.252.29.85:17199'; // ip dev
+const ip3 = 'http://222.252.29.85:17399'; // ip dev
+const ip = 'http://222.252.29.85:17399'; // ip dev
 
 const ipPayment = 'https://tssv3.aisenote.com/payment'; // ip dev
 

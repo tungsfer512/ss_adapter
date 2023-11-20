@@ -9,6 +9,7 @@ import org.springframework.util.ResourceUtils;
 
 import com.google.common.collect.Lists;
 import com.vnpt.xml.base.Content;
+import com.vnpt.xml.base.builder.BuildException;
 import com.vnpt.xml.base.header.Bussiness;
 import com.vnpt.xml.base.header.Header;
 import com.vnpt.xml.base.header.BussinessDocumentInfo;
@@ -36,9 +37,12 @@ import com.vnpt.xml.ed.header.DocumentType;
 import com.vnpt.xml.ed.header.MessageHeader;
 import com.vnpt.xml.ed.header.OtherInfo;
 import com.vnpt.xml.ed.header.PromulgationInfo;
+import com.vnpt.xml.status.Status;
+import com.vnpt.xml.status.builder.StatusXmlBuilder;
+import com.vnpt.xml.status.header.MessageStatus;
 
 public class EdXMLBuild {
-    public static Content createEdoc_new(String fileName) throws Exception {
+	public static Content createEdoc_new(String fileName) throws Exception {
 		Ed ed = new Ed();
 		// khoi tao code cho van ban
 		Code code = new Code("7816", "VPCP-TTĐT");
@@ -107,10 +111,10 @@ public class EdXMLBuild {
 		header.setDocumentId("000.00.00.G22,2015/09/30,7816/VPCP-TTĐT");
 
 		// khoi tao thong tin van ban phan hoi va phuc dap
-		ResponseFor responseFor = new ResponseFor("000.00.00.H41", "267/VPCP-TTĐT", new Date(),
-				"000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
-		ResponseFor responseFor2 = new ResponseFor("000.00.00.H14", "267/VPCP-TTĐT", new Date(),
-				"000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
+		// ResponseFor responseFor = new ResponseFor("000.00.00.H41", "267/VPCP-TTĐT", new Date(),
+		// 		"000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
+		// ResponseFor responseFor2 = new ResponseFor("000.00.00.H14", "267/VPCP-TTĐT", new Date(),
+				// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
 
 		// add responseFor
 		// header.setResponseFor(responseFor);
@@ -193,13 +197,57 @@ public class EdXMLBuild {
 		ed.setHeader(new Header(header, trList, signature));
 
 		// khoi tao file dinh kem
-		System.out.println("abcabcabcabacbacbacbacba");
-		ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment("209", fileName, fileName, ResourceUtils.getFile(Utils.uploadDir + fileName)));
-		System.out.println("abcabcabcabacbacbacbacba");
-
+		if (fileName != null) {
+			ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment("209", fileName, fileName,
+					ResourceUtils.getFile(Utils.uploadDir + fileName)));
+		}
 		// ghi file ra thu muc
 		Content content = EdXmlBuilder.build(ed, Utils.EDocDir);
 
+		return content;
+	}
+
+	
+
+	public static Content create_status(String status_code) {
+		// create header
+		Header header = new Header();
+		MessageStatus msgStatus = new MessageStatus();
+
+		// set ResponseFor Tag
+		msgStatus.setResponseFor(new ResponseFor("000.00.00.G22", "7816/VPCP-TTĐT", new Date(),
+				"000.00.00.G22,2015/09/30,7816/VPCP-TTĐT"));
+		// set from information (organization)
+		msgStatus.setFrom(new Organization(
+				"000.00.00.H41",
+				"UBND Tỉnh Nghệ An",
+				"UBND Tỉnh Nghệ An",
+				"Số 03, đường Trường Thi, Thành phố Vinh, Tỉnh Nghệ An, Việt Nam", "nghean@gov.vn", "0383 840418",
+				"0383 843049", "www.nghean.vn"));
+
+		// set status code info
+		msgStatus.setStatusCode(status_code);
+		msgStatus.setDescription(
+				"Văn thư - Phòng Văn thư - Lưu trữ: Đã đến - Phần mềm QLVB đã nhận nhưng văn thư chưa xử lý");
+		msgStatus.setTimestamp(new Date());
+
+		// set staff details
+		StaffInfo staffInfo = new StaffInfo();
+		staffInfo.setDepartment("Văn thư văn phòng");
+		staffInfo.setStaff("Nguyễn Thị Ngọc Trâm");
+		staffInfo.setEmail("vanthuvanphong@gov.vn");
+		staffInfo.setMobile("84912000001");
+		msgStatus.setStaffInfo(staffInfo);
+		header.setMessageHeader(msgStatus);
+
+		// build status edxml
+
+		Content content = null;
+		try {
+			content = StatusXmlBuilder.build(new Status(header), Utils.EDocDir);
+		} catch (BuildException e) {
+			e.printStackTrace();
+		}
 		return content;
 	}
 

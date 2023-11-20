@@ -16,7 +16,7 @@ const Services = () => {
     Xmodel.get_endpoint({
       'Subsystem-Code': subsystemId,
       'Service-Code': serviceCode,
-      'X-Road-Client': 'CS/GOV/SS1MC/SS1IS1',
+      'X-Road-Client': 'CS/GOV/SS1MC/SS1SUB1',
       'Service-Endpoint': item.path,
     })
   }
@@ -30,7 +30,7 @@ const Services = () => {
     // Xmodel.setData(xx_data);
     Xmodel.get_services({
       'Subsystem-Code': subsystemId,
-      'X-Road-Client': 'CS/GOV/SS1MC/SS1IS1'
+      'X-Road-Client': 'CS/GOV/SS1MC/SS1SUB1'
     });
     console.log('useEffect', Xmodel?.serviceData?.filter((item) => item?.id?.object_type == 'MEMBER'));
   }, []);

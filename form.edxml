@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.mic.gov.vn/TBT/QCVN_102_2016">
+  <Boundary>LzQ5d9rbLkm1K9QwOd6DiQzz</Boundary>
+  <ContentId>8FB2FCA1433A35AB4725857B0030382A-02-06-2020.edxml</ContentId>
+  <ContentType>text/xml</ContentType>
+  <edXML:edXMLEnvelope xmlns:edXML="http://www.mic.gov.vn/TBT/QCVN_102_2016"> 
+    <edXML:edXMLHeader>
+      <edXML:MessageHeader>
+        <edXML:From> <!-- Thông tin đơn vị gửi -->
+          <edXML:OrganId>Mã định danh điện tử theo QCVN 102 BTTTT</edXML:OrganId>
+          <edXML:OrganizationInCharge>Mã đơn vị chủ quản trực tiếp</edXML:OrganizationInCharge> <!--optional-->
+          <edXML:OrganName>Tên đơn vị</edXML:OrganName>
+          <edXML:OrganAdd>Địa chỉ đơn vị</edXML:OrganAdd>
+          <edXML:Email>Email đơn  vị</edXML:Email> <!--optional-->
+          <edXML:Telephone>Số điện thoại đơn vị</edXML:Telephone> <!--optional-->
+          <edXML:Fax>Số Fax đơn vị</edXML:Fax> <!--optional-->
+          <edXML:Website>Website đơn vị</edXML:Website> <!--optional-->
+        </edXML:From>
+        <edXML:To> <!-- Thông tin đơn vị nhận -->
+          <edXML:OrganId>Mã định danh điện tử theo QCVN 102 BTTTT</edXML:OrganId>
+          <edXML:OrganizationInCharge>Mã đơn vị chủ quản trực tiếp</edXML:OrganizationInCharge> <!--optional-->
+          <edXML:OrganName>Tên đơn vị</edXML:OrganName>
+          <edXML:OrganAdd>Địa chỉ đơn vị</edXML:OrganAdd>
+          <edXML:Email>Email đơn  vị</edXML:Email> <!--optional-->
+          <edXML:Telephone>Số điện thoại đơn vị</edXML:Telephone> <!--optional-->
+          <edXML:Fax>Số Fax đơn vị</edXML:Fax> <!--optional-->
+          <edXML:Website>Website đơn vị</edXML:Website> <!--optional-->
+        </edXML:To>
+        <edXML:Code><!--Số hiệu, ký hiệu VB gửi đi-->
+          <edXML:CodeNumber>15,01/2020,... (Số hiệu VB gửi đi)</edXML:CodeNumber>
+          <edXML:CodeNotation>NQ-CP,CT-TTg,...(Ký hiệu VB gửi đi)</edXML:CodeNotation>
+        </edXML:Code>
+        <edXML:PromulgationInfo> <!--Địa danh, địa điểm, ngày tháng năm ban hành VB-->
+          <edXML:Place>Sở Tư pháp,Hà Nội,...(Địa danh, địa điểm)</edXML:Place> <!--optional-->
+          <edXML:PromulgationDate>2020/06/02(Ngày tháng nam ban hành yyyy/mm/dd)</edXML:PromulgationDate>
+        </edXML:PromulgationInfo>
+        <edXML:DocumentType> <!--Loại VB--> <!--optional-->
+          <edXML:Type>1</edXML:Type> <!--optional-->
+          <edXML:TypeName>Công văn</edXML:TypeName> <!--optional-->
+          <!-- <edXML:TypeDetail>0</edXML:TypeDetail> --> <!--optional-->
+        </edXML:DocumentType>
+        <edXML:Subject>Trích yêu nội dung VB cần gửi đi</edXML:Subject>
+        <edXML:Content>Nội dung VB gửi đi</edXML:Content> <!--optional-->
+        <edXML:SignerInfo> <!--Thông tin người ký VB--> <!--optional-->
+          <edXML:Competence>TL,KT,...(Quyền hạn của người ký VB)</edXML:Competence> <!--optional-->
+          <edXML:Position>Phó giám đốc(Chức vụ người ký)</edXML:Position> <!--optional-->
+          <edXML:FullName>Hoàng Văn Truyền(Họ tên người ký)</edXML:FullName> <!--optional-->
+        </edXML:SignerInfo>
+        <edXML:DueDate>2020/06/04(Hạn trả lời của VB)</edXML:DueDate> <!--optional-->
+        <edXML:ToPlaces> <!--Danh sách nơi nhận và lưu VB, không tính các đơn vị trực tiếp giải quyết trong phần To--> <!--optional-->
+          <edXML:Place>000.00.00.G15(Tên cơ quan, tổ chức, đơn vị và cá nhân nhận VB)</edXML:Place> <!--optional-->
+          <edXML:Place>000.00.00.G16(Tên cơ quan, tổ chức, đơn vị và cá nhân nhận VB)</edXML:Place> <!--optional-->
+        </edXML:ToPlaces>
+        <edXML:OtherInfo> <!--Các thông tin mô tả khác--> <!--optional-->
+          <edXML:Priority>0(Độ ưu tiên VB: 0-Thường, 1-Khẩn, 2-Thượng khẩn, 3-Hỏa tốc, 4-Hỏa tốc hẹn giờ)</edXML:Priority> <!--optional-->
+          <edXML:SphereOfPromulgation>Bổ trợ TP(Phạm vi lưu hành của VB)</edXML:SphereOfPromulgation> <!--optional-->
+          <edXML:TyperNotation>Trịnh Xuân Khánh(Ký hiệu đơn vị, tổ chức or tên người soạn thảo VB)</edXML:TyperNotation> <!--optional-->
+          <edXML:PromulgationAmount>0(Số lượng phát hành VB)</edXML:PromulgationAmount> <!--optional-->
+          <edXML:PageAmount>0(Số trang)</edXML:PageAmount> <!--optional-->
+          <edXML:Appendixes> <!--Phụ lục đính kèm với VB--> <!--optional-->
+            <edXML:Appendix>Tên phụ lục đính kèm</edXML:Appendix> <!--optional-->
+            <edXML:Appendix>Tên phụ lục đính kèm</edXML:Appendix> <!--optional-->
+          </edXML:Appendixes>
+        </edXML:OtherInfo>
+        <edXML:SteeringType>1(Loại chỉ đạo: 1-Không phải chỉ đạo, 2-Chỉ đạo, 3-Báo cáo chỉ đạo)</edXML:SteeringType>
+        <edXML:DocumentId>000.00.14.H56,2020/06/02,808/VNPTTEST</edXML:DocumentId>
+      </edXML:MessageHeader>
+      <edXML:TraceHeaderList id="3490sdo9" version="1.0" mustUnderstand="1" actor="http://schemas.xmlsoap.org/soap/actor/next">
+        <edXML:TraceHeader>
+          <edXML:OrganId>000.00.14.H56</edXML:OrganId>
+          <edXML:Timestamp>2020/06/02 15:48:40</edXML:Timestamp>
+        </edXML:TraceHeader>
+        <edXML:Bussiness>
+          <edXML:BussinessDocType>2</edXML:BussinessDocType>
+          <edXML:BussinessDocReason>Văn bản điện tử mới</edXML:BussinessDocReason>
+          <edXML:DocumentId>000.00.14.H56,2020/06/02,808/VNPTTEST</edXML:DocumentId>
+          <edXML:StaffInfo>
+            <edXML:Department>Sở Tư pháp</edXML:Department>
+            <edXML:Staff>Trịnh Xuân Khánh</edXML:Staff>
+            <edXML:Mobile />
+            <edXML:Email />
+          </edXML:StaffInfo>
+          <edXML:Paper>0</edXML:Paper>
+        </edXML:Bussiness>
+      </edXML:TraceHeaderList>
+      <edXML:DigitalSignature />
+    </edXML:edXMLHeader>
+    <edXML:edXMLBody>
+      <edXML:edXMLManifest version="1.0">
+        <edXML:Reference xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="cid:abf52b38-78f5-4008-b7cd-93ce4002ba45" xlink:role="XLinkRole" xlink:type="simple">
+          <edXML:Description>File dinh kem 1</edXML:Description>
+          <edXML:AttachmentName>Thông báo cấp GĐKHĐ VPCC ĐTXHòa(02.06.2020_15h46p34)_signed.pdf</edXML:AttachmentName>
+          <edXML:ContentType>application/pdf</edXML:ContentType>
+          <edXML:ContentId>cid:abf52b38-78f5-4008-b7cd-93ce4002ba45</edXML:ContentId>
+        </edXML:Reference>
+      </edXML:edXMLManifest>
+    </edXML:edXMLBody>
+  </edXML:edXMLEnvelope>
+  <AttachmentEncoded>
+    <Attachment>
+      <ContentType>application/pdf</ContentType>
+      <ContentId>abf52b38-78f5-4008-b7cd-93ce4002ba45</ContentId>
+      <Description>Mô tả file đính kèm</Description>
+      <ContentTransferEncoded>File đính kèm dạng base64</ContentTransferEncoded>
+      <AttachmentName>Tên file đính kèm được gửi lên</AttachmentName>
+    </Attachment>
+  </AttachmentEncoded>
+</edXML>

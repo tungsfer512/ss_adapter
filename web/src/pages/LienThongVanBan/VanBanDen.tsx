@@ -13,9 +13,12 @@ const VanBanDen = (): React.Fragment => {
   const vanbanModel = useModel('vanban');
 
   const handleTiepNhan = (record: IVanBanRecord) => {
-    vanbanModel.setVisibleForm(true);
-    vanbanModel.setEdit(true);
-    vanbanModel.setRecord(record);
+    let headers = {
+      docId: record.id,
+      status: '01',
+      to : 'CS:GOV:SS1MC:SS1SUB1',
+    }
+    vanbanModel.send_status_edoc(headers);
   };
 
   const handleTuChoi = async (record: IVanBanRecord) => {
@@ -186,6 +189,7 @@ const VanBanDen = (): React.Fragment => {
         title="Danh sách văn bản đến"
         columns={columns}
         hascreate={false}
+        border={true}
         formType={'Modal'}
         dependencies={[vanbanModel.page, vanbanModel.limit, vanbanModel.condition]}
         widthDrawer={800}
@@ -201,6 +205,7 @@ const VanBanDen = (): React.Fragment => {
         otherProps={{
           scroll: {
             x: 1000,
+            y: 535,
           },
         }}
       />

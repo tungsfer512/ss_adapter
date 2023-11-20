@@ -6,7 +6,6 @@ import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Base64;
-import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.util.ResourceUtils;
@@ -14,9 +13,9 @@ import org.springframework.util.ResourceUtils;
 public class Utils {
 
     public static String EDocDir = System.getenv("API_WORK_DIR") + "/src/main/resources/edocs/";
-    public static String uploadDir = System.getenv("API_WORK_DIR") + "/src/main/resources/vanban/";
-    public static String ipSS = System.getenv("IP_SS") != null ? System.getenv("IP_SS") : "localhost";
-    public static Map<String, String> envs = System.getenv();
+    public static String uploadDir = System.getenv("API_WORK_DIR") + "/src/main/resources/attachments/";
+    public static String SS_IP = System.getenv("SS_IP") != null ? System.getenv("SS_IP") : "localhost";
+    public static String SS_ID = System.getenv("SS_ID") != null ? System.getenv("SS_ID") : "";
 
     public static String UUID() {
         return UUID.randomUUID().toString();

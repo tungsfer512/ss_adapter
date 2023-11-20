@@ -60,7 +60,7 @@ services:
       args:
         - WEB_WORK_DIR=$WEB_WORK_DIR
     ports:
-      - 8008:8000
+      - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
     volumes:
       - ./web/src:$WEB_WORK_DIR/src
       - ./web/config:$WEB_WORK_DIR/config

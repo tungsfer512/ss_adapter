@@ -145,6 +145,18 @@ export default defineConfig({
           path: '/edocs/sent',
           component: './LienThongVanBan/VanBanDi',
         },
+        {
+          hideInMenu: true,
+          name: 'Chi tiết văn bản đến',
+          path: '/edocs/received/:id',
+          component: './LienThongVanBan/ChiTietVanBanDen',
+        },
+        {
+          hideInMenu: true,
+          name: 'Chi tiết văn bản đi',
+          path: '/edocs/sent/:id',
+          component: './LienThongVanBan/ChiTietVanBanDi',
+        },
       ],
     },
     {

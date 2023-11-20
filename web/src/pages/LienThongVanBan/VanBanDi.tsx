@@ -186,6 +186,7 @@ const VanBanDi = (): React.Fragment => {
         title="Danh sách văn bản đi"
         columns={columns}
         hascreate={true}
+        border={true}
         formType={'Modal'}
         dependencies={[vanbanModel.page, vanbanModel.limit, vanbanModel.condition]}
         widthDrawer={800}
@@ -201,6 +202,7 @@ const VanBanDi = (): React.Fragment => {
         otherProps={{
           scroll: {
             x: 1000,
+            y: 535,
           },
         }}
       />

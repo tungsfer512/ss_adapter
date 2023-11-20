@@ -15,11 +15,20 @@ public class EDocService {
     @Autowired
     EDocRepository eDocRepository;
 
-    public List<EDoc> getReceivedEdocList() {
-        return eDocRepository.findByFromNot("me");
+    public List<EDoc> getReceivedEdocList(String fromOrganization) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganizationNot("eDoc","edoc", fromOrganization);
     }
-    public List<EDoc> getSentEdocList() {
-        return eDocRepository.findByFrom("me");
+    
+    public List<EDoc> getSentEdocList(String fromOrganization) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","status", fromOrganization);
+    }
+    
+    public List<EDoc> getReceivedStatusEdocList(String fromOrganization) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganizationNot("eDoc","status", fromOrganization);
+    }
+    
+    public List<EDoc> getSentStatusEdocList(String fromOrganization) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","edoc", fromOrganization);
     }
     
     public EDoc sendEdoc(EDoc edoc) {
@@ -30,7 +39,7 @@ public class EDocService {
         return eDocRepository.findById(docId);
     }
 
-    public EDoc updateStatusByDocId(EDoc edoc) {
+    public EDoc updateEDoc(EDoc edoc) {
         return eDocRepository.save(edoc);
     }
 

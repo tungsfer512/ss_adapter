@@ -15,20 +15,20 @@ public class EDocService {
     @Autowired
     EDocRepository eDocRepository;
 
-    public List<EDoc> getReceivedEdocList(String fromOrganization) {
-        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganizationNot("eDoc","edoc", fromOrganization);
+    public List<EDoc> getReceivedEdocList(String toOrganizationId) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndToOrganization("eDoc","edoc", toOrganizationId);
     }
     
-    public List<EDoc> getSentEdocList(String fromOrganization) {
-        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","status", fromOrganization);
+    public List<EDoc> getSentEdocList(String fromOrganizationId) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","edoc", fromOrganizationId);
     }
     
-    public List<EDoc> getReceivedStatusEdocList(String fromOrganization) {
-        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganizationNot("eDoc","status", fromOrganization);
+    public List<EDoc> getReceivedStatusEdocList(String toOrganizationId) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndToOrganization("eDoc","status", toOrganizationId);
     }
     
-    public List<EDoc> getSentStatusEdocList(String fromOrganization) {
-        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","edoc", fromOrganization);
+    public List<EDoc> getSentStatusEdocList(String fromOrganizationId) {
+        return eDocRepository.findByServiceTypeAndMessageTypeAndFromOrganization("eDoc","status", fromOrganizationId);
     }
     
     public EDoc sendEdoc(EDoc edoc) {

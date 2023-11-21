@@ -119,7 +119,7 @@ public class EdocController {
             if (!checkOrganization.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-            List<EDoc> edocs = eDocService.getReceivedEdocList(Utils.SS_ID);
+            List<EDoc> edocs = eDocService.getReceivedEdocList(checkOrganization.get().getId());
             return CustomResponse.Response_data(200, edocs);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
@@ -134,7 +134,7 @@ public class EdocController {
             if (!checkOrganization.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-            List<EDoc> edocs = eDocService.getSentEdocList(Utils.SS_ID);
+            List<EDoc> edocs = eDocService.getSentEdocList(checkOrganization.get().getId());
             return CustomResponse.Response_data(200, edocs);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);

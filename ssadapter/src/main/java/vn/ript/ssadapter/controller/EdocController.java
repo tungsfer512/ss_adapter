@@ -52,12 +52,13 @@ public class EdocController {
             @RequestHeader(name = "to", required = true) String to) {
         try {
             Content content;
-            String UUID = Utils.UUID();
+            String id = Utils.UUID();
+            String senderDocId = Utils.UUID();
             if (!file.isEmpty()) {
                 String originFileName = file.getOriginalFilename();
                 List<String> attachFileInfo = Arrays.asList(originFileName.split("\\."));
                 String attachFileExt = attachFileInfo.get(attachFileInfo.size() - 1);
-                String attachFileName = UUID + "." + attachFileExt;
+                String attachFileName = id + "." + attachFileExt;
                 Path attachFilePath = Paths.get(Utils.uploadDir, attachFileName);
                 Files.write(attachFilePath, file.getBytes());
                 TimeUnit.SECONDS.sleep(3);
@@ -75,8 +76,8 @@ public class EdocController {
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-
-            EDoc eDoc = new EDoc(UUID, UUID, UUID, null, "eDoc", "edoc", Utils.datetime_now(), Utils.datetime_now(),
+            EDoc eDoc = new EDoc(id, senderDocId, null, null, "eDoc", "edoc", Utils.datetime_now(),
+                    Utils.datetime_now(),
                     edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da gui",
                     "Notation van ban moi da gui",

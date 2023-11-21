@@ -30,7 +30,7 @@ import vn.ript.ssadapter.utils.EdXML;
 import vn.ript.ssadapter.utils.Utils;
 
 @RestController
-@RequestMapping("/api/lienthong/v1/edocs")
+@RequestMapping("/api/lienthong/v1/edocs/status")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EdocStatusLienThongController {
 
@@ -47,10 +47,11 @@ public class EdocStatusLienThongController {
             @RequestHeader(name = "from", required = true) String from,
             @RequestHeader(name = "docId", required = true) String docId) {
         try {
-            String UUID = Utils.UUID();
+            String id = Utils.UUID();
+            String receiverDocId = Utils.UUID();
             if (!file.isEmpty()) {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                String fileName = UUID + ".edxml";
+                String fileName = id + ".edxml";
                 Path fileNameAndPath = Paths.get(Utils.EDocDir, fileName);
                 Files.write(fileNameAndPath, file.getBytes());
                 
@@ -63,7 +64,7 @@ public class EdocStatusLienThongController {
                     return CustomResponse.Response_data(404, "Khong tim thay don vi");
                 }
                 
-                EDoc eDoc = new EDoc(UUID, UUID, UUID, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), "Mo ta trang thai moi da nhan");
+                EDoc eDoc = new EDoc(id, null, receiverDocId, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), "Mo ta trang thai moi da nhan");
 
                 Optional<EDoc> checkPeDoc = eDocService.findByDocId(docId);
                 if (!checkPeDoc.isPresent()) {

@@ -47,7 +47,8 @@ public class EdocStatusController {
             @RequestHeader(name = "to", required = true) String to) {
         try {
             Content content;
-            String UUID = Utils.UUID();
+            String id = Utils.UUID();
+            String senderDocId = Utils.UUID();
             content = EdXMLBuild.create_status(status);
             Path edxmlFilePath = content.getContent().toPath();
 
@@ -60,7 +61,7 @@ public class EdocStatusController {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
 
-            EDoc eDoc = new EDoc(UUID, UUID, UUID, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(),
+            EDoc eDoc = new EDoc(id, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(),
                     edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da gui",
                     "Notation trang thai moi da gui",
@@ -75,6 +76,7 @@ public class EdocStatusController {
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/status/update";
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
+            headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
 

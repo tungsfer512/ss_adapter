@@ -24,7 +24,7 @@ export const getSentEdocList = (headers: any) => {
 }
 
 export const sendEdoc = (headers: any, payload: any) => {
-    return axios.post(`${ip3}/api/v1/edocs/new_edoc`, payload, {
+    return axios.post(`${ip3}/api/v1/edocs/newedoc`, payload, {
       headers: headers
     })
 }

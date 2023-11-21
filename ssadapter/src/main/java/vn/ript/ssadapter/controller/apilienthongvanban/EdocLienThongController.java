@@ -36,7 +36,7 @@ public class EdocLienThongController {
 
     // Gui file edxml giua cac SS, extract file, cac thong tin va luu vao DB cua ben
     // nhan
-    @PostMapping(value = "/new_edoc")
+    @PostMapping(value = "/newedoc")
     public ResponseEntity<Map<String, Object>> sendEdoc(
             @RequestPart(name = "file", required = true) MultipartFile file,
             @RequestHeader(name = "from", required = true) String from) {

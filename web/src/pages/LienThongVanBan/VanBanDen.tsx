@@ -7,6 +7,7 @@ import { Button, Divider, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
 import FormVanBan from './FormVanBan';
+import { ETrangThaiVanBan } from '@/utils/constants';
 
 const VanBanDen = (): React.Fragment => {
 
@@ -15,8 +16,8 @@ const VanBanDen = (): React.Fragment => {
   const handleTiepNhan = (record: IVanBanRecord) => {
     let headers = {
       docId: record.id,
-      status: '03',
-      to : 'CS:GOV:SS1MC:SS1SUB1',
+      status: ETrangThaiVanBan.DA_TIEP_NHAN,
+      to : record?.fromOrganization?.code,
     }
     vanbanModel.send_status_edoc(headers);
   };

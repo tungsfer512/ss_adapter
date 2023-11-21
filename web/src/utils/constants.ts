@@ -378,3 +378,14 @@ export const Setting = {
   logo: '/favicon.ico',
   iconfontUrl: '',
 };
+
+export enum ETrangThaiVanBan {
+  DA_DEN = '01',
+  TU_CHOI_TIEP_NHAN = '02',
+  DA_TIEP_NHAN = '03',
+  DA_PHAN_CONG_XU_LY = '04',
+  DANG_XU_LY = '05',
+  DA_XU_LY = '06',
+  DA_THU_HOI = '13',
+  DA_CAP_NHAT = '15',
+}

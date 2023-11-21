@@ -63,7 +63,7 @@ public class EdocStatusLienThongController {
                     return CustomResponse.Response_data(404, "Khong tim thay don vi");
                 }
                 
-                EDoc eDoc = new EDoc(UUID, UUID, UUID, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI), "Mo ta trang thai moi da nhan");
+                EDoc eDoc = new EDoc(UUID, UUID, UUID, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), "Mo ta trang thai moi da nhan");
 
                 Optional<EDoc> checkPeDoc = eDocService.findByDocId(docId);
                 if (!checkPeDoc.isPresent()) {

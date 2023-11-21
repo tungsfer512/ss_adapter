@@ -77,13 +77,13 @@ public class EdocController {
             }
 
             EDoc eDoc = new EDoc(UUID, UUID, UUID, null, "eDoc", "edoc", Utils.datetime_now(), Utils.datetime_now(),
-                    edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI,
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, "Tieu de van ban moi da gui",
+                    edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
+                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da gui",
                     "Notation van ban moi da gui",
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI),
+                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI),
+                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
                     " Mo ta van ban moi da gui");
 
             String subsystem_code = to.replace(':', '/');

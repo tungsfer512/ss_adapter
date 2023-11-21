@@ -7,6 +7,7 @@ import { Button, Divider, Popconfirm } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { useModel, history } from 'umi';
 import FormVanBan from './FormVanBan';
+import { ETrangThaiVanBan } from '@/utils/constants';
 
 const VanBanDi = (): React.Fragment => {
 
@@ -19,7 +20,13 @@ const VanBanDi = (): React.Fragment => {
   };
 
   const handleThuHoi = async (record: IVanBanRecord) => {
-    await vanbanModel.del(record?.id ?? '');
+    let headers = {
+      docId: record.id,
+      sendDocId: '124b3206-074c-4c69-8fcd-0c239bf72d0a.edxml',
+      status: ETrangThaiVanBan.DA_THU_HOI,
+      to : record?.toOrganization?.code,
+    }
+    vanbanModel.send_status_edoc(headers);
   };
 
   const renderLast = (value: any, record: IVanBanRecord) => (

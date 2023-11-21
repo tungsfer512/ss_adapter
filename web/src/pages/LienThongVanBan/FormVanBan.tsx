@@ -33,6 +33,7 @@ const FormVanBan = () => {
       to : 'CS:GOV:SS2MC:SS2SUB1'
     }
     vanbanModel.send_edoc(headers, payload);
+    vanbanModel.setVisibleForm(false);
   };
   return (
     <Spin spinning={vanbanModel.loading}>

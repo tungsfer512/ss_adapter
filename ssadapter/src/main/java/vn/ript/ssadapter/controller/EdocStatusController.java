@@ -62,7 +62,7 @@ public class EdocStatusController {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
             
-            Optional<EDoc> checkEDoc = eDocService.findByDocId(sendDocId);
+            Optional<EDoc> checkEDoc = eDocService.findByDocId(docId);
             if(!checkEDoc.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay van ban");
             }

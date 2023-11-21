@@ -4,6 +4,8 @@ import { getReceivedEdocList, getSentEdocList, sendEdoc, sendStatusEdoc } from '
 
 export interface IVanBanRecord {
   id: string;
+  fromOrganization: any;
+  toOrganization: any;
   senderDocId: string;
   receiverDocId: string;
   pid: string;

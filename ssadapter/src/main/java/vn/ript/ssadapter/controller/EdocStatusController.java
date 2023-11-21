@@ -71,10 +71,11 @@ public class EdocStatusController {
                     "Mo ta trang thai moi da gui");
 
             String subsystem_code = to.replace(':', '/');
+            String xRoadClient = Utils.SS_ID.replace(':', '/');
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/status/update";
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
-            headers.put("X-Road-Client", Utils.SS_ID);
+            headers.put("X-Road-Client", xRoadClient);
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
 
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();

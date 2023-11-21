@@ -44,9 +44,25 @@ const VanBanDi = (): React.Fragment => {
   );
   const columns: IColumn<IVanBanRecord>[] = [
     {
-      title: 'ID',
+      title: 'Id',
       dataIndex: 'id',
       width: 80,
+      align: 'center',
+    },
+    {
+      title: 'From',
+      render: (value: any, record: IVanBanRecord) => record?.fromOrganization?.code,
+      search: 'search',
+      notRegex: true,
+      width: 200,
+      align: 'center',
+    },
+    {
+      title: 'To',
+      render: (value: any, record: IVanBanRecord) => record?.toOrganization?.code,
+      search: 'search',
+      notRegex: true,
+      width: 200,
       align: 'center',
     },
     {
@@ -105,22 +121,14 @@ const VanBanDi = (): React.Fragment => {
       width: 200,
       align: 'center',
     },
-    {
-      title: 'From',
-      dataIndex: 'from',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
-    {
-      title: 'To',
-      dataIndex: 'to',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
+    // {
+    //   title: 'Data',
+    //   dataIndex: 'data',
+    //   search: 'search',
+    //   notRegex: true,
+    //   width: 200,
+    //   align: 'center',
+    // },
     {
       title: 'SendStatus',
       dataIndex: 'sendStatus',
@@ -164,6 +172,14 @@ const VanBanDi = (): React.Fragment => {
     {
       title: 'ReceiveStatusDesc',
       dataIndex: 'receiveStatusDesc',
+      search: 'search',
+      notRegex: true,
+      width: 200,
+      align: 'center',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
       search: 'search',
       notRegex: true,
       width: 200,

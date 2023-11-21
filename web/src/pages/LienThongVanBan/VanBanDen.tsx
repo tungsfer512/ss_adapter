@@ -15,7 +15,7 @@ const VanBanDen = (): React.Fragment => {
   const handleTiepNhan = (record: IVanBanRecord) => {
     let headers = {
       docId: record.id,
-      status: '01',
+      status: '03',
       to : 'CS:GOV:SS1MC:SS1SUB1',
     }
     vanbanModel.send_status_edoc(headers);
@@ -47,9 +47,25 @@ const VanBanDen = (): React.Fragment => {
   );
   const columns: IColumn<IVanBanRecord>[] = [
     {
-      title: 'ID',
+      title: 'Id',
       dataIndex: 'id',
       width: 80,
+      align: 'center',
+    },
+    {
+      title: 'From',
+      render: (value: any, record: IVanBanRecord) => record?.fromOrganization?.code,
+      search: 'search',
+      notRegex: true,
+      width: 200,
+      align: 'center',
+    },
+    {
+      title: 'To',
+      render: (value: any, record: IVanBanRecord) => record?.toOrganization?.code,
+      search: 'search',
+      notRegex: true,
+      width: 200,
       align: 'center',
     },
     {
@@ -108,22 +124,14 @@ const VanBanDen = (): React.Fragment => {
       width: 200,
       align: 'center',
     },
-    {
-      title: 'From',
-      dataIndex: 'from',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
-    {
-      title: 'To',
-      dataIndex: 'to',
-      search: 'search',
-      notRegex: true,
-      width: 200,
-      align: 'center',
-    },
+    // {
+    //   title: 'Data',
+    //   dataIndex: 'data',
+    //   search: 'search',
+    //   notRegex: true,
+    //   width: 200,
+    //   align: 'center',
+    // },
     {
       title: 'SendStatus',
       dataIndex: 'sendStatus',
@@ -167,6 +175,14 @@ const VanBanDen = (): React.Fragment => {
     {
       title: 'ReceiveStatusDesc',
       dataIndex: 'receiveStatusDesc',
+      search: 'search',
+      notRegex: true,
+      width: 200,
+      align: 'center',
+    },
+    {
+      title: 'Description',
+      dataIndex: 'description',
       search: 'search',
       notRegex: true,
       width: 200,

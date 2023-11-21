@@ -46,7 +46,6 @@ public class EdocController {
     @Autowired
     OrganizationService organizationService;
 
-
     @PostMapping(value = "/newedoc")
     public ResponseEntity<Map<String, Object>> sendEdoc(
             @RequestPart(name = "file", required = false) MultipartFile file,
@@ -67,44 +66,47 @@ public class EdocController {
                 content = EdXMLBuild.createEdoc_new(null);
             }
             Path edxmlFilePath = content.getContent().toPath();
-            
+
             String edoc_64 = Utils.encodeEdXmlFileToBase64(edxmlFilePath.toAbsolutePath().toString());
 
             Optional<Organization> checkFrom = organizationService.findByCode(Utils.SS_ID);
-            Optional<Organization> checkTo = organizationService.findByCode(to);            
-            
+            Optional<Organization> checkTo = organizationService.findByCode(to);
+
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-            
-            EDoc eDoc = new EDoc(UUID, UUID, UUID, null, "eDoc", "edoc", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, "Tieu de van ban moi da gui", "Notation van ban moi da gui", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI), " Mo ta van ban moi da gui");
+
+            EDoc eDoc = new EDoc(UUID, UUID, UUID, null, "eDoc", "edoc", Utils.datetime_now(), Utils.datetime_now(),
+                    edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI,
+                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI, "Tieu de van ban moi da gui",
+                    "Notation van ban moi da gui",
+                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI),
+                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_GUI),
+                    " Mo ta van ban moi da gui");
 
             String subsystem_code = to.replace(':', '/');
+            String xRoadClient = Utils.SS_ID.replace(':', '/');
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/newedoc";
-            System.out.println("===================== " + url);
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
-            headers.put("X-Road-Client", Utils.SS_ID);
-            CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
-            System.out.println("=====================1");
-            
+            headers.put("X-Road-Client", xRoadClient);
+            CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url,
+                    headers);
+
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
             multipartEntityBuilder.addBinaryBody("file", content.getContent());
             HttpEntity multipartHttpEntity = multipartEntityBuilder.build();
-            System.out.println("=====================2");
-            
+
             HttpResponse httpResponse = customHttpRequest.request(multipartHttpEntity);
-            System.out.println("=====================3" + httpResponse);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("=====================4");
                 eDocService.saveEDoc(eDoc);
                 return CustomResponse.Response_no_data(200);
             } else {
-                System.out.println("=====================5");
                 return CustomResponse.Response_data(500, httpResponse.getStatusLine());
             }
         } catch (Exception e) {
-            System.out.println("=====================6" + e.getMessage());
             return CustomResponse.Response_data(500, e);
         }
     }

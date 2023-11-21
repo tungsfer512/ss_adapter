@@ -1,30 +1,60 @@
 package vn.ript.ssadapter.utils;
 
 import java.io.IOException;
-import java.security.KeyManagementException;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
+import java.security.SecureRandom;
+import java.security.cert.X509Certificate;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpPut;
-import org.apache.http.client.methods.HttpPatch;
-import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpHead;
 import org.apache.http.client.methods.HttpOptions;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.methods.HttpTrace;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;
-import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
-import org.apache.http.conn.ssl.TrustAllStrategy;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+
+class SkipSSLHttpClient {
+    public static CloseableHttpClient Create() {
+        try {
+            TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                    return null;
+                }
+
+                public void checkClientTrusted(X509Certificate[] certs,
+                        String authType) {
+                }
+
+                public void checkServerTrusted(X509Certificate[] certs,
+                        String authType) {
+                }
+            } };
+
+            SSLContext sc = SSLContext.getInstance("SSL");
+            sc.init(null, trustAllCerts, new SecureRandom());
+            CloseableHttpClient httpClient = HttpClients.custom()
+                    .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
+                    .setSslcontext(sc).build();
+            return httpClient;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+}
 
 public class CustomHttpRequest {
 
@@ -37,7 +67,7 @@ public class CustomHttpRequest {
         this.url = url;
         this.headers = new HashMap<>();
     }
-    
+
     public CustomHttpRequest(String method, String url, Map<String, String> headers) {
         this.method = method;
         this.url = url;
@@ -45,15 +75,9 @@ public class CustomHttpRequest {
     }
 
     public HttpResponse request() {
-        SSLContextBuilder sslContextBuilder = new SSLContextBuilder();
         try {
-            sslContextBuilder.loadTrustMaterial(new TrustAllStrategy());
-            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-                    sslContextBuilder.build(), new NoopHostnameVerifier());
-            HttpClient httpClient = HttpClientBuilder.create()
-                    .setSSLSocketFactory(sslConnectionSocketFactory)
-                    .build();
-            
+            CloseableHttpClient httpClient = SkipSSLHttpClient.Create();
+
             HttpRequestBase httpRequest = null;
             if (this.method.equalsIgnoreCase("Get")) {
                 httpRequest = new HttpGet(url);
@@ -83,22 +107,16 @@ public class CustomHttpRequest {
             HttpResponse httpResponse;
             httpResponse = httpClient.execute(httpRequest);
             return httpResponse;
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
     }
 
     public HttpResponse request(HttpEntity entity) {
-        SSLContextBuilder sslContextBuilder = new SSLContextBuilder();
         try {
-            sslContextBuilder.loadTrustMaterial(new TrustAllStrategy());
-            SSLConnectionSocketFactory sslConnectionSocketFactory = new SSLConnectionSocketFactory(
-                    sslContextBuilder.build(), new NoopHostnameVerifier());
-            HttpClient httpClient = HttpClientBuilder.create()
-                    .setSSLSocketFactory(sslConnectionSocketFactory)
-                    .build();
-            
+            CloseableHttpClient httpClient = SkipSSLHttpClient.Create();
+
             HttpEntityEnclosingRequestBase httpRequest = null;
             if (this.method.equalsIgnoreCase("Post")) {
                 httpRequest = new HttpPost(url);
@@ -120,7 +138,7 @@ public class CustomHttpRequest {
             HttpResponse httpResponse;
             httpResponse = httpClient.execute(httpRequest);
             return httpResponse;
-        } catch (NoSuchAlgorithmException | KeyStoreException | KeyManagementException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
         return null;

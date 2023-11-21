@@ -43,6 +43,7 @@ public class EdocStatusController {
     @PostMapping(value = "/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestHeader(name = "docId", required = true) String docId,
+            @RequestHeader(name = "sendDocId", required = true) String sendDocId,
             @RequestHeader(name = "status", required = true) String status,
             @RequestHeader(name = "to", required = true) String to) {
         try {
@@ -60,8 +61,14 @@ public class EdocStatusController {
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
+            
+            Optional<EDoc> checkEDoc = eDocService.findByDocId(sendDocId);
+            if(!checkEDoc.isPresent()) {
+                return CustomResponse.Response_data(404, "Khong tim thay van ban");
+            }
+            EDoc eDoc = checkEDoc.get();
 
-            EDoc eDoc = new EDoc(id, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(),
+            EDoc eDocStatus = new EDoc(id, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(),
                     edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da gui",
                     "Notation trang thai moi da gui",
@@ -76,7 +83,7 @@ public class EdocStatusController {
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/status/update";
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
-            headers.put("docId", docId);
+            headers.put("docId", sendDocId);
             headers.put("X-Road-Client", xRoadClient);
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
 
@@ -86,7 +93,12 @@ public class EdocStatusController {
 
             HttpResponse httpResponse = customHttpRequest.request(multipartHttpEntity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                eDocService.saveEDoc(eDoc);
+                eDoc.setSendStatus(status);
+                eDoc.setReceiveStatus(status);
+                eDoc.setSendStatusDesc(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(status));
+                eDoc.setReceiveStatusDesc(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(status));
+                eDocService.saveEDoc(eDocStatus);
+                eDocService.updateEDoc(eDoc);
                 return CustomResponse.Response_no_data(200);
             } else {
                 return CustomResponse.Response_data(500, httpResponse.getStatusLine());

@@ -388,4 +388,5 @@ export enum ETrangThaiVanBan {
   DA_XU_LY = '06',
   DA_THU_HOI = '13',
   DA_CAP_NHAT = '15',
+  TU_CHOI_CAP_NHAT = '16',
 }

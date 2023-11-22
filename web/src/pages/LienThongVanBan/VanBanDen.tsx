@@ -14,21 +14,41 @@ const VanBanDen = (): React.Fragment => {
   const vanbanModel = useModel('vanban');
 
   const handleTiepNhan = (record: IVanBanRecord) => {
-    let headers = {
-      docId: record.id,
-      status: ETrangThaiVanBan.DA_TIEP_NHAN,
-      to : record?.fromOrganization?.code,
+    if (record?.pid && record?.pid !== '') {
+      let headers = {
+        docId: record.id,
+        pDocId: record?.pid,
+        status: ETrangThaiVanBan.DA_CAP_NHAT,
+        to: record?.fromOrganization?.code,
+      }
+      vanbanModel.send_status_edoc(headers);
+    } else {
+      let headers = {
+        docId: record.id,
+        status: ETrangThaiVanBan.DA_TIEP_NHAN,
+        to: record?.fromOrganization?.code,
+      }
+      vanbanModel.send_status_edoc(headers);
     }
-    vanbanModel.send_status_edoc(headers);
   };
 
   const handleTuChoi = async (record: IVanBanRecord) => {
-    let headers = {
-      docId: record.id,
-      status: ETrangThaiVanBan.TU_CHOI_TIEP_NHAN,
-      to : record?.fromOrganization?.code,
+    if (record?.pid && record?.pid !== '') {
+      let headers = {
+        docId: record.id,
+        pDocId: record?.pid,
+        status: ETrangThaiVanBan.TU_CHOI_CAP_NHAT,
+        to: record?.fromOrganization?.code,
+      }
+      vanbanModel.send_status_edoc(headers);
+    } else {
+      let headers = {
+        docId: record.id,
+        status: ETrangThaiVanBan.TU_CHOI_TIEP_NHAN,
+        to: record?.fromOrganization?.code,
+      }
+      vanbanModel.send_status_edoc(headers);
     }
-    vanbanModel.send_status_edoc(headers);
   };
 
   const renderLast = (value: any, record: IVanBanRecord) => (
@@ -215,7 +235,7 @@ const VanBanDen = (): React.Fragment => {
         formType={'Modal'}
         dependencies={[vanbanModel.page, vanbanModel.limit, vanbanModel.condition]}
         widthDrawer={800}
-        getData={() => vanbanModel.get_received_edoc_list({messagetype: "demo", servicetype: "demo"})}
+        getData={() => vanbanModel.get_received_edoc_list({ messagetype: "demo", servicetype: "demo" })}
         Form={FormVanBan}
         noCleanUp={true}
         params={{

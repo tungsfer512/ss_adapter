@@ -41,6 +41,7 @@ public class EdocLienThongController {
     @PostMapping(value = "/newedoc")
     public ResponseEntity<Map<String, Object>> sendEdoc(
             @RequestPart(name = "file", required = true) MultipartFile file,
+            @RequestHeader(name = "pDocId", required = false) String pDocId,
             @RequestHeader(name = "from", required = true) String from) {
         try {
             String receiverDocId = Utils.UUID();
@@ -66,7 +67,12 @@ public class EdocLienThongController {
 
                 String docId = Utils.SHA256Hash(docIdEdxml);
 
-                EDoc eDoc = new EDoc(docId, null, receiverDocId, null, "eDoc", "edoc", Utils.datetime_now(),
+                String pid = null;
+                if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                    pid = pDocId;
+                }
+
+                EDoc eDoc = new EDoc(docId, null, receiverDocId, pid, "eDoc", "edoc", Utils.datetime_now(),
                         Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(),
                         Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                         "Tieu de van ban moi da nhan", "Notation van ban moi da nhan",

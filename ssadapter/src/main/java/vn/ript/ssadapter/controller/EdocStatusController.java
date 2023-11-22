@@ -48,6 +48,7 @@ public class EdocStatusController {
     @PostMapping(value = "/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestHeader(name = "docId", required = true) String docId,
+            @RequestHeader(name = "pDocId", required = false) String pDocId,
             @RequestHeader(name = "status", required = true) String status,
             @RequestHeader(name = "to", required = true) String to) {
         try {
@@ -65,30 +66,14 @@ public class EdocStatusController {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
 
-            Optional<EDoc> checkEDoc = eDocService.findByDocId(docId);
-            if (!checkEDoc.isPresent()) {
-                return CustomResponse.Response_data(404, "Khong tim thay van ban");
-            }
-            EDoc eDoc = checkEDoc.get();
-
+            
             Status statusEdxml = EdXML.readStatus(content.getContent());
             Header header = statusEdxml.getHeader();
             MessageStatus messageStatus = (MessageStatus) header.getMessageHeader();
             ResponseFor responseFor = messageStatus.getResponseFor();
             String statusIdEdxml = responseFor.getDocumentId();
-
+            
             String statusId = Utils.SHA256Hash(statusIdEdxml);
-
-            EDoc eDocStatus = new EDoc(statusId, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(),
-                    Utils.datetime_now(),
-                    edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da gui",
-                    "Notation trang thai moi da gui",
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
-                    "Mo ta trang thai moi da gui");
 
             String subsystem_code = to.replace(':', '/');
             String xRoadClient = Utils.SS_ID.replace(':', '/');
@@ -98,13 +83,34 @@ public class EdocStatusController {
             headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
-
+            
             MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
             multipartEntityBuilder.addBinaryBody("file", content.getContent());
             HttpEntity multipartHttpEntity = multipartEntityBuilder.build();
-
+            
+            String pid = docId;
+            if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                pid = pDocId;
+                headers.put("pDocId", pid);
+            }
+            
             HttpResponse httpResponse = customHttpRequest.request(multipartHttpEntity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                Optional<EDoc> checkEDoc = eDocService.findByDocId(pid);
+                if (!checkEDoc.isPresent()) {
+                    return CustomResponse.Response_data(404, "Khong tim thay van ban");
+                }
+                EDoc eDoc = checkEDoc.get();
+                EDoc eDocStatus = new EDoc(statusId, senderDocId, null, pid, "eDoc", "status", Utils.datetime_now(),
+                        Utils.datetime_now(),
+                        edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da gui",
+                        "Notation trang thai moi da gui",
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        "Mo ta trang thai moi da gui");
                 eDoc.setSendStatus(status);
                 eDoc.setReceiveStatus(status);
                 eDoc.setSendStatusDesc(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(status));

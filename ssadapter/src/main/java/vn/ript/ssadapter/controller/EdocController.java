@@ -53,6 +53,7 @@ public class EdocController {
     @PostMapping(value = "/newedoc")
     public ResponseEntity<Map<String, Object>> sendEdoc(
             @RequestPart(name = "file", required = false) MultipartFile file,
+            @RequestHeader(name = "pDocId", required = false) String pDocId,
             @RequestHeader(name = "to", required = true) String to) {
         try {
             Content content;
@@ -87,23 +88,20 @@ public class EdocController {
             String docIdEdxml = messageHeader.getDocumentId();
 
             String docId = Utils.SHA256Hash(docIdEdxml);
-            EDoc eDoc = new EDoc(docId, senderDocId, null, null, "eDoc", "edoc", Utils.datetime_now(),
-                    Utils.datetime_now(),
-                    edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da gui",
-                    "Notation van ban moi da gui",
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
-                    Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
-                            .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
-                    " Mo ta van ban moi da gui");
-
+            
             String subsystem_code = to.replace(':', '/');
             String xRoadClient = Utils.SS_ID.replace(':', '/');
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/newedoc";
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
             headers.put("X-Road-Client", xRoadClient);
+            
+            String pid = null;
+            if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                pid = pDocId;
+                headers.put("pDocId", pDocId);
+            }
+            
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url,
                     headers);
 
@@ -113,6 +111,16 @@ public class EdocController {
 
             HttpResponse httpResponse = customHttpRequest.request(multipartHttpEntity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                EDoc eDoc = new EDoc(docId, senderDocId, null, pid, "eDoc", "edoc", Utils.datetime_now(),
+                        Utils.datetime_now(),
+                        edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da gui",
+                        "Notation van ban moi da gui",
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        " Mo ta van ban moi da gui");
                 eDocService.saveEDoc(eDoc);
                 return CustomResponse.Response_no_data(200);
             } else {

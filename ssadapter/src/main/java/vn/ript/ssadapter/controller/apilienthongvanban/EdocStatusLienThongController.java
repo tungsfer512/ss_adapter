@@ -42,6 +42,7 @@ public class EdocStatusLienThongController {
     @PostMapping(value = "/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestPart(name = "file", required = true) MultipartFile file,
+            @RequestHeader(name = "pDocId", required = false) String pDocId,
             @RequestHeader(name = "from", required = true) String from,
             @RequestHeader(name = "docId", required = true) String docId) {
         try {
@@ -69,8 +70,11 @@ public class EdocStatusLienThongController {
                 String statusIdEdxml = responseFor.getDocumentId();
 
                 String statusId = Utils.SHA256Hash(statusIdEdxml);
-
-                EDoc eDoc = new EDoc(statusId, null, receiverDocId, docId, "eDoc", "status", Utils.datetime_now(),
+                String pid = docId;
+                if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                    pid = pDocId;
+                }
+                EDoc eDoc = new EDoc(statusId, null, receiverDocId, pid, "eDoc", "status", Utils.datetime_now(),
                         Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(),
                         Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                         "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan",
@@ -80,7 +84,7 @@ public class EdocStatusLienThongController {
                                 .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
                         "Mo ta trang thai moi da nhan");
 
-                Optional<EDoc> checkPeDoc = eDocService.findByDocId(docId);
+                Optional<EDoc> checkPeDoc = eDocService.findByDocId(pid);
                 if (!checkPeDoc.isPresent()) {
                     return CustomResponse.Response_data(404, "Khong tim thay van ban");
                 }

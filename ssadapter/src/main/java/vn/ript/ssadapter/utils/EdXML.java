@@ -15,9 +15,32 @@ public class EdXML {
     public static Ed readEdoc(String fileName) {
         Ed ed = null;
         try {
-            Thread.sleep(3000);
+            // Thread.sleep(3000);
             File file = ResourceUtils.getFile(Utils.EDocDir + fileName);
             InputStream inputStream = new FileInputStream(file);
+            ed = EdXmlParser.getInstance().parse(inputStream);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return ed;
+    }
+    
+    public static Ed readEdoc(File file) {
+        Ed ed = null;
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            ed = EdXmlParser.getInstance().parse(inputStream);
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        return ed;
+    }
+    
+    public static Ed readEdoc(InputStream inputStream) {
+        Ed ed = null;
+        try {
             ed = EdXmlParser.getInstance().parse(inputStream);
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage());
@@ -31,6 +54,27 @@ public class EdXML {
         try {
             File file = ResourceUtils.getFile(Utils.EDocDir + fileName);
             InputStream inputStream = new FileInputStream(file);
+            status = StatusXmlParser.parse(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static Status readStatus(File file) {
+        Status status = null;
+        try {
+            InputStream inputStream = new FileInputStream(file);
+            status = StatusXmlParser.parse(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return status;
+    }
+
+    public static Status readStatus(InputStream inputStream) {
+        Status status = null;
+        try {
             status = StatusXmlParser.parse(inputStream);
         } catch (Exception e) {
             e.printStackTrace();

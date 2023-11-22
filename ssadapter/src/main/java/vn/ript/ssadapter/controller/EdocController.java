@@ -25,6 +25,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vnpt.xml.base.Content;
+import com.vnpt.xml.base.header.Header;
+import com.vnpt.xml.ed.Ed;
+import com.vnpt.xml.ed.header.MessageHeader;
 
 import vn.ript.ssadapter.model.EDoc;
 import vn.ript.ssadapter.model.Organization;
@@ -33,6 +36,7 @@ import vn.ript.ssadapter.service.OrganizationService;
 import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
+import vn.ript.ssadapter.utils.EdXML;
 import vn.ript.ssadapter.utils.EdXMLBuild;
 import vn.ript.ssadapter.utils.Utils;
 
@@ -62,10 +66,11 @@ public class EdocController {
                 Path attachFilePath = Paths.get(Utils.uploadDir, attachFileName);
                 Files.write(attachFilePath, file.getBytes());
                 TimeUnit.SECONDS.sleep(3);
-                content = EdXMLBuild.createEdoc_new(attachFileName);
+                content = EdXMLBuild.createEdoc_new(attachFileName, EDoc.code_number);
             } else {
-                content = EdXMLBuild.createEdoc_new(null);
+                content = EdXMLBuild.createEdoc_new(null, EDoc.code_number);
             }
+            EDoc.code_number += 1;
             Path edxmlFilePath = content.getContent().toPath();
 
             String edoc_64 = Utils.encodeEdXmlFileToBase64(edxmlFilePath.toAbsolutePath().toString());
@@ -76,7 +81,14 @@ public class EdocController {
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-            EDoc eDoc = new EDoc(id, senderDocId, null, null, "eDoc", "edoc", Utils.datetime_now(),
+
+            Ed ed = EdXML.readEdoc(content.getContent());
+            Header header = ed.getHeader();
+            MessageHeader messageHeader = (MessageHeader) header.getMessageHeader();
+            String docIdEdxml = messageHeader.getDocumentId();
+
+            String docId = Utils.SHA256Hash(docIdEdxml);
+            EDoc eDoc = new EDoc(docId, senderDocId, null, null, "eDoc", "edoc", Utils.datetime_now(),
                     Utils.datetime_now(),
                     edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da gui",

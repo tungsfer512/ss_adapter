@@ -2,6 +2,7 @@ package vn.ript.ssadapter.utils;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -9,6 +10,8 @@ import java.util.Base64;
 import java.util.UUID;
 
 import org.springframework.util.ResourceUtils;
+
+import com.google.common.hash.Hashing;
 
 public class Utils {
 
@@ -35,6 +38,17 @@ public class Utils {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now).toString();
+    }
+    
+    public static String date_now() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now).toString();
+    }
+
+    public static String SHA256Hash(String text) {
+        String sha256hex = Hashing.sha256().hashString(text, StandardCharsets.UTF_8).toString();
+        return sha256hex;
     }
 
 }

@@ -17,6 +17,8 @@ import lombok.*;
 @ToString
 
 public class EDoc {
+
+    public static int code_number = 1;
     
     @Id
     String id;

@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vnpt.xml.base.Content;
+import com.vnpt.xml.base.header.Header;
+import com.vnpt.xml.base.header.ResponseFor;
+import com.vnpt.xml.ed.Ed;
+import com.vnpt.xml.ed.header.MessageHeader;
+import com.vnpt.xml.status.Status;
+import com.vnpt.xml.status.header.MessageStatus;
 
 import vn.ript.ssadapter.model.EDoc;
 import vn.ript.ssadapter.model.Organization;
@@ -27,6 +33,7 @@ import vn.ript.ssadapter.service.OrganizationService;
 import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
+import vn.ript.ssadapter.utils.EdXML;
 import vn.ript.ssadapter.utils.EdXMLBuild;
 import vn.ript.ssadapter.utils.Utils;
 
@@ -61,14 +68,23 @@ public class EdocStatusController {
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
-            
+
             Optional<EDoc> checkEDoc = eDocService.findByDocId(docId);
-            if(!checkEDoc.isPresent()) {
+            if (!checkEDoc.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay van ban");
             }
             EDoc eDoc = checkEDoc.get();
 
-            EDoc eDocStatus = new EDoc(id, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(),
+            Status statusEdxml = EdXML.readStatus(content.getContent());
+            Header header = statusEdxml.getHeader();
+            MessageStatus messageStatus = (MessageStatus) header.getMessageHeader();
+            ResponseFor responseFor = messageStatus.getResponseFor();
+            String statusIdEdxml = responseFor.getDocumentId();
+
+            String statusId = Utils.SHA256Hash(statusIdEdxml);
+
+            EDoc eDocStatus = new EDoc(statusId, senderDocId, null, docId, "eDoc", "status", Utils.datetime_now(),
+                    Utils.datetime_now(),
                     edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
                     Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da gui",
                     "Notation trang thai moi da gui",

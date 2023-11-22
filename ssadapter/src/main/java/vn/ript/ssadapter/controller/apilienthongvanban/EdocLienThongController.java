@@ -16,12 +16,17 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.vnpt.xml.base.header.Header;
+import com.vnpt.xml.ed.Ed;
+import com.vnpt.xml.ed.header.MessageHeader;
+
 import vn.ript.ssadapter.model.EDoc;
 import vn.ript.ssadapter.model.Organization;
 import vn.ript.ssadapter.service.EDocService;
 import vn.ript.ssadapter.service.OrganizationService;
 import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomResponse;
+import vn.ript.ssadapter.utils.EdXML;
 import vn.ript.ssadapter.utils.Utils;
 
 @RestController
@@ -41,24 +46,38 @@ public class EdocLienThongController {
             @RequestPart(name = "file", required = true) MultipartFile file,
             @RequestHeader(name = "from", required = true) String from) {
         try {
-            String id = Utils.UUID();
             String receiverDocId = Utils.UUID();
             if (!file.isEmpty()) {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
                 String originFileName = file.getOriginalFilename();
                 Path fileNameAndPath = Paths.get(Utils.EDocDir, originFileName);
                 Files.write(fileNameAndPath, file.getBytes());
-                
+
                 String edoc_64 = Utils.encodeEdXmlFileToBase64(fileNameAndPath.toString());
 
                 Optional<Organization> checkFrom = organizationService.findByCode(from);
                 Optional<Organization> checkTo = organizationService.findByCode(Utils.SS_ID);
-                
+
                 if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                     return CustomResponse.Response_data(404, "Khong tim thay don vi");
                 }
-                
-                EDoc eDoc = new EDoc(id, null, receiverDocId, null, "eDoc", "edoc", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de van ban moi da nhan", "Notation van ban moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),  "Mo ta van ban moi da nhan");
+
+                Ed ed = EdXML.readEdoc(file.getInputStream());
+                Header header = ed.getHeader();
+                MessageHeader messageHeader = (MessageHeader) header.getMessageHeader();
+                String docIdEdxml = messageHeader.getDocumentId();
+
+                String docId = Utils.SHA256Hash(docIdEdxml);
+
+                EDoc eDoc = new EDoc(docId, null, receiverDocId, null, "eDoc", "edoc", Utils.datetime_now(),
+                        Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
+                        "Tieu de van ban moi da nhan", "Notation van ban moi da nhan",
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        "Mo ta van ban moi da nhan");
 
                 eDocService.saveEDoc(eDoc);
 

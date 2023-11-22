@@ -1,6 +1,5 @@
 package vn.ript.ssadapter.utils;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,8 +10,8 @@ import com.google.common.collect.Lists;
 import com.vnpt.xml.base.Content;
 import com.vnpt.xml.base.builder.BuildException;
 import com.vnpt.xml.base.header.Bussiness;
-import com.vnpt.xml.base.header.Header;
 import com.vnpt.xml.base.header.BussinessDocumentInfo;
+import com.vnpt.xml.base.header.Header;
 import com.vnpt.xml.base.header.KeyInfo;
 import com.vnpt.xml.base.header.OrganIdList;
 import com.vnpt.xml.base.header.Organization;
@@ -42,10 +41,12 @@ import com.vnpt.xml.status.builder.StatusXmlBuilder;
 import com.vnpt.xml.status.header.MessageStatus;
 
 public class EdXMLBuild {
-	public static Content createEdoc_new(String fileName) throws Exception {
+	public static Content createEdoc_new(String fileName, int code_number) throws Exception {
 		Ed ed = new Ed();
 		// khoi tao code cho van ban
-		Code code = new Code("7816", "VPCP-TTĐT");
+		String code_number_str = String.valueOf(code_number);
+		String date = Utils.date_now();
+		Code code = new Code(code_number_str, "VPCP-TTĐT");
 
 		// khoi tao cac don vi gui va nhan
 		Organization org1 = new Organization("000.00.00.G22", "Văn phòng Chính phủ", "Văn phòng Chính phủ",
@@ -69,8 +70,7 @@ public class EdXMLBuild {
 		List<Organization> toes = Lists.newArrayList(org5, org6, org7);
 
 		// khoi tao thong tin ban hanh
-		PromulgationInfo promulgationInfo = new PromulgationInfo("Hà Nội",
-				DateUtils.parse(new SimpleDateFormat("yyyy/MM/dd").format(new java.util.Date())));
+		PromulgationInfo promulgationInfo = new PromulgationInfo("Hà Nội", DateUtils.parse(date));
 
 		// khoi tao loai van ban
 		DocumentType docType = new DocumentType(1, "Công văn");
@@ -108,13 +108,15 @@ public class EdXMLBuild {
 		header.setOtherInfo(otherInfo);
 
 		// khoi tao thong tin ma dinh danh cua van ban
-		header.setDocumentId("000.00.00.G22,2015/09/30,7816/VPCP-TTĐT");
+		header.setDocumentId("000.00.00.G22," + date + "," + code_number_str + "/VPCP-TTĐT");
 
 		// khoi tao thong tin van ban phan hoi va phuc dap
-		// ResponseFor responseFor = new ResponseFor("000.00.00.H41", "267/VPCP-TTĐT", new Date(),
-		// 		"000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
-		// ResponseFor responseFor2 = new ResponseFor("000.00.00.H14", "267/VPCP-TTĐT", new Date(),
-				// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
+		// ResponseFor responseFor = new ResponseFor("000.00.00.H41", "267/VPCP-TTĐT",
+		// new Date(),
+		// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
+		// ResponseFor responseFor2 = new ResponseFor("000.00.00.H14", "267/VPCP-TTĐT",
+		// new Date(),
+		// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
 
 		// add responseFor
 		// header.setResponseFor(responseFor);
@@ -124,7 +126,7 @@ public class EdXMLBuild {
 		TraceHeaderList trList = new TraceHeaderList();
 		TraceHeader trace1 = new TraceHeader();
 		trace1.setOrganId("000.00.00.G22");
-		trace1.setTimestamp(DateUtils.parse(new SimpleDateFormat("yyyy/MM/dd").format(new java.util.Date())));
+		trace1.setTimestamp(DateUtils.parse(date));
 		trList.addTraceHeader(trace1);
 		// TraceHeader trace2 = new TraceHeader();
 		// trace2.setOrganId("000.00.00.H41");
@@ -206,8 +208,6 @@ public class EdXMLBuild {
 
 		return content;
 	}
-
-	
 
 	public static Content create_status(String status_code) {
 		// create header

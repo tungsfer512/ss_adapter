@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.vnpt.xml.base.header.Header;
+import com.vnpt.xml.base.header.ResponseFor;
+import com.vnpt.xml.ed.Ed;
 import com.vnpt.xml.status.Status;
 import com.vnpt.xml.status.header.MessageStatus;
 
@@ -54,17 +56,33 @@ public class EdocStatusLienThongController {
                 String fileName = id + ".edxml";
                 Path fileNameAndPath = Paths.get(Utils.EDocDir, fileName);
                 Files.write(fileNameAndPath, file.getBytes());
-                
+
                 String edoc_64 = Utils.encodeEdXmlFileToBase64(fileNameAndPath.toString());
 
                 Optional<Organization> checkFrom = organizationService.findByCode(from);
                 Optional<Organization> checkTo = organizationService.findByCode(Utils.SS_ID);
-                
+
                 if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                     return CustomResponse.Response_data(404, "Khong tim thay don vi");
                 }
-                
-                EDoc eDoc = new EDoc(id, null, receiverDocId, docId, "eDoc", "status", Utils.datetime_now(), Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan", Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN), "Mo ta trang thai moi da nhan");
+
+                Status statusEdxml = EdXML.readStatus(file.getInputStream());
+                Header header = statusEdxml.getHeader();
+                MessageStatus messageStatus = (MessageStatus) header.getMessageHeader();
+                ResponseFor responseFor = messageStatus.getResponseFor();
+                String statusIdEdxml = responseFor.getDocumentId();
+
+                String statusId = Utils.SHA256Hash(statusIdEdxml);
+
+                EDoc eDoc = new EDoc(statusId, null, receiverDocId, docId, "eDoc", "status", Utils.datetime_now(),
+                        Utils.datetime_now(), edoc_64, checkFrom.get(), checkTo.get(),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN, Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN,
+                        "Tieu de trang thai moi da nhan", "Notation trang thai moi da nhan",
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN
+                                .get(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.DA_DEN),
+                        "Mo ta trang thai moi da nhan");
 
                 Optional<EDoc> checkPeDoc = eDocService.findByDocId(docId);
                 if (!checkPeDoc.isPresent()) {
@@ -72,23 +90,16 @@ public class EdocStatusLienThongController {
                 }
 
                 EDoc peDoc = checkPeDoc.get();
-                Status edxmlStatus = EdXML.readStatus(fileName);
-                System.out.println(edxmlStatus.toString());
-                System.out.println("+================");
-                Header header = edxmlStatus.getHeader();
-                System.out.println(header.toString());
-                System.out.println("+================");
-                MessageStatus messageStatus = (MessageStatus) header.getMessageHeader();
-                System.out.println(messageStatus.toString());
-                System.out.println("+================");
 
                 String statusCode = messageStatus.getStatusCode();
                 String statusDescription = messageStatus.getDescription();
                 peDoc.setUpdated_time(Utils.datetime_now());
                 peDoc.setSendStatus(statusCode);
                 peDoc.setReceiveStatus(statusCode);
-                peDoc.setSendStatusDesc(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(statusCode));
-                peDoc.setReceiveStatusDesc(Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(statusCode));
+                peDoc.setSendStatusDesc(
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(statusCode));
+                peDoc.setReceiveStatusDesc(
+                        Constants.TRANG_THAI_VAN_BAN_LIEN_THONG.MO_TA_TRANG_THAI_VAN_BAN.get(statusCode));
                 peDoc.setDescription(statusDescription);
 
                 eDocService.saveEDoc(eDoc);

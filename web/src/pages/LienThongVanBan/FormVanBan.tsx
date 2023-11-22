@@ -44,7 +44,7 @@ const FormVanBan = () => {
   };
   return (
     <Spin spinning={vanbanModel.loading}>
-      <Card title={'Thêm mới'}>
+      <Card title={vanbanModel?.edit? "Chỉnh sửa văn bản" : "Thêm mới"}>
         <Form
           {...layout}
           form={form}
@@ -55,7 +55,7 @@ const FormVanBan = () => {
         >
           <Form.Item name={['toOrganization', 'code']} label="Mã đơn vị nhận" rules={rules.required}>
             {vanbanModel?.edit ?
-              <Input type="text" name={['toOrganization', 'code']} readOnly disabled/>
+              <Input type="text" name={['toOrganization', 'code']} readOnly disabled />
               :
               <Input type="text" name={['toOrganization', 'code']} />
             }

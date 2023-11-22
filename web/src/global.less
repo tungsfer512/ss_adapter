@@ -69,6 +69,7 @@ body,
 .ant-layout {
   min-height: 100vh;
 }
+
 .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
   left: unset;
 }
@@ -82,9 +83,11 @@ body,
   cursor: pointer;
   transition: all 0.3s;
 }
+
 .dynamic-delete-button:hover {
   color: #777;
 }
+
 .dynamic-delete-button[disabled] {
   cursor: not-allowed;
   opacity: 0.5;
@@ -109,11 +112,11 @@ ol {
   color: #0033CD;
 }
 
-.ant-collapse-content > .ant-collapse-content-box {
+.ant-collapse-content>.ant-collapse-content-box {
   padding: 0 !important;
 }
 
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
+.ant-collapse>.ant-collapse-item>.ant-collapse-header {
   padding: 0 !important;
 }
 
@@ -121,12 +124,15 @@ ol {
   .ant-table {
     width: 100%;
     overflow-x: auto;
-    &-thead > tr,
-    &-tbody > tr {
-      > th,
-      > td {
+
+    &-thead>tr,
+    &-tbody>tr {
+
+      >th,
+      >td {
         white-space: pre;
-        > span {
+
+        >span {
           display: block;
         }
       }
@@ -139,12 +145,26 @@ ol {
 }
 
 // Compatible with IE11
-@media screen and(-ms-high-contrast: active), (-ms-high-contrast: none) {
-  body .ant-design-pro > .ant-layout {
+@media screen and(-ms-high-contrast: active),
+(-ms-high-contrast: none) {
+  body .ant-design-pro>.ant-layout {
     min-height: 100vh;
   }
 }
 
 .ant-pro-sider-logo h1 {
   height: auto !important;
+}
+
+.ant-table-thead>tr>th {
+  font-weight: 800 !important;
+}
+
+.ant-table-thead .ant-table-cell {
+  background: #cfcfcf !important;
+}
+
+.ant-table-filter-trigger,
+.ant-table-column-sorter-inner {
+  color: #454545 !important;
 }

@@ -16,7 +16,6 @@ const VanBanDen = (): React.Fragment => {
   const handleTiepNhan = (record: IVanBanRecord) => {
     let headers = {
       docId: record.id,
-      sendDocId: '42a200c7-519a-4cad-904e-9abbb637cb1d',
       status: ETrangThaiVanBan.DA_TIEP_NHAN,
       to : record?.fromOrganization?.code,
     }
@@ -26,7 +25,6 @@ const VanBanDen = (): React.Fragment => {
   const handleTuChoi = async (record: IVanBanRecord) => {
     let headers = {
       docId: record.id,
-      sendDocId: '42a200c7-519a-4cad-904e-9abbb637cb1d',
       status: ETrangThaiVanBan.TU_CHOI_TIEP_NHAN,
       to : record?.fromOrganization?.code,
     }

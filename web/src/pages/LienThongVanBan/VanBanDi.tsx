@@ -22,7 +22,6 @@ const VanBanDi = (): React.Fragment => {
   const handleThuHoi = async (record: IVanBanRecord) => {
     let headers = {
       docId: record.id,
-      sendDocId: '124b3206-074c-4c69-8fcd-0c239bf72d0a.edxml',
       status: ETrangThaiVanBan.DA_THU_HOI,
       to : record?.toOrganization?.code,
     }

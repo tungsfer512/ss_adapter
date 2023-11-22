@@ -1,8 +1,5 @@
 package vn.ript.ssadapter.controller.apilienthongvanban;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.vnpt.xml.base.header.Header;
 import com.vnpt.xml.base.header.ResponseFor;
-import com.vnpt.xml.ed.Ed;
 import com.vnpt.xml.status.Status;
 import com.vnpt.xml.status.header.MessageStatus;
 
@@ -49,15 +45,15 @@ public class EdocStatusLienThongController {
             @RequestHeader(name = "from", required = true) String from,
             @RequestHeader(name = "docId", required = true) String docId) {
         try {
-            String id = Utils.UUID();
+            // String id = Utils.UUID();
             String receiverDocId = Utils.UUID();
             if (!file.isEmpty()) {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                String fileName = id + ".edxml";
-                Path fileNameAndPath = Paths.get(Utils.EDocDir, fileName);
-                Files.write(fileNameAndPath, file.getBytes());
+                // String fileName = id + ".edxml";
+                // Path fileNameAndPath = Paths.get(Utils.EDocDir, fileName);
+                // Files.write(fileNameAndPath, file.getBytes());
 
-                String edoc_64 = Utils.encodeEdXmlFileToBase64(fileNameAndPath.toString());
+                String edoc_64 = Utils.encodeEdXmlFileToBase64(file.getBytes());
 
                 Optional<Organization> checkFrom = organizationService.findByCode(from);
                 Optional<Organization> checkTo = organizationService.findByCode(Utils.SS_ID);

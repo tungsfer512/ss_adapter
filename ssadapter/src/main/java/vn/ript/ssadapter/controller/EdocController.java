@@ -71,9 +71,8 @@ public class EdocController {
                 content = EdXMLBuild.createEdoc_new(null, EDoc.code_number);
             }
             EDoc.code_number += 1;
-            Path edxmlFilePath = content.getContent().toPath();
 
-            String edoc_64 = Utils.encodeEdXmlFileToBase64(edxmlFilePath.toAbsolutePath().toString());
+            String edoc_64 = Utils.encodeEdXmlFileToBase64(content.getContent());
 
             Optional<Organization> checkFrom = organizationService.findByCode(Utils.SS_ID);
             Optional<Organization> checkTo = organizationService.findByCode(to);

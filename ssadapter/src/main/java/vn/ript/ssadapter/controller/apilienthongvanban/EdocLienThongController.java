@@ -1,8 +1,5 @@
 package vn.ript.ssadapter.controller.apilienthongvanban;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Optional;
 
@@ -49,11 +46,11 @@ public class EdocLienThongController {
             String receiverDocId = Utils.UUID();
             if (!file.isEmpty()) {
                 System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
-                String originFileName = file.getOriginalFilename();
-                Path fileNameAndPath = Paths.get(Utils.EDocDir, originFileName);
-                Files.write(fileNameAndPath, file.getBytes());
+                // String originFileName = file.getOriginalFilename();
+                // Path fileNameAndPath = Paths.get(Utils.EDocDir, originFileName);
+                // Files.write(fileNameAndPath, file.getBytes());
 
-                String edoc_64 = Utils.encodeEdXmlFileToBase64(fileNameAndPath.toString());
+                String edoc_64 = Utils.encodeEdXmlFileToBase64(file.getBytes());
 
                 Optional<Organization> checkFrom = organizationService.findByCode(from);
                 Optional<Organization> checkTo = organizationService.findByCode(Utils.SS_ID);

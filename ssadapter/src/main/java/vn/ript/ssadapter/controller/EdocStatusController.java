@@ -21,8 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vnpt.xml.base.Content;
 import com.vnpt.xml.base.header.Header;
 import com.vnpt.xml.base.header.ResponseFor;
-import com.vnpt.xml.ed.Ed;
-import com.vnpt.xml.ed.header.MessageHeader;
 import com.vnpt.xml.status.Status;
 import com.vnpt.xml.status.header.MessageStatus;
 
@@ -50,12 +48,10 @@ public class EdocStatusController {
     @PostMapping(value = "/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestHeader(name = "docId", required = true) String docId,
-            @RequestHeader(name = "sendDocId", required = true) String sendDocId,
             @RequestHeader(name = "status", required = true) String status,
             @RequestHeader(name = "to", required = true) String to) {
         try {
             Content content;
-            String id = Utils.UUID();
             String senderDocId = Utils.UUID();
             content = EdXMLBuild.create_status(status);
             Path edxmlFilePath = content.getContent().toPath();
@@ -99,7 +95,7 @@ public class EdocStatusController {
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/edocs/status/update";
             Map<String, String> headers = new HashMap<>();
             headers.put("from", Utils.SS_ID);
-            headers.put("docId", sendDocId);
+            headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("POST", url, headers);
 

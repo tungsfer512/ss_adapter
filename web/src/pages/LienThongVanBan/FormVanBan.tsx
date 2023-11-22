@@ -24,15 +24,22 @@ const FormVanBan = () => {
   }
 
   const handleFinish = (values: any) => {
-    console.log("==================");
-    console.log(selectedFile[0]);
-    console.log("==================");
-    let payload = new FormData();
-    payload.append('file', selectedFile[0]);
-    let headers = {
-      to : 'CS:GOV:SS2MC:SS2SUB1'
+    if (vanbanModel.edit) {
+      let payload = new FormData();
+      payload.append('file', selectedFile[0]);
+      let headers = {
+        to: vanbanModel?.record?.toOrganization?.code,
+        pDocId: vanbanModel?.record?.id,
+      }
+      vanbanModel.send_edoc(headers, payload);
+    } else {
+      let payload = new FormData();
+      payload.append('file', selectedFile[0]);
+      let headers = {
+        to: values?.toOrganization?.code
+      }
+      vanbanModel.send_edoc(headers, payload);
     }
-    vanbanModel.send_edoc(headers, payload);
     vanbanModel.setVisibleForm(false);
   };
   return (
@@ -46,13 +53,26 @@ const FormVanBan = () => {
             ...(vanbanModel?.record ?? {}),
           }}
         >
-          <Form.Item name='file' label="file" rules={rules.required}>
-            <Input type="file" name='file' onChange={handleFileSelect}/>
+          <Form.Item name={['toOrganization', 'code']} label="Mã đơn vị nhận" rules={rules.required}>
+            {vanbanModel?.edit ?
+              <Input type="text" name={['toOrganization', 'code']} readOnly disabled/>
+              :
+              <Input type="text" name={['toOrganization', 'code']} />
+            }
+          </Form.Item>
+          <Form.Item name='file' label="File đính kèm" rules={rules.required}>
+            <Input type="file" name='file' onChange={handleFileSelect} />
           </Form.Item>
           <Form.Item {...tailLayout}>
-            <Button type="primary" htmlType="submit">
-              {'Gửi văn bản'}
-            </Button>
+            {vanbanModel?.edit ?
+              <Button type="primary" htmlType="submit">
+                {'Cập nhật văn bản'}
+              </Button>
+              :
+              <Button type="primary" htmlType="submit">
+                {'Gửi văn bản'}
+              </Button>
+            }
           </Form.Item>
         </Form>
       </Card>

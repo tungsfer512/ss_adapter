@@ -71,7 +71,7 @@ public class EdocStatusLienThongController {
 
                 String statusId = Utils.SHA256Hash(statusIdEdxml);
                 String pid = docId;
-                if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                if (pDocId != null && !pDocId.equalsIgnoreCase("")) {
                     pid = pDocId;
                 }
                 EDoc eDoc = new EDoc(statusId, null, receiverDocId, pid, "eDoc", "status", Utils.datetime_now(),

@@ -68,7 +68,7 @@ public class EdocLienThongController {
                 String docId = Utils.SHA256Hash(docIdEdxml);
 
                 String pid = null;
-                if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+                if (pDocId != null && !pDocId.equalsIgnoreCase("")) {
                     pid = pDocId;
                 }
 

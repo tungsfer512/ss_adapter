@@ -97,7 +97,7 @@ public class EdocController {
             headers.put("X-Road-Client", xRoadClient);
             
             String pid = null;
-            if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+            if (pDocId != null && !pDocId.equalsIgnoreCase("")) {
                 pid = pDocId;
                 headers.put("pDocId", pDocId);
             }

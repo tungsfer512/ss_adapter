@@ -89,7 +89,7 @@ public class EdocStatusController {
             HttpEntity multipartHttpEntity = multipartEntityBuilder.build();
             
             String pid = docId;
-            if (pDocId != null && pDocId.equalsIgnoreCase("")) {
+            if (pDocId != null && !pDocId.equalsIgnoreCase("")) {
                 pid = pDocId;
                 headers.put("pDocId", pid);
             }

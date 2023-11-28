@@ -12,7 +12,7 @@ import com.vnpt.xml.status.Status;
 import com.vnpt.xml.status.parser.StatusXmlParser;
 
 public class EdXML {
-    public static Ed readEdoc(String fileName) {
+    public static Ed readDocument(String fileName) {
         Ed ed = null;
         try {
             // Thread.sleep(3000);
@@ -26,7 +26,7 @@ public class EdXML {
         return ed;
     }
     
-    public static Ed readEdoc(File file) {
+    public static Ed readDocument(File file) {
         Ed ed = null;
         try {
             InputStream inputStream = new FileInputStream(file);
@@ -38,7 +38,7 @@ public class EdXML {
         return ed;
     }
     
-    public static Ed readEdoc(InputStream inputStream) {
+    public static Ed readDocument(InputStream inputStream) {
         Ed ed = null;
         try {
             ed = EdXmlParser.getInstance().parse(inputStream);

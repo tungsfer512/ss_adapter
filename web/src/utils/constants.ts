@@ -380,13 +380,15 @@ export const Setting = {
 };
 
 export enum ETrangThaiVanBan {
-  DA_DEN = '01',
-  TU_CHOI_TIEP_NHAN = '02',
-  DA_TIEP_NHAN = '03',
-  DA_PHAN_CONG_XU_LY = '04',
+  CHO_TIEP_NHAN = '01',
+  DA_TU_CHOI_TIEP_NHAN = '02',
+  DA_TIEP_NHAN_CHO_PHAN_CONG = '03',
+  DA_PHAN_CONG_CHO_XU_LY = '04',
   DANG_XU_LY = '05',
-  DA_XU_LY = '06',
+  DA_HOAN_THANH_XU_LY = '06',
+  DA_YEU_CAU_THU_HOI = '103',
   DA_THU_HOI = '13',
-  DA_CAP_NHAT = '15',
-  TU_CHOI_CAP_NHAT = '16',
+  DA_YEU_CAU_CAP_NHAT = '104',
+  DA_DONG_Y_CAP_NHAT = '15',
+  DA_TU_CHOI_CAP_NHAT = '16',
 }

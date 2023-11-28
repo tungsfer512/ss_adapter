@@ -44,12 +44,12 @@ public class OrganizationService {
     }
 
     
-    public void deleteByCode(String code) {
-        organizationRepository.deleteByCode(code);
+    public void deleteByOrganId(String organId) {
+        organizationRepository.deleteByOrganId(organId);
     }
 
-    public Optional<Organization> findByCode(String code) {
-        return organizationRepository.findByCode(code);
+    public Optional<Organization> findByOrganId(String organId) {
+        return organizationRepository.findByOrganId(organId);
     }
 
 

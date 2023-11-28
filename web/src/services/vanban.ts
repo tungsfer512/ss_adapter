@@ -12,25 +12,25 @@ export interface IPayload {
 }
 
 export const getReceivedEdocList = (headers: any) => {
-    return axios.get(`${ip3}/api/v1/edocs/getReceivedEdocList`, {
+    return axios.get(`${ip3}/api/v1/document/edocs/getReceivedEdocList`, {
       headers: headers
     })
 }
 
 export const getSentEdocList = (headers: any) => {
-    return axios.get(`${ip3}/api/v1/edocs/getSentEdocList`, {
+    return axios.get(`${ip3}/api/v1/document/edocs/getSentEdocList`, {
       headers: headers
     })
 }
 
 export const sendEdoc = (headers: any, payload: any) => {
-    return axios.post(`${ip3}/api/v1/edocs/newedoc`, payload, {
+    return axios.post(`${ip3}/api/v1/document/edocs/new`, payload, {
       headers: headers
     })
 }
 
-export const sendStatusEdoc = (headers: any) => {
-    return axios.post(`${ip3}/api/v1/edocs/status/update`, undefined, {
+export const sendStatusEdoc = (headers: any, payload: any) => {
+    return axios.post(`${ip3}/api/v1/document/status/update`, payload, {
       headers: headers
     })
 }

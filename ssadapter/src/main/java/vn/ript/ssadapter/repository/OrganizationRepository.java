@@ -8,7 +8,7 @@ import org.springframework.data.repository.query.Param;
 import vn.ript.ssadapter.model.Organization;
 
 public interface OrganizationRepository extends JpaRepository<Organization, String> {
-    Optional<Organization> findByCode(@Param("code") String code);
+    Optional<Organization> findByOrganId(@Param("organId") String organId);
 
-	void deleteByCode(@Param("code") String code);
+	void deleteByOrganId(@Param("organId") String organId);
 }

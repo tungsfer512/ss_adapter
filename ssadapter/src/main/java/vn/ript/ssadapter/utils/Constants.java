@@ -1,27 +1,139 @@
 package vn.ript.ssadapter.utils;
 
-import java.util.Map;
+import java.util.HashMap;
 
 public class Constants {
-    public static class TRANG_THAI_VAN_BAN_LIEN_THONG {
-        public static String DA_DEN = "01";
-        public static String TU_CHOI_TIEP_NHAN = "02";
-        public static String DA_TIEP_NHAN = "03";
-        public static String DA_PHAN_CONG_XU_LY = "04";
-        public static String DANG_XU_LY = "05";
-        public static String DA_XU_LY = "06";
-        public static String DA_THU_HOI = "13";
-        public static String DA_CAP_NHAT = "15";
-        public static String TU_CHOI_CAP_NHAT = "16";
-        public static Map<String, String> MO_TA_TRANG_THAI_VAN_BAN = Map.ofEntries(
-                Map.entry(DA_DEN, "Đã đến nơi"),
-                Map.entry(TU_CHOI_TIEP_NHAN, "Đã từ chối tiếp nhận"),
-                Map.entry(DA_TIEP_NHAN, "Đã tiếp nhận"),
-                Map.entry(DA_PHAN_CONG_XU_LY, "Đã phân công xử lý"),
-                Map.entry(DANG_XU_LY, "Đang xử lý"),
-                Map.entry(DA_XU_LY, "Đã xử lý xong"),
-                Map.entry(DA_THU_HOI, "Đã thu hồi"),
-                Map.entry(DA_CAP_NHAT, "Đã được cập nhật"),
-                Map.entry(TU_CHOI_CAP_NHAT, "Đã từ chối cập nhật"));
+
+    private static HashMap<String, TRANG_THAI_VAN_BAN> TRANG_THAI_VAN_BAN_MAP = new HashMap<>();
+    private static HashMap<String, TRANG_THAI_GOI_TIN> TRANG_THAI_GOI_TIN_MAP = new HashMap<>();
+    private static HashMap<String, TRANG_THAI_LIEN_THONG> TRANG_THAI_LIEN_THONG_MAP = new HashMap<>();
+
+    public enum TRANG_THAI_VAN_BAN {
+        CHO_TIEP_NHAN("01",
+                "Văn bản đang chờ tiếp nhận",
+                "Văn bản đang chờ tiếp nhận"),
+        DA_TU_CHOI_TIEP_NHAN("02",
+                "Văn bản đã bị từ chối tiếp nhận",
+                "Đã từ chối tiếp nhận văn bản"),
+        DA_TIEP_NHAN_CHO_PHAN_CONG("03",
+                "Văn bản đã được tiếp nhận, đang chờ phân công xử lý",
+                "Đã tiếp nhận văn bản, yêu cầu phân công xử lý"),
+        DA_PHAN_CONG_CHO_XU_LY("04",
+                "Văn bản đã được phân công, đang chờ xử lý",
+                "Đã phân công xử lý văn bản, yêu cầu xử lý"),
+        DANG_XU_LY("05",
+                "Văn bản đang được xử lý",
+                "Đang xử lý văn bản"),
+        DA_HOAN_THANH_XU_LY("06",
+                "Văn bản đã được xử lý",
+                "Văn bản đã xử lý xong"),
+        DA_YEU_CAU_THU_HOI("103",
+                "Đã thông báo thu hồi văn bản",
+                "Văn bản có thông báo thu hồi"),
+        DA_THU_HOI("13",
+                "Đã thu hồi văn bản",
+                "Văn bản đã bị thu hồi"),
+        DA_YEU_CAU_CAP_NHAT("104",
+                "Đã yêu cầu cập nhật văn bản",
+                "Văn bản có yêu cầu cập nhật"),
+        DA_DONG_Y_CAP_NHAT("15",
+                "Văn bản đã có phiên bản cập nhật",
+                "Văn bản đã có phiên bản cập nhật"),
+        DA_TU_CHOI_CAP_NHAT("16",
+                "Văn bản đã bị từ chối cập nhật",
+                "Đã từ chối phiên bản cập nhật của văn bản, đây là phiên bản cũ");
+
+        private final String maTrangThai;
+        private final String moTaTrangThaiGui;
+        private final String moTaTrangThaiNhan;
+
+        TRANG_THAI_VAN_BAN(final String maTrangThai, final String moTaTrangThaiGui, final String moTaTrangThaiNhan) {
+            this.maTrangThai = maTrangThai;
+            this.moTaTrangThaiGui = moTaTrangThaiGui;
+            this.moTaTrangThaiNhan = moTaTrangThaiNhan;
+            TRANG_THAI_VAN_BAN_MAP.put(maTrangThai, this);
+        }
+
+        public String maTrangThai() {
+            return this.maTrangThai;
+        }
+
+        public String moTaTrangThaiGui() {
+            return this.moTaTrangThaiGui;
+        }
+
+        public String moTaTrangThaiNhan() {
+            return this.moTaTrangThaiNhan;
+        }
+
+        public static TRANG_THAI_VAN_BAN getByMaTrangThai(String maTrangThai) {
+            return TRANG_THAI_VAN_BAN_MAP.get(maTrangThai);
+        }
+    }
+
+    public enum TRANG_THAI_GOI_TIN {
+        DA_GUI_KHONG_PHAN_HOI("00",
+                "Gói tin trạng thái đã chuyển đi, không yêu cầu phản hồi",
+                "Gói tin trạng thái đã nhận, không yêu cầu phản hồi"),
+        CHO_PHAN_HOI("01",
+                "Gói tin trạng thái đang chờ phản hồi",
+                "Gói tin trạng thái đang chờ phản hồi"),
+        DA_HOAN_THANH_XU_LY("06",
+                "Gói tin trạng thái đã phản hồi",
+                "Gói tin trạng thái đã phản hồi");
+
+        private final String maTrangThai;
+        private final String moTaTrangThaiGui;
+        private final String moTaTrangThaiNhan;
+
+        private TRANG_THAI_GOI_TIN(final String maTrangThai, final String moTaTrangThaiGui,
+                final String moTaTrangThaiNhan) {
+            this.maTrangThai = maTrangThai;
+            this.moTaTrangThaiGui = moTaTrangThaiGui;
+            this.moTaTrangThaiNhan = moTaTrangThaiNhan;
+            TRANG_THAI_GOI_TIN_MAP.put(maTrangThai, this);
+        }
+
+        public String maTrangThai() {
+            return this.maTrangThai;
+        }
+
+        public String moTaTrangThaiGui() {
+            return this.moTaTrangThaiGui;
+        }
+
+        public String moTaTrangThaiNhan() {
+            return this.moTaTrangThaiNhan;
+        }
+
+        public static TRANG_THAI_GOI_TIN getByMaTrangThai(String maTrangThai) {
+            return TRANG_THAI_GOI_TIN_MAP.get(maTrangThai);
+        }
+    }
+
+    public enum TRANG_THAI_LIEN_THONG {
+        THANH_CONG("done", "Đã gửi đi thành công"),
+        THAT_BAI("fail", "Gửi đến đơn vị nhận lỗi");
+
+        private final String maTrangThai;
+        private final String moTaTrangThai;
+
+        private TRANG_THAI_LIEN_THONG(final String maTrangThai, final String moTaTrangThai) {
+            this.maTrangThai = maTrangThai;
+            this.moTaTrangThai = moTaTrangThai;
+            TRANG_THAI_LIEN_THONG_MAP.put(maTrangThai, this);
+        }
+
+        public String maTrangThai() {
+            return this.maTrangThai;
+        }
+
+        public String moTaTrangThai() {
+            return this.moTaTrangThai;
+        }
+
+        public static TRANG_THAI_GOI_TIN getByMaTrangThai(String maTrangThai) {
+            return TRANG_THAI_GOI_TIN_MAP.get(maTrangThai);
+        }
     }
 }

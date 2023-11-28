@@ -1,27 +1,7 @@
 import { message } from 'antd';
 import { useRef, useState } from 'react';
 import { getReceivedEdocList, getSentEdocList, sendEdoc, sendStatusEdoc } from '@/services/vanban';
-
-export interface IVanBanRecord {
-  id: string;
-  fromOrganization: any;
-  toOrganization: any;
-  senderDocId: string;
-  receiverDocId: string;
-  pid: string;
-  serviceType: string;
-  messageType: string;
-  created_time: string;
-  updated_time: string;
-  from: string;
-  to: string;
-  sendStatus: string;
-  receiveStatus: string;
-  title: string;
-  notation: string;
-  sendStatusDesc: string;
-  receiveStatusDesc: string;
-}
+import { IVanBanRecord } from '@/utils/interfaces';
 
 export default () => {
   const [danhSach, setDanhSach] = useState<IVanBanRecord[]>([]);
@@ -86,11 +66,11 @@ export default () => {
       setLoading(false);
     }
   };
-  
-  const send_status_edoc = async (headers: any) => {
+
+  const send_status_edoc = async (headers: any, payload: any) => {
     try {
       setLoading(true);
-      const res = await sendStatusEdoc(headers);
+      const res = await sendStatusEdoc(headers, payload);
       if (res.status === 200) {
         const res_get = await getReceivedEdocList(headers);
         if (res_get.status === 200) {

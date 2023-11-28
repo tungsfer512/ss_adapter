@@ -47,7 +47,7 @@ class SkipSSLHttpClient {
             sc.init(null, trustAllCerts, new SecureRandom());
             CloseableHttpClient httpClient = HttpClients.custom()
                     .setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE)
-                    .setSslcontext(sc).build();
+                    .setSSLContext(sc).build();
             return httpClient;
         } catch (Exception e) {
             e.printStackTrace();

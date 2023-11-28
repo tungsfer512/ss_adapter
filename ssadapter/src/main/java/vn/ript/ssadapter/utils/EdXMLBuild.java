@@ -1,12 +1,11 @@
 package vn.ript.ssadapter.utils;
 
+import java.io.File;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.springframework.util.ResourceUtils;
-
-import com.google.common.collect.Lists;
 import com.vnpt.xml.base.Content;
 import com.vnpt.xml.base.builder.BuildException;
 import com.vnpt.xml.base.header.Bussiness;
@@ -41,143 +40,172 @@ import com.vnpt.xml.status.builder.StatusXmlBuilder;
 import com.vnpt.xml.status.header.MessageStatus;
 
 public class EdXMLBuild {
-	public static Content createEdoc_new(String fileName, int code_number) throws Exception {
-		Ed ed = new Ed();
-		// khoi tao code cho van ban
-		String code_number_str = String.valueOf(code_number);
+	public static Content createEdoc_new(
+			vn.ript.ssadapter.model.Organization from,
+			List<vn.ript.ssadapter.model.Organization> to_list,
+			String code_number,
+			String code_notation,
+			String promulgation_place,
+			vn.ript.ssadapter.model.document.DocumentType document_type,
+			String subject,
+			String content,
+			String signer_info_competence,
+			String signer_info_position,
+			String signer_info_fullname,
+			String due_date,
+			List<String> to_places,
+			Integer other_info_priority,
+			String other_info_sphere_of_promulgation,
+			String other_info_typer_notation,
+			Integer other_info_promulgation_amount,
+			Integer other_info_page_amount,
+			List<String> appendixes,
+			Boolean response_for,
+			Integer steering_type,
+			Integer business_bussiness_doc_type,
+			String business_bussiness_doc_reason,
+			Integer business_bussiness_document_info_document_info,
+			Integer business_bussiness_document_info_document_receiver,
+			List<vn.ript.ssadapter.model.document.UpdateReceiver> business_bussiness_document_info_receiver_list,
+			String business_document_id,
+			String business_staff_info_department,
+			String business_staff_info_staff,
+			String business_staff_info_mobile,
+			String business_staff_info_email,
+			Integer business_paper,
+			List<vn.ript.ssadapter.model.document.ReplacementInfo> business_replacement_info_list,
+			List<File> attachments,
+			List<String> attachment_description_list) throws Exception {
+
 		String date = Utils.date_now();
-		Code code = new Code(code_number_str, "VPCP-TTĐT");
 
-		// khoi tao cac don vi gui va nhan
-		Organization org1 = new Organization("000.00.00.G22", "Văn phòng Chính phủ", "Văn phòng Chính phủ",
-				"Số 1 Hoàng Hoa Thám, Quận Ba Đình, Hà Nội", "vpcp@gov.vn", "8043100", "048989898789", "vpcp.vn");
+		Ed ed = new Ed();
 
-		Organization org5 = new Organization("000.00.00.H41", "UBND Tỉnh Nghệ An", "UBND Tỉnh Nghệ An",
-				"Số 03, đường Trường Thi, Thành phố Vinh, Tỉnh Nghệ An, Việt Nam",
-				"nghean@gov.vn", "0383 840418", "0383 843049", "www.nghean.vn");
+		// khoi tao code cho van ban
+		Code code = new Code(code_number, code_notation);
 
-		Organization org6 = new Organization("000.00.00.H14", "UBND Tỉnh Cao Bằng", "UBND Tỉnh Cao Bằng",
-				"Số 011 - Đường Hoàng Đình Giong - Thành Phố Cao Bằng, Tỉnh Cao Bằng",
-				"caobang@gov.vn", "02063852139", "0202183239", "www.caobang.gov.vn");
-
-		Organization org7 = new Organization("000.00.00.G17", "Sở Thông tin truyền thông Hải Phòng",
-				"Sở Thông tin truyền thông Hải Phòng", "số 62 - Võ Thị Sáu - Ngô Quyền - Hải Phòng",
-				"bxd@moc.gov.vn", "(84-4) 3821 5137", "(023)37366617", "www.haiphong.gov.vn");
 		// khoi tao don vi gui
-		Organization from = org1;
+		Organization orgFrom = new Organization(
+				from.getOrganId(),
+				from.getOrganizationInCharge(),
+				from.getOrganName(),
+				from.getOrganAdd(),
+				from.getEmail(),
+				from.getTelephone(),
+				from.getFax(),
+				from.getWebsite());
 
 		// khoi tao danh sach don vi nhan
-		List<Organization> toes = Lists.newArrayList(org5, org6, org7);
+		List<Organization> orgToes = new ArrayList<>();
+		for (vn.ript.ssadapter.model.Organization to : to_list) {
+			orgToes.add(new Organization(
+					to.getOrganId(),
+					to.getOrganizationInCharge(),
+					to.getOrganName(),
+					to.getOrganAdd(),
+					to.getEmail(),
+					to.getTelephone(),
+					to.getFax(),
+					to.getWebsite()));
+		}
 
 		// khoi tao thong tin ban hanh
-		PromulgationInfo promulgationInfo = new PromulgationInfo("Hà Nội", DateUtils.parse(date));
+		PromulgationInfo promulgationInfo = new PromulgationInfo(promulgation_place, DateUtils.parse(date));
 
 		// khoi tao loai van ban
-		DocumentType docType = new DocumentType(1, "Công văn");
+		DocumentType documentType = new DocumentType(document_type.getType(), document_type.getTypeName());
 
 		// khoi tao thong tin nguoi ky
-		SignerInfo signerInfo = new SignerInfo("TL. BO TRUONG", "Cuc truong cuc ung dung cong nghe thong tin",
-				"Nguyen Thanh Phuc");
-
-		// khai bao tieu de
-		String subject = "V/v kết nối, liên thông phần mềm quản lý văn bản";
-		// khai bao noi dung
-		String context = "V/v kết nối, liên thông phần mềm quản lý văn bản";
+		SignerInfo signerInfo = new SignerInfo(signer_info_competence, signer_info_position, signer_info_fullname);
 
 		// khoi tao header
-		MessageHeader header = new MessageHeader(from, toes, code, promulgationInfo, docType, subject,
-				context, null, signerInfo, new Date(), null, null);
+		MessageHeader header = new MessageHeader(orgFrom, orgToes, code, promulgationInfo, documentType, subject,
+				content, null, signerInfo, DateUtils.parse(due_date), null, null);
 
 		// dia diem noi nhan va luu van ban
-		header.addToPlace("Cac bo va co quan ngang bo");
-		header.addToPlace("Uy ban nhan dan cac tinh, TP");
+		for (String to_place : to_places) {
+			header.addToPlace(to_place);
+		}
 
 		// khoi tao loai chi dao
-		header.setSteeringType(1);
+		header.setSteeringType(steering_type);
 
 		// khoi tao cac thong tin khac cua van ban
 		OtherInfo otherInfo = new OtherInfo();
-		otherInfo.setPriority(0);
-		otherInfo.setPromulgationAmount(2);
-		otherInfo.setPageAmount(22);
-		otherInfo.setSphereOfPromulgation("Liên thông văn bản quốc gia");
-		List<String> paramList = new ArrayList<String>();
-		paramList.add("Công văn về việc kết nối, liên thông phần mềm quản lý văn bản");
-		otherInfo.setTyperNotation("TVC");
-		otherInfo.setAppendixes(paramList);
+		otherInfo.setPriority(other_info_priority);
+		otherInfo.setPromulgationAmount(other_info_promulgation_amount);
+		otherInfo.setPageAmount(other_info_page_amount);
+		otherInfo.setSphereOfPromulgation(other_info_sphere_of_promulgation);
+		otherInfo.setTyperNotation(other_info_typer_notation);
+		otherInfo.setAppendixes(appendixes);
 		header.setOtherInfo(otherInfo);
 
+		String document_id = from.getOrganId() + "," + date + "," + code_number + "/" + code_notation;
 		// khoi tao thong tin ma dinh danh cua van ban
-		header.setDocumentId("000.00.00.G22," + date + "," + code_number_str + "/VPCP-TTĐT");
+		header.setDocumentId(document_id);
 
 		// khoi tao thong tin van ban phan hoi va phuc dap
-		// ResponseFor responseFor = new ResponseFor("000.00.00.H41", "267/VPCP-TTĐT",
-		// new Date(),
-		// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
-		// ResponseFor responseFor2 = new ResponseFor("000.00.00.H14", "267/VPCP-TTĐT",
-		// new Date(),
-		// "000.00.04.G14,2012/08/06,267/VPCP-TTĐT");
-
-		// add responseFor
-		// header.setResponseFor(responseFor);
-		// header.setResponseFor(responseFor2);
+		// List<ResponseFor> response_for_list = new
+		if (response_for != null && response_for == true) {
+			for (vn.ript.ssadapter.model.Organization to : to_list) {
+				ResponseFor responseFor = new ResponseFor(to.getOrganId(), code_number + "/" + code_notation,
+						DateUtils.parse(date), document_id);
+				header.addResponseFor(responseFor);
+			}
+		}
 
 		// khoi tao cac thong tin traceHeader
 		TraceHeaderList trList = new TraceHeaderList();
-		TraceHeader trace1 = new TraceHeader();
-		trace1.setOrganId("000.00.00.G22");
-		trace1.setTimestamp(DateUtils.parse(date));
-		trList.addTraceHeader(trace1);
-		// TraceHeader trace2 = new TraceHeader();
-		// trace2.setOrganId("000.00.00.H41");
-		// trace2.setTimestamp(DateUtils.parse(new
-		// SimpleDateFormat("yyyy/MM/dd").format(new java.util.Date())));
-		// trList.addTraceHeader(trace2);
+		TraceHeader traceFrom = new TraceHeader();
+		traceFrom.setOrganId(from.getOrganId());
+		traceFrom.setTimestamp(DateUtils.parse(date));
+		trList.addTraceHeader(traceFrom);
 
 		// khoi tao danh sach cac truong thong tin duoc van ban cap nhat
 		BussinessDocumentInfo bussinessDocumentInfo = new BussinessDocumentInfo();
-		bussinessDocumentInfo.setdocumentInfo("1");
-		bussinessDocumentInfo.setdocumentReceiver("1");
+		bussinessDocumentInfo.setdocumentInfo(business_bussiness_document_info_document_info.toString());
+		bussinessDocumentInfo.setdocumentReceiver(business_bussiness_document_info_document_receiver.toString());
 
 		// khoi tao danh sach cac don vi nhan bi thay doi khi cap nhat van ban
 		ReceiverList receiverList = new ReceiverList();
-		Receiver receiver = new Receiver("000.00.00.H41", "0");
-		Receiver receiver2 = new Receiver("000.00.00.H14", "1");
-		receiverList.addReceiver(receiver);
-		receiverList.addReceiver(receiver2);
+		for (vn.ript.ssadapter.model.document.UpdateReceiver business_bussiness_document_info_receiver : business_bussiness_document_info_receiver_list) {
+			Receiver receiver = new Receiver(business_bussiness_document_info_receiver.getUpdateReceiver_OrganId(),
+					business_bussiness_document_info_receiver.getUpdateReceiver_ReceiverType().toString());
+			receiverList.addReceiver(receiver);
+		}
 
 		// khoi tao thong tin ve nguoi xu ly
 		StaffInfo staffInfo = new StaffInfo();
-		staffInfo.setDepartment("Văn thư văn phòng");
-		staffInfo.setStaff("Nguyễn Thị Ngọc Trâm");
-		staffInfo.setEmail("vanthuvanphong@gov.vn");
-		staffInfo.setMobile("84912000001");
+		staffInfo.setDepartment(business_staff_info_department);
+		staffInfo.setStaff(business_staff_info_staff);
+		staffInfo.setEmail(business_staff_info_email);
+		staffInfo.setMobile(business_staff_info_mobile);
 
 		// khoi tao thong tin danh sach van ban bi thay the
 		ReplacementInfoList replacementInfoList = new ReplacementInfoList();
-		ReplacementInfo replacementInfo = new ReplacementInfo();
-		OrganIdList organIdList = new OrganIdList();
-		organIdList.addOrganId("000.00.00.H41");
-		organIdList.addOrganId("000.00.00.H14");
-		replacementInfo.setOrganIdList(organIdList);
-		replacementInfo.setDocumentId("000.00.00.G22,2014/02/30,7806/VPCP-TTĐT");
-		replacementInfoList.addReplacementInfo(replacementInfo);
-		replacementInfoList.addReplacementInfo(replacementInfo);
+		for (vn.ript.ssadapter.model.document.ReplacementInfo business_replacement_info : business_replacement_info_list) {
+			OrganIdList organIdList = new OrganIdList();
+			organIdList.setOrganId(business_replacement_info.getReplacementInfo_OrganIdList());
+			ReplacementInfo replacementInfo = new ReplacementInfo(
+					business_replacement_info.getReplacementInfo_DocumentId(),
+					organIdList);
+			replacementInfoList.addReplacementInfo(replacementInfo);
+		}
 
 		// khoi tao cac thong tin danh dau loai nghiep vu van ban
 		Bussiness bussiness = new Bussiness();
-		bussiness.setBussinessDocReason("Văn bản điện tử mới");
-		bussiness.setBussinessDocType("0");
-		bussiness.setDocumentId("000.00.00.G22,2014/02/30,7806/VPCP-TTĐT");
-		bussiness.setPaper("0");
+		bussiness.setBussinessDocReason(business_bussiness_doc_reason);
+		bussiness.setBussinessDocType(business_bussiness_doc_type.toString());
+		bussiness.setDocumentId(business_document_id);
+		bussiness.setPaper(business_paper.toString());
 		// add addreceiverList
 		bussinessDocumentInfo.addreceiverList(receiverList);
 		// add staffInfo
 		bussiness.addStaffInfo(staffInfo);
 		// add BussinessDocumentInfo
-		// bussiness.addBussinessDocumentInfo(bussinessDocumentInfo);
+		bussiness.addBussinessDocumentInfo(bussinessDocumentInfo);
 		// add ReplacementInfoList
-		// bussiness.addReplacementInfoList(replacementInfoList);
+		bussiness.addReplacementInfoList(replacementInfoList);
 
 		// add TraceHeaderList
 		trList.setBussiness(bussiness);
@@ -199,44 +227,63 @@ public class EdXMLBuild {
 		ed.setHeader(new Header(header, trList, signature));
 
 		// khoi tao file dinh kem
-		if (fileName != null) {
-			ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment("209", fileName, fileName,
-					ResourceUtils.getFile(Utils.uploadDir + fileName)));
+		if (attachments != null) {
+			for (int i = 0; i < attachments.size(); i++) {
+				File attachment = attachments.get(i);
+				String description = attachment_description_list.get(i);
+				String fileName = attachment.getName();
+				ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment(
+						Utils.SHA256Hash(Files.readAllBytes(attachment.toPath()).toString()), fileName, description,
+						attachment));
+			}
 		}
 		// ghi file ra thu muc
-		Content content = EdXmlBuilder.build(ed, Utils.EDocDir);
+		Content edXmlContent = EdXmlBuilder.build(ed, Utils.EDocDir);
 
-		return content;
+		return edXmlContent;
 	}
 
-	public static Content create_status(String status_code) {
+	public static Content create_status(
+			vn.ript.ssadapter.model.Organization from,
+			vn.ript.ssadapter.model.document.Document document,
+			String status_staff_info_department,
+			String status_staff_info_staff,
+			String status_staff_info_mobile,
+			String status_staff_info_email,
+			String status_status_code,
+			String status_description) {
 		// create header
 		Header header = new Header();
 		MessageStatus msgStatus = new MessageStatus();
 
 		// set ResponseFor Tag
-		msgStatus.setResponseFor(new ResponseFor("000.00.00.G22", "7816/VPCP-TTĐT", new Date(),
-				"000.00.00.G22,2015/09/30,7816/VPCP-TTĐT"));
+		msgStatus.setResponseFor(new ResponseFor(
+				document.getFrom().getOrganId(),
+				document.getCode_CodeNumber() + "/" + document.getCode_CodeNotation(),
+				DateUtils.parse(document.getPromulgationInfo_PromulgationDate()),
+				document.getDocumentId()));
 		// set from information (organization)
 		msgStatus.setFrom(new Organization(
-				"000.00.00.H41",
-				"UBND Tỉnh Nghệ An",
-				"UBND Tỉnh Nghệ An",
-				"Số 03, đường Trường Thi, Thành phố Vinh, Tỉnh Nghệ An, Việt Nam", "nghean@gov.vn", "0383 840418",
-				"0383 843049", "www.nghean.vn"));
+				from.getOrganId(),
+				from.getOrganizationInCharge(),
+				from.getOrganName(),
+				from.getOrganAdd(),
+				from.getEmail(),
+				from.getTelephone(),
+				from.getFax(),
+				from.getWebsite()));
 
 		// set status code info
-		msgStatus.setStatusCode(status_code);
-		msgStatus.setDescription(
-				"Văn thư - Phòng Văn thư - Lưu trữ: Đã đến - Phần mềm QLVB đã nhận nhưng văn thư chưa xử lý");
+		msgStatus.setStatusCode(status_status_code);
+		msgStatus.setDescription(status_description);
 		msgStatus.setTimestamp(new Date());
 
 		// set staff details
 		StaffInfo staffInfo = new StaffInfo();
-		staffInfo.setDepartment("Văn thư văn phòng");
-		staffInfo.setStaff("Nguyễn Thị Ngọc Trâm");
-		staffInfo.setEmail("vanthuvanphong@gov.vn");
-		staffInfo.setMobile("84912000001");
+		staffInfo.setDepartment(status_staff_info_department);
+		staffInfo.setStaff(status_staff_info_staff);
+		staffInfo.setEmail(status_staff_info_email);
+		staffInfo.setMobile(status_staff_info_mobile);
 		msgStatus.setStaffInfo(staffInfo);
 		header.setMessageHeader(msgStatus);
 

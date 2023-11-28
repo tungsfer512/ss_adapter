@@ -35,12 +35,12 @@
           <edXML:PromulgationDate>2020/06/02(Ngày tháng nam ban hành yyyy/mm/dd)</edXML:PromulgationDate>
         </edXML:PromulgationInfo>
         <edXML:DocumentType> <!--Loại VB--> <!--optional-->
-          <edXML:Type>1</edXML:Type> <!--optional-->
-          <edXML:TypeName>Công văn</edXML:TypeName> <!--optional-->
+          <edXML:Type>1(1-Văn bản quy phạm pháp luật, 2- Văn bản hành chính, mặc định là 2)</edXML:Type> <!--optional-->
+          <edXML:TypeName>Công văn(Nếu là văn bản hành chính, mặc định là công văn)</edXML:TypeName> <!--optional-->
           <!-- <edXML:TypeDetail>0</edXML:TypeDetail> --> <!--optional-->
         </edXML:DocumentType>
-        <edXML:Subject>Trích yêu nội dung VB cần gửi đi</edXML:Subject>
-        <edXML:Content>Nội dung VB gửi đi</edXML:Content> <!--optional-->
+        <edXML:Subject>Trích yêu nội dung VB cần gửi đi (Tiêu đề)</edXML:Subject>
+        <edXML:Content>Nội dung VB gửi đi(Nội dung tóm tắt)</edXML:Content> <!--optional-->
         <edXML:SignerInfo> <!--Thông tin người ký VB--> <!--optional-->
           <edXML:Competence>TL,KT,...(Quyền hạn của người ký VB)</edXML:Competence> <!--optional-->
           <edXML:Position>Phó giám đốc(Chức vụ người ký)</edXML:Position> <!--optional-->
@@ -62,8 +62,14 @@
             <edXML:Appendix>Tên phụ lục đính kèm</edXML:Appendix> <!--optional-->
           </edXML:Appendixes>
         </edXML:OtherInfo>
+        <edXML:ResponseFor> <!--1. TH VB phản hồi cho VB cha, 2. TH thu hồi VB bằng VB khác-->
+          <edXML:OrganId>000.00.00.G22(mã đơn vị gửi)</edXML:OrganId>
+          <edXML:Code>7816/VPCP-TTĐT(số hiệu VB gửi)</edXML:Code>
+          <edXML:DocumentId>000.00.00.G22,2015/09/30,7816/VPCP-TTĐT(mã định danh của vb gửi)</edXML:DocumentId>
+          <edXML:PromulgationDate>2023/11/21 (ngày gửi vb của vb gửi)</edXML:PromulgationDate>
+        </edXML:ResponseFor>
         <edXML:SteeringType>1(Loại chỉ đạo: 1-Không phải chỉ đạo, 2-Chỉ đạo, 3-Báo cáo chỉ đạo)</edXML:SteeringType>
-        <edXML:DocumentId>000.00.14.H56,2020/06/02,808/VNPTTEST</edXML:DocumentId>
+        <edXML:DocumentId>000.00.14.H56,2020/06/02,808/VNPTTEST(mã đơn vị gửi, ngày tháng năm gửi, số hiệu VB gửi)</edXML:DocumentId>
       </edXML:MessageHeader>
       <edXML:TraceHeaderList id="3490sdo9" version="1.0" mustUnderstand="1" actor="http://schemas.xmlsoap.org/soap/actor/next">
         <edXML:TraceHeader>

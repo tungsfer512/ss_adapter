@@ -1,11 +1,20 @@
 package vn.ript.ssadapter.model;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 @Entity
-@Table(name = "organizations")
+@Table(name = "_organization")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,24 +24,31 @@ import lombok.*;
 @ToString
 
 public class Organization {
-    
+
     @Id
-    String id;
-    @Column(name = "_code", columnDefinition = "text", updatable = true)
-    String code;
-    @Column(name = "_pid", columnDefinition = "text", updatable = true)
-    String pid;
-    @Column(name = "_name", columnDefinition = "text", updatable = true)
-    String name;
-    @Column(name = "_address", columnDefinition = "text", updatable = true)
-    String address;
-    @Column(name = "_email", columnDefinition = "text", updatable = true)
-    String email;
-    @Column(name = "_telephone", columnDefinition = "text", updatable = true)
-    String telephone;
-    @Column(name = "_fax", columnDefinition = "text", updatable = true)
-    String fax;
-    @Column(name = "_website", columnDefinition = "text", updatable = true)
-    String website;
-    
+    private String id;
+
+    @Column(name = "_organId", columnDefinition = "text")
+    private String organId;
+
+    @Column(name = "_organizationInCharge", columnDefinition = "text")
+    private String organizationInCharge;
+
+    @Column(name = "_organName", columnDefinition = "text")
+    private String organName;
+
+    @Column(name = "_organAdd", columnDefinition = "text")
+    private String organAdd;
+
+    @Column(name = "_email", columnDefinition = "text")
+    private String email;
+
+    @Column(name = "_telephone", columnDefinition = "text")
+    private String telephone;
+
+    @Column(name = "_fax", columnDefinition = "text")
+    private String fax;
+
+    @Column(name = "_website", columnDefinition = "text")
+    private String website;
 }

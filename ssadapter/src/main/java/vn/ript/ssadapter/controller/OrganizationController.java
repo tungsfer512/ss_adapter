@@ -35,10 +35,10 @@ public class OrganizationController {
             return CustomResponse.Response_data(500, e);
         }
     }
-    @GetMapping("/{code}")
-    public ResponseEntity<Map<String, Object>> getOrganizationsByCode(@PathVariable String code) {
+    @GetMapping("/{organId}")
+    public ResponseEntity<Map<String, Object>> getOrganizationsByOrganId(@PathVariable String organId) {
         try {
-            Optional<Organization> checkOrganization = organizationService.findByCode(code);
+            Optional<Organization> checkOrganization = organizationService.findByOrganId(organId);
             if (!checkOrganization.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
@@ -56,14 +56,14 @@ public class OrganizationController {
             Organization organization = new Organization();
             String UUID = Utils.UUID();
             organization.setId(UUID);
-            organization.setCode((String) entity.get("code"));
-            organization.setPid((String) entity.get("pid"));
-            organization.setName((String) entity.get("name"));
-            organization.setAddress((String) entity.get("address"));
-            organization.setEmail((String) entity.get("email"));
-            organization.setTelephone((String) entity.get("telephone"));
-            organization.setFax((String) entity.get("fax"));
-            organization.setWebsite((String) entity.get("website"));
+            organization.setOrganId(entity.get("organId").toString());
+            organization.setOrganizationInCharge(entity.get("organizationInCharge").toString());
+            organization.setOrganName(entity.get("organName").toString());
+            organization.setOrganAdd(entity.get("organAdd").toString());
+            organization.setEmail(entity.get("email").toString());
+            organization.setTelephone(entity.get("telephone").toString());
+            organization.setFax(entity.get("fax").toString());
+            organization.setWebsite(entity.get("website").toString());
             Organization organizationRes = organizationService.add(organization);
             return CustomResponse.Response_data(200, organizationRes);
         } catch (Exception e) {

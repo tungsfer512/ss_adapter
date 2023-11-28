@@ -12,6 +12,7 @@ import { ETrangThaiVanBan } from '@/utils/constants';
 const VanBanDi = (): React.Fragment => {
 
   const vanbanModel = useModel('vanban');
+  const type = "sent";
 
   const checkCanChinhSua = (record: IVanBanRecord) => {
     // if record.receiveStatus === ETrangThaiVanBan.
@@ -36,7 +37,7 @@ const VanBanDi = (): React.Fragment => {
       status_status_code: ETrangThaiVanBan.DA_YEU_CAU_THU_HOI,
       status_description: "Đã từ chối tiếp nhận"
     }
-    vanbanModel.send_status_edoc(headers, payload);
+    vanbanModel.send_status_edoc(headers, payload, type);
   };
 
   const renderLast = (value: any, record: IVanBanRecord) => (

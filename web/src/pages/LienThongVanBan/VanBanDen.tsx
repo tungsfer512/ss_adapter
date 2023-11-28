@@ -12,6 +12,7 @@ import { ETrangThaiVanBan } from '@/utils/constants';
 const VanBanDen = (): React.Fragment => {
 
   const vanbanModel = useModel('vanban');
+  const type = "received";
 
   const handleTiepNhan = (record: IVanBanRecord) => {
     let headers = {
@@ -26,7 +27,7 @@ const VanBanDen = (): React.Fragment => {
       //   status_status_code: ETrangThaiVanBan.DA_DONG_Y_CAP_NHAT,
       //   status_description: "Đã đồng ý cập nhật"
       // }
-      // vanbanModel.send_status_edoc(headers, payload);
+      // vanbanModel.send_status_edoc(headers, payload, type);
       window.alert("Nghiệp vụ cập nhật chưa có!")
     } else {
       let payload = {
@@ -37,7 +38,7 @@ const VanBanDen = (): React.Fragment => {
         status_status_code: ETrangThaiVanBan.DA_TIEP_NHAN_CHO_PHAN_CONG,
         status_description: "Chờ Phân công xử lý"
       }
-      vanbanModel.send_status_edoc(headers, payload);
+      vanbanModel.send_status_edoc(headers, payload, type);
     }
   };
 
@@ -53,7 +54,7 @@ const VanBanDen = (): React.Fragment => {
       status_status_code: ETrangThaiVanBan.DA_PHAN_CONG_CHO_XU_LY,
       status_description: "Chờ Phân công xử lý"
     }
-    vanbanModel.send_status_edoc(headers, payload);
+    vanbanModel.send_status_edoc(headers, payload, type);
   };
 
   const handleDangXuLy = (record: IVanBanRecord) => {
@@ -68,7 +69,7 @@ const VanBanDen = (): React.Fragment => {
       status_status_code: ETrangThaiVanBan.DANG_XU_LY,
       status_description: "Chờ Phân công xử lý"
     }
-    vanbanModel.send_status_edoc(headers, payload);
+    vanbanModel.send_status_edoc(headers, payload, type);
   };
 
   const handleDaXuLy = (record: IVanBanRecord) => {
@@ -83,7 +84,7 @@ const VanBanDen = (): React.Fragment => {
       status_status_code: ETrangThaiVanBan.DA_HOAN_THANH_XU_LY,
       status_description: "Chờ Phân công xử lý"
     }
-    vanbanModel.send_status_edoc(headers, payload);
+    vanbanModel.send_status_edoc(headers, payload, type);
   };
 
   const handleTuChoi = async (record: IVanBanRecord) => {
@@ -99,7 +100,7 @@ const VanBanDen = (): React.Fragment => {
       //   status_status_code: ETrangThaiVanBan.DA_TU_CHOI_CAP_NHAT,
       //   status_description: "Đã từ chối cập nhật"
       // }
-      // vanbanModel.send_status_edoc(headers, payload);
+      // vanbanModel.send_status_edoc(headers, payload, type);
       window.alert("Nghiệp vụ cập nhật chưa có!")
     } else {
       let payload = {
@@ -110,7 +111,7 @@ const VanBanDen = (): React.Fragment => {
         status_status_code: ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN,
         status_description: "Đã từ chối tiếp nhận"
       }
-      vanbanModel.send_status_edoc(headers, payload);
+      vanbanModel.send_status_edoc(headers, payload, type);
     }
   };
 

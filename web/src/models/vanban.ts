@@ -52,7 +52,8 @@ export default () => {
       setLoading(true);
       const res = await sendEdoc(headers, payload);
       if (res.status === 201) {
-        const res_get = await getReceivedEdocList(headers);
+        
+        const res_get = await getSentEdocList(headers);
         if (res_get.status === 200) {
           setDanhSach(res_get.data?.data);
           setTotal(res_get.data?.data?.length);
@@ -68,15 +69,23 @@ export default () => {
     }
   };
 
-  const send_status_edoc = async (headers: any, payload: any) => {
+  const send_status_edoc = async (headers: any, payload: any, type: string) => {
     try {
       setLoading(true);
       const res = await sendStatusEdoc(headers, payload);
       if (res.status === 201) {
-        const res_get = await getReceivedEdocList(headers);
-        if (res_get.status === 200) {
-          setDanhSach(res_get.data?.data);
-          setTotal(res_get.data?.data?.length);
+        if (type === 'received') {
+          const res_get = await getReceivedEdocList(headers);
+          if (res_get.status === 200) {
+            setDanhSach(res_get.data?.data);
+            setTotal(res_get.data?.data?.length);
+          }
+        } else {
+          const res_get = await getSentEdocList(headers);
+          if (res_get.status === 200) {
+            setDanhSach(res_get.data?.data);
+            setTotal(res_get.data?.data?.length);
+          }
         }
         message.success("Thành công");
       }

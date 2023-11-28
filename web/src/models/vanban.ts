@@ -51,12 +51,13 @@ export default () => {
     try {
       setLoading(true);
       const res = await sendEdoc(headers, payload);
-      if (res.status === 200) {
+      if (res.status === 201) {
         const res_get = await getReceivedEdocList(headers);
         if (res_get.status === 200) {
           setDanhSach(res_get.data?.data);
           setTotal(res_get.data?.data?.length);
         }
+        message.success("Thành công");
       }
       setLoading(false);
     } catch (error: any) {
@@ -71,12 +72,13 @@ export default () => {
     try {
       setLoading(true);
       const res = await sendStatusEdoc(headers, payload);
-      if (res.status === 200) {
+      if (res.status === 201) {
         const res_get = await getReceivedEdocList(headers);
         if (res_get.status === 200) {
           setDanhSach(res_get.data?.data);
           setTotal(res_get.data?.data?.length);
         }
+        message.success("Thành công");
       }
       setLoading(false);
     } catch (error: any) {

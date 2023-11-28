@@ -122,7 +122,7 @@ const VanBanDen = (): React.Fragment => {
           <>
             <Button
               type="primary"
-              style={{ marginBottom: '3px', flex: 1 }}
+              style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
               title="Tiếp nhận"
               onClick={() => handleTiepNhan(record)}
             >Tiếp nhận</Button>
@@ -145,7 +145,7 @@ const VanBanDen = (): React.Fragment => {
         (
           <Button
             type="primary"
-            style={{ marginBottom: '3px', flex: 1 }}
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
             title="Phân công"
             onClick={() => handlePhanCong(record)}
           >Phân công</Button>
@@ -156,7 +156,7 @@ const VanBanDen = (): React.Fragment => {
         (
           <Button
             type="primary"
-            style={{ marginBottom: '3px', flex: 1 }}
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
             title="Đánh dấu đang xử lý"
             onClick={() => handleDangXuLy(record)}
           >Đánh dấu đang xử lý</Button>
@@ -167,7 +167,7 @@ const VanBanDen = (): React.Fragment => {
         (
           <Button
             type="primary"
-            style={{ marginBottom: '3px', flex: 1 }}
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
             title="Đánh dấu đã xử lý"
             onClick={() => handleDaXuLy(record)}
           >Đánh dấu đã xử lý</Button>
@@ -178,10 +178,21 @@ const VanBanDen = (): React.Fragment => {
         (
           <Button
             type="primary"
-            style={{ marginBottom: '3px', flex: 1 }}
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
             title="Đã xử lý"
             disabled
           >Đã xử lý</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Đã từ chối tiếp nhận"
+            disabled
+          >Đã từ chối tiếp nhận</Button>
         )
       }
     </div>

@@ -15,8 +15,8 @@ public class OrganizationService {
     @Autowired
     OrganizationRepository organizationRepository;
 
-    public List<Organization> findAll() {
-        return organizationRepository.findAll();
+    public List<Organization> findAllExcept(String organId) {
+        return organizationRepository.findAllExcept(organId);
     }
 
     public Organization add(Organization organization) {

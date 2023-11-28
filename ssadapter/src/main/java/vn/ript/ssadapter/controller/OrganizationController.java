@@ -29,7 +29,7 @@ public class OrganizationController {
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> getOrganizationsList() {
         try {
-            List<Organization> organizations = organizationService.findAll();
+            List<Organization> organizations = organizationService.findAllExcept(Utils.SS_ID);
             return CustomResponse.Response_data(200, organizations);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);

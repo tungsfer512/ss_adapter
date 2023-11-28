@@ -222,6 +222,17 @@ const VanBanDen = (): React.Fragment => {
           >Ngừng xử lý</Button>
         )
       }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_THU_HOI &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Đã thu hồi"
+            disabled
+          >Đã thu hồi</Button>
+        )
+      }
     </div>
   );
 

@@ -15,7 +15,7 @@ const VanBanDen = (): React.Fragment => {
 
   const handleTiepNhan = (record: IVanBanRecord) => {
     let headers = {
-      docId: record.id
+      docId: record.documentId
     }
     if (record?.responseFor_DocumentId && record?.responseFor_DocumentId !== '') {
       // let payload = {
@@ -43,7 +43,7 @@ const VanBanDen = (): React.Fragment => {
 
   const handleTuChoi = async (record: IVanBanRecord) => {
     let headers = {
-      docId: record.id,
+      docId: record.documentId,
     }
     if (record?.responseFor_DocumentId && record?.responseFor_DocumentId !== '') {
       // let payload = {
@@ -583,7 +583,7 @@ const VanBanDen = (): React.Fragment => {
     <TableBase
       loading={vanbanModel.loading}
       modelName={'vanban'}
-      title="Danh sách văn bản đến"
+      title="Danh sách văn bản đến - Phòng Văn Thư"
       columns={columns}
       hascreate={false}
       border={true}

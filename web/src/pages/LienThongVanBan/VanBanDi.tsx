@@ -26,7 +26,7 @@ const VanBanDi = (): React.Fragment => {
 
   const handleThuHoi = async (record: IVanBanRecord) => {
     let headers = {
-      docId: record.id,
+      docId: record.documentId,
     }
     let payload = {
       status_staff_info_department: "Phong hanh chinh",
@@ -555,7 +555,7 @@ const VanBanDi = (): React.Fragment => {
       <TableBase
         loading={vanbanModel.loading}
         modelName={'vanban'}
-        title="Danh sách văn bản đi"
+        title="Danh sách văn bản đi - Phòng Văn Thư"
         columns={columns}
         hascreate={true}
         border={true}

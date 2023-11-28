@@ -39,6 +39,10 @@ public class DocumentService {
         return documentRepository.findById(id);
     }
 
+    public Optional<Document> findByDocumentId(String documentId) {
+        return documentRepository.findByDocumentId(documentId);
+    }
+
     public Document updateDocument(Document document) {
         return documentRepository.save(document);
     }

@@ -53,7 +53,7 @@ public class DocumentStatusController {
             String status_status_code = status_info.get("status_status_code");
             String status_description = status_info.get("status_description");
 
-            Optional<Document> check_document = documentService.findById(docId);
+            Optional<Document> check_document = documentService.findByDocumentId(docId);
             if (!check_document.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay van ban can phan hoi");
             }

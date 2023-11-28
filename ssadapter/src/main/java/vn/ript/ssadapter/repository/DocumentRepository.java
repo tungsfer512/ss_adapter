@@ -1,6 +1,7 @@
 package vn.ript.ssadapter.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -16,4 +17,5 @@ public interface DocumentRepository extends JpaRepository<Document, String> {
     @Query(value = "SELECT * FROM _document WHERE _service_type=:serviceType AND _message_type=:messageType AND _to_id=:toOrganizationId", nativeQuery = true)
     List<Document> findByServiceTypeAndMessageTypeAndToOrganization(@Param("serviceType") String serviceType, @Param("messageType") String messageType, @Param("toOrganizationId") String toOrganizationId);
 
+    Optional<Document> findByDocumentId(String documentId);
 }

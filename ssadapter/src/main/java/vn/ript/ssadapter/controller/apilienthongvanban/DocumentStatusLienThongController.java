@@ -130,7 +130,7 @@ public class DocumentStatusLienThongController {
                         Constants.TRANG_THAI_GOI_TIN.getByMaTrangThai(status_tmp).moTaTrangThaiNhan(),
                         document_64);
 
-                Optional<Document> checkPdocument = documentService.findById(docId);
+                Optional<Document> checkPdocument = documentService.findByDocumentId(docId);
                 if (!checkPdocument.isPresent()) {
                     return CustomResponse.Response_data(404, "Khong tim thay van ban");
                 }

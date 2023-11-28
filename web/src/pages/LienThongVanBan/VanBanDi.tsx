@@ -14,11 +14,6 @@ const VanBanDi = (): React.Fragment => {
   const vanbanModel = useModel('vanban');
   const type = "sent";
 
-  const checkCanChinhSua = (record: IVanBanRecord) => {
-    // if record.receiveStatus === ETrangThaiVanBan.
-    return true;
-  }
-
   const handleChinhSua = (record: IVanBanRecord) => {
     vanbanModel.setVisibleForm(true);
     vanbanModel.setEdit(true);
@@ -45,6 +40,7 @@ const VanBanDi = (): React.Fragment => {
       {
         (
           record.receiveStatus != ETrangThaiVanBan.DA_YEU_CAU_THU_HOI &&
+          record.receiveStatus != ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN &&
           record.receiveStatus != ETrangThaiVanBan.DA_THU_HOI
         ) &&
         (
@@ -89,6 +85,17 @@ const VanBanDi = (): React.Fragment => {
             title="Đã thu hồi"
             disabled
           >Đã thu hồi</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Đã từ chối tiếp nhận"
+            disabled
+          >Đã từ chối tiếp nhận</Button>
         )
       }
     </div>
@@ -323,7 +330,7 @@ const VanBanDi = (): React.Fragment => {
       align: 'center',
     },
     {
-      title: 'Mã VB được phản hồi',
+      title: 'Mã VB liên quan',
       dataIndex: 'responseFor_DocumentId',
       search: 'search',
       // notRegex: true,

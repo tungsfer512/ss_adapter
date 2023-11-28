@@ -108,9 +108,11 @@ public class DocumentStatusController {
                 document.setReceiveStatus(
                         Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).maTrangThai());
                 document.setSendStatusDesc(
-                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiGui());
+                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiGui()
+                                + "\n (" + status_description + ")");
                 document.setReceiveStatusDesc(
-                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiNhan());
+                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiNhan()
+                                + "\n (" + status_description + ")");
                 documentService.updateDocument(document);
             }
 

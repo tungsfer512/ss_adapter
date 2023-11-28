@@ -465,7 +465,7 @@ const VanBanDen = (): React.Fragment => {
       align: 'center',
     },
     {
-      title: 'Mã VB được phản hồi',
+      title: 'Mã VB liên quan',
       dataIndex: 'responseFor_DocumentId',
       search: 'search',
       // notRegex: true,

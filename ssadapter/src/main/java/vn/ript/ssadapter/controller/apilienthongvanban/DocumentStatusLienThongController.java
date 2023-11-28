@@ -140,10 +140,11 @@ public class DocumentStatusLienThongController {
                 pdocument.setSendStatus(status_status_code);
                 pdocument.setReceiveStatus(status_status_code);
                 pdocument.setSendStatusDesc(
-                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiGui());
+                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiGui()
+                        + "\n (" + messageStatus.getDescription() + ")");
                 pdocument.setReceiveStatusDesc(
-                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiNhan());
-                pdocument.setDescription(messageStatus.getDescription());
+                        Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiNhan()
+                        + "\n (" + messageStatus.getDescription() + ")");
 
                 documentService.saveDocument(document);
                 documentService.updateDocument(pdocument);

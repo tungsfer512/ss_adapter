@@ -58,7 +58,7 @@ export default () => {
           setDanhSach(res_get.data?.data);
           setTotal(res_get.data?.data?.length);
         }
-        message.success("Thành công");
+        message.success("Gửi văn bản thành công");
       }
       setLoading(false);
     } catch (error: any) {
@@ -87,7 +87,7 @@ export default () => {
             setTotal(res_get.data?.data?.length);
           }
         }
-        message.success("Thành công");
+        message.success("Cập nhật trạng thái văn bản thành công");
       }
       setLoading(false);
     } catch (error: any) {

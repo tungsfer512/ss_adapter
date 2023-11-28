@@ -41,6 +41,51 @@ const VanBanDen = (): React.Fragment => {
     }
   };
 
+  const handlePhanCong = (record: IVanBanRecord) => {
+    let headers = {
+      docId: record.documentId
+    }
+    let payload = {
+      status_staff_info_department: "Phong hanh chinh",
+      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
+      status_staff_info_mobile: "84912000002",
+      status_staff_info_email: "ngoctram@nghean.vn",
+      status_status_code: ETrangThaiVanBan.DA_PHAN_CONG_CHO_XU_LY,
+      status_description: "Chờ Phân công xử lý"
+    }
+    vanbanModel.send_status_edoc(headers, payload);
+  };
+
+  const handleDangXuLy = (record: IVanBanRecord) => {
+    let headers = {
+      docId: record.documentId
+    }
+    let payload = {
+      status_staff_info_department: "Phong hanh chinh",
+      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
+      status_staff_info_mobile: "84912000002",
+      status_staff_info_email: "ngoctram@nghean.vn",
+      status_status_code: ETrangThaiVanBan.DANG_XU_LY,
+      status_description: "Chờ Phân công xử lý"
+    }
+    vanbanModel.send_status_edoc(headers, payload);
+  };
+
+  const handleDaXuLy = (record: IVanBanRecord) => {
+    let headers = {
+      docId: record.documentId
+    }
+    let payload = {
+      status_staff_info_department: "Phong hanh chinh",
+      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
+      status_staff_info_mobile: "84912000002",
+      status_staff_info_email: "ngoctram@nghean.vn",
+      status_status_code: ETrangThaiVanBan.DA_HOAN_THANH_XU_LY,
+      status_description: "Chờ Phân công xử lý"
+    }
+    vanbanModel.send_status_edoc(headers, payload);
+  };
+
   const handleTuChoi = async (record: IVanBanRecord) => {
     let headers = {
       docId: record.documentId,
@@ -71,23 +116,74 @@ const VanBanDen = (): React.Fragment => {
 
   const renderLast = (value: any, record: IVanBanRecord) => (
     <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItem: 'center' }}>
-      <Button
-        type="primary"
-        style={{ marginBottom: '3px', flex: 1 }}
-        title="Tiếp nhận"
-        onClick={() => handleTiepNhan(record)}
-      >Tiếp nhận</Button>
-      <Popconfirm
-        title="Bạn có chắc muốn từ chối văn bản này không?"
-        okText="Có"
-        cancelText="Không"
-        onConfirm={() => handleTuChoi(record)}
-      >
-        <Button
-          type="danger"
-          style={{ marginTop: '3px', flex: 1 }}
-          title="Từ chối" >Từ chối</Button>
-      </Popconfirm>
+      {
+        record.receiveStatus == ETrangThaiVanBan.CHO_TIEP_NHAN &&
+        (
+          <>
+            <Button
+              type="primary"
+              style={{ marginBottom: '3px', flex: 1 }}
+              title="Tiếp nhận"
+              onClick={() => handleTiepNhan(record)}
+            >Tiếp nhận</Button>
+            <Popconfirm
+              title="Bạn có chắc muốn từ chối văn bản này không?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => handleTuChoi(record)}
+            >
+              <Button
+                type="danger"
+                style={{ marginTop: '3px', flex: 1 }}
+                title="Từ chối" >Từ chối</Button>
+            </Popconfirm>
+          </>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_TIEP_NHAN_CHO_PHAN_CONG &&
+        (
+          <Button
+            type="primary"
+            style={{ marginBottom: '3px', flex: 1 }}
+            title="Phân công"
+            onClick={() => handlePhanCong(record)}
+          >Phân công</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_PHAN_CONG_CHO_XU_LY &&
+        (
+          <Button
+            type="primary"
+            style={{ marginBottom: '3px', flex: 1 }}
+            title="Đánh dấu đang xử lý"
+            onClick={() => handleDangXuLy(record)}
+          >Đánh dấu đang xử lý</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DANG_XU_LY &&
+        (
+          <Button
+            type="primary"
+            style={{ marginBottom: '3px', flex: 1 }}
+            title="Đánh dấu đã xử lý"
+            onClick={() => handleDaXuLy(record)}
+          >Đánh dấu đã xử lý</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_HOAN_THANH_XU_LY &&
+        (
+          <Button
+            type="primary"
+            style={{ marginBottom: '3px', flex: 1 }}
+            title="Đã xử lý"
+            disabled
+          >Đã xử lý</Button>
+        )
+      }
     </div>
   );
 

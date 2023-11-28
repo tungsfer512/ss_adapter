@@ -87,6 +87,21 @@ const VanBanDen = (): React.Fragment => {
     vanbanModel.send_status_edoc(headers, payload, type);
   };
 
+  const handleDaThuHoi = (record: IVanBanRecord) => {
+    let headers = {
+      docId: record.documentId
+    }
+    let payload = {
+      status_staff_info_department: "Phong hanh chinh",
+      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
+      status_staff_info_mobile: "84912000002",
+      status_staff_info_email: "ngoctram@nghean.vn",
+      status_status_code: ETrangThaiVanBan.DA_THU_HOI,
+      status_description: "Da thu hoi"
+    }
+    vanbanModel.send_status_edoc(headers, payload, type);
+  };
+
   const handleTuChoi = async (record: IVanBanRecord) => {
     let headers = {
       docId: record.documentId,
@@ -194,6 +209,17 @@ const VanBanDen = (): React.Fragment => {
             title="Đã từ chối tiếp nhận"
             disabled
           >Đã từ chối tiếp nhận</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_YEU_CAU_THU_HOI &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Ngừng xử lý"
+            onClick={() => handleDaThuHoi(record)}
+          >Ngừng xử lý</Button>
         )
       }
     </div>

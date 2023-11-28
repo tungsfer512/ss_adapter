@@ -60,7 +60,11 @@ public class DocumentStatusController {
             Document document = check_document.get();
 
             Optional<Organization> checkFrom = organizationService.findByOrganId(Utils.SS_ID);
-            Optional<Organization> checkTo = organizationService.findByOrganId(document.getFrom().getOrganId());
+            String tmp_to_id = document.getFrom().getOrganId();
+            if (tmp_to_id.equalsIgnoreCase(Utils.SS_ID)) {
+                tmp_to_id = document.getTo().getOrganId();
+            }
+            Optional<Organization> checkTo = organizationService.findByOrganId(tmp_to_id);
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }
@@ -77,8 +81,11 @@ public class DocumentStatusController {
             String document_64 = Utils.encodeToBase64(content.getContent());
 
             String subsystem_code = checkTo.get().getOrganId().replace(':', '/');
+            System.out.println(subsystem_code);
             String xRoadClient = Utils.SS_ID.replace(':', '/');
+            System.out.println(xRoadClient);
             String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/document/status/update";
+            System.out.println(url);
             Map<String, String> headers = new HashMap<>();
             headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);
@@ -95,6 +102,7 @@ public class DocumentStatusController {
             if (httpResponse.getStatusLine().getStatusCode() != 201) {
                 status = Constants.TRANG_THAI_LIEN_THONG.THAT_BAI.maTrangThai();
                 statusDesc = Constants.TRANG_THAI_LIEN_THONG.THAT_BAI.moTaTrangThai();
+                System.out.println(httpResponse);
             } else {
                 document.setSendStatus(Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).maTrangThai());
                 document.setReceiveStatus(

@@ -35,30 +35,62 @@ const VanBanDi = (): React.Fragment => {
       status_staff_info_mobile: "84912000002",
       status_staff_info_email: "ngoctram@nghean.vn",
       status_status_code: ETrangThaiVanBan.DA_YEU_CAU_THU_HOI,
-      status_description: "Đã từ chối tiếp nhận"
+      status_description: "Đã yêu cầu thu hồi"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };
 
   const renderLast = (value: any, record: IVanBanRecord) => (
     <div style={{ display: 'flex', width: '100%', flexDirection: 'column', alignItem: 'center' }}>
-      <Button
-        type="primary"
-        style={{ marginBottom: '3px', flex: 1 }}
-        title="Cập nhật"
-        onClick={() => handleChinhSua(record)}
-      >Cập nhật</Button>
-      <Popconfirm
-        title="Bạn có chắc rằng muốn thu hồi văn bản này?"
-        okText="Có"
-        cancelText="Không"
-        onConfirm={() => handleThuHoi(record)}
-      >
-        <Button
-          type="danger"
-          style={{ marginTop: '3px', flex: 1 }}
-          title="Thu hồi" >Thu hồi</Button>
-      </Popconfirm>
+      {
+        (
+          record.receiveStatus != ETrangThaiVanBan.DA_YEU_CAU_THU_HOI &&
+          record.receiveStatus != ETrangThaiVanBan.DA_THU_HOI
+        ) &&
+        (
+          <>
+            <Button
+              type="primary"
+              style={{ marginBottom: '3px', flex: 1 }}
+              title="Cập nhật"
+              onClick={() => handleChinhSua(record)}
+            >Cập nhật</Button>
+            <Popconfirm
+              title="Bạn có chắc rằng muốn thu hồi văn bản này?"
+              okText="Có"
+              cancelText="Không"
+              onConfirm={() => handleThuHoi(record)}
+            >
+              <Button
+                type="danger"
+                style={{ marginTop: '3px', flex: 1 }}
+                title="Thu hồi" >Thu hồi</Button>
+            </Popconfirm>
+          </>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_YEU_CAU_THU_HOI &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Đã yêu cầu thu hồi"
+            disabled
+          >Đã yêu cầu thu hồi</Button>
+        )
+      }
+      {
+        record.receiveStatus == ETrangThaiVanBan.DA_THU_HOI &&
+        (
+          <Button
+            type="primary"
+            style={{ whiteSpace: "normal", height: 'auto', marginBottom: '3px', flex: 1 }}
+            title="Đã thu hồi"
+            disabled
+          >Đã thu hồi</Button>
+        )
+      }
     </div>
   );
 

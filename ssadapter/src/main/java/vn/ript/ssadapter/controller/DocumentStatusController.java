@@ -78,14 +78,11 @@ public class DocumentStatusController {
                     status_staff_info_email,
                     status_status_code,
                     status_description);
-            String document_64 = Utils.encodeToBase64(content.getContent());
+            String document_64 = Utils.ENCODE_TO_BASE64(content.getContent());
 
             String subsystem_code = checkTo.get().getOrganId().replace(':', '/');
-            System.out.println(subsystem_code);
             String xRoadClient = Utils.SS_ID.replace(':', '/');
-            System.out.println(xRoadClient);
-            String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/lienthongvanban/document/status/update";
-            System.out.println(url);
+            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code + "/lienthongvanban/document/status/update";
             Map<String, String> headers = new HashMap<>();
             headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);
@@ -102,7 +99,6 @@ public class DocumentStatusController {
             if (httpResponse.getStatusLine().getStatusCode() != 201) {
                 status = Constants.TRANG_THAI_LIEN_THONG.THAT_BAI.maTrangThai();
                 statusDesc = Constants.TRANG_THAI_LIEN_THONG.THAT_BAI.moTaTrangThai();
-                System.out.println(httpResponse);
             } else {
                 document.setSendStatus(Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).maTrangThai());
                 document.setReceiveStatus(
@@ -153,7 +149,7 @@ public class DocumentStatusController {
                     null,
                     status_status_code,
                     status_description,
-                    Utils.datetime_now(),
+                    Utils.DATETIME_NOW(),
                     null,
                     null,
                     null,

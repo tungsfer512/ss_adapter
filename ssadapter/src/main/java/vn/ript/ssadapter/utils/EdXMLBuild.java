@@ -77,7 +77,7 @@ public class EdXMLBuild {
 			List<File> attachments,
 			List<String> attachment_description_list) throws Exception {
 
-		String date = Utils.date_now();
+		String date = Utils.DATE_NOW();
 
 		Ed ed = new Ed();
 
@@ -233,12 +233,12 @@ public class EdXMLBuild {
 				String description = attachment_description_list.get(i);
 				String fileName = attachment.getName();
 				ed.addAttachment(new com.vnpt.xml.base.attachment.Attachment(
-						Utils.SHA256Hash(Files.readAllBytes(attachment.toPath()).toString()), fileName, description,
+						Utils.SHA256_HASH(Files.readAllBytes(attachment.toPath()).toString()), fileName, description,
 						attachment));
 			}
 		}
 		// ghi file ra thu muc
-		Content edXmlContent = EdXmlBuilder.build(ed, Utils.EDocDir);
+		Content edXmlContent = EdXmlBuilder.build(ed, Utils.EDOC_DIR);
 
 		return edXmlContent;
 	}
@@ -291,7 +291,7 @@ public class EdXMLBuild {
 
 		Content content = null;
 		try {
-			content = StatusXmlBuilder.build(new Status(header), Utils.EDocDir);
+			content = StatusXmlBuilder.build(new Status(header), Utils.EDOC_DIR);
 		} catch (BuildException e) {
 			e.printStackTrace();
 		}

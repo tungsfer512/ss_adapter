@@ -99,7 +99,7 @@ public class DocumentLienThongController {
                 List<com.vnpt.xml.base.header.ReplacementInfo> business_replacement_info_edxml_list = business
                         .getReplacementInfoList().get(0).getReplacementInfo();
 
-                String document_64 = Utils.encodeToBase64(file.getBytes());
+                String document_64 = Utils.ENCODE_TO_BASE64(file.getBytes());
 
                 com.vnpt.xml.base.header.Organization fromEdXML = messageHeader.getFrom();
                 Optional<Organization> checkFrom = organizationService.findByOrganId(fromEdXML.getOrganId());
@@ -147,7 +147,7 @@ public class DocumentLienThongController {
                         code_number,
                         code_notation,
                         promulgation_place,
-                        Utils.date_now(),
+                        Utils.DATE_NOW(),
                         document_type,
                         subject,
                         content,

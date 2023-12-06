@@ -7,6 +7,7 @@ public class Constants {
     private static HashMap<String, TRANG_THAI_VAN_BAN> TRANG_THAI_VAN_BAN_MAP = new HashMap<>();
     private static HashMap<String, TRANG_THAI_GOI_TIN> TRANG_THAI_GOI_TIN_MAP = new HashMap<>();
     private static HashMap<String, TRANG_THAI_LIEN_THONG> TRANG_THAI_LIEN_THONG_MAP = new HashMap<>();
+    private static HashMap<String, LOAI_FILE> LOAI_FILE_MAP = new HashMap<>();
 
     public enum TRANG_THAI_VAN_BAN {
         CHO_TIEP_NHAN("01",
@@ -135,5 +136,33 @@ public class Constants {
         public static TRANG_THAI_GOI_TIN getByMaTrangThai(String maTrangThai) {
             return TRANG_THAI_GOI_TIN_MAP.get(maTrangThai);
         }
+    }
+
+    public enum LOAI_FILE {
+        EDOC("EDOC", "File văn bản điện tử/gói tin trạng thái"),
+        CONFIG("CONFIG", "File cấu hình SS"),
+        ATTACHMENT("ATTACHMENT", "File đính kèm");
+
+        private final String ma;
+        private final String moTa;
+
+        private LOAI_FILE(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            LOAI_FILE_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public LOAI_FILE getByMa(String ma) {
+            return LOAI_FILE_MAP.get(ma);
+        }
+
     }
 }

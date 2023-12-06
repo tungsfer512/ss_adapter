@@ -16,7 +16,7 @@ public class EdXML {
         Ed ed = null;
         try {
             // Thread.sleep(3000);
-            File file = ResourceUtils.getFile(Utils.EDocDir + fileName);
+            File file = ResourceUtils.getFile(Utils.EDOC_DIR + fileName);
             InputStream inputStream = new FileInputStream(file);
             ed = EdXmlParser.getInstance().parse(inputStream);
         } catch (Exception e) {
@@ -52,7 +52,7 @@ public class EdXML {
     public static Status readStatus(String fileName) {
         Status status = null;
         try {
-            File file = ResourceUtils.getFile(Utils.EDocDir + fileName);
+            File file = ResourceUtils.getFile(Utils.EDOC_DIR + fileName);
             InputStream inputStream = new FileInputStream(file);
             status = StatusXmlParser.parse(inputStream);
         } catch (Exception e) {

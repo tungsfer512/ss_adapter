@@ -1,11 +1,7 @@
 package vn.ript.ssadapter.controller;
 
 import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -128,7 +124,7 @@ public class DocumentController {
     ) {
         try {
             JSONObject jsonObject = new JSONObject(json_data);
-            List<String> to_ids = Utils.JsonGetStringList(jsonObject, "to_ids");
+            List<String> to_ids = Utils.JSON_GET_STRING_LIST(jsonObject, "to_ids");
             String code_number = jsonObject.getString("code_number");
             String code_notation = jsonObject.getString("code_notation");
             String promulgation_place = jsonObject.getString("promulgation_place");
@@ -139,14 +135,14 @@ public class DocumentController {
             String signer_info_position = jsonObject.getString("signer_info_position");
             String signer_info_fullname = jsonObject.getString("signer_info_fullname");
             String due_date = jsonObject.getString("due_date");
-            List<String> to_places = Utils.JsonGetStringList(jsonObject, "to_places");
+            List<String> to_places = Utils.JSON_GET_STRING_LIST(jsonObject, "to_places");
             Integer other_info_priority = jsonObject.getInt("other_info_priority");
             String other_info_sphere_of_promulgation = jsonObject
                     .getString("other_info_sphere_of_promulgation");
             String other_info_typer_notation = jsonObject.getString("other_info_typer_notation");
             Integer other_info_promulgation_amount = jsonObject.getInt("other_info_promulgation_amount");
             Integer other_info_page_amount = jsonObject.getInt("other_info_page_amount");
-            List<String> appendixes = Utils.JsonGetStringList(jsonObject, "appendixes");
+            List<String> appendixes = Utils.JSON_GET_STRING_LIST(jsonObject, "appendixes");
             Boolean response_for = jsonObject.getBoolean("response_for");
             Integer steering_type = jsonObject.getInt("steering_type");
             // String status_status_code = jsonObject.getString("status_status_code");
@@ -158,7 +154,7 @@ public class DocumentController {
                     .getInt("business_bussiness_document_info_document_info");
             Integer business_bussiness_document_info_document_receiver = jsonObject
                     .getInt("business_bussiness_document_info_document_receiver");
-            List<String> business_bussiness_document_info_receiver_json_str_list = Utils.JsonGetStringList(
+            List<String> business_bussiness_document_info_receiver_json_str_list = Utils.JSON_GET_STRING_LIST(
                     jsonObject,
                     "business_bussiness_document_info_receiver_json_str_list");
             String business_document_id = jsonObject.getString("business_document_id");
@@ -167,9 +163,9 @@ public class DocumentController {
             String business_staff_info_mobile = jsonObject.getString("business_staff_info_mobile");
             String business_staff_info_email = jsonObject.getString("business_staff_info_email");
             Integer business_paper = jsonObject.getInt("business_paper");
-            List<String> business_replacement_info_json_str_list = Utils.JsonGetStringList(jsonObject,
+            List<String> business_replacement_info_json_str_list = Utils.JSON_GET_STRING_LIST(jsonObject,
                     "business_replacement_info_json_str_list");
-            List<String> attachment_description_list = Utils.JsonGetStringList(jsonObject,
+            List<String> attachment_description_list = Utils.JSON_GET_STRING_LIST(jsonObject,
                     "attachment_description_list");
 
             Content edXmlContent;
@@ -178,13 +174,7 @@ public class DocumentController {
             if (!files.isEmpty()) {
                 attachments = new ArrayList<>();
                 for (MultipartFile file : files) {
-                    String originFileName = file.getOriginalFilename();
-                    List<String> attachFileInfo = Arrays.asList(originFileName.split("\\."));
-                    String attachFileExt = attachFileInfo.get(attachFileInfo.size() - 1);
-                    String attachFileName = Utils.UUID() + "." + attachFileExt;
-                    Path attachFilePath = Paths.get(Utils.uploadDir, attachFileName);
-                    Files.write(attachFilePath, file.getBytes());
-                    attachments.add(attachFilePath.toFile());
+                    attachments.add(Utils.MULTIPART_FILE_TO_FILE(file, Constants.LOAI_FILE.ATTACHMENT.ma()));
                 }
             }
             Optional<Organization> checkFrom = organizationService.findByOrganId(Utils.SS_ID);
@@ -273,7 +263,7 @@ public class DocumentController {
                     attachments,
                     attachment_description_list);
 
-            String document_64 = Utils.encodeToBase64(edXmlContent.getContent());
+            String document_64 = Utils.ENCODE_TO_BASE64(edXmlContent.getContent());
 
             Ed ed = EdXML.readDocument(edXmlContent.getContent());
             Header header = ed.getHeader();
@@ -287,7 +277,7 @@ public class DocumentController {
                 }
                 String subsystem_code = to_id.replace(':', '/');
                 String xRoadClient = Utils.SS_ID.replace(':', '/');
-                String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code +
+                String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                         "/lienthongvanban/document/edocs/new";
                 Map<String, String> headers = new HashMap<>();
                 headers.put("from", Utils.SS_ID);
@@ -315,7 +305,7 @@ public class DocumentController {
                         code_number,
                         code_notation,
                         promulgation_place,
-                        Utils.date_now(),
+                        Utils.DATE_NOW(),
                         document_type,
                         subject,
                         content,
@@ -369,7 +359,7 @@ public class DocumentController {
             }
             return CustomResponse.Response_no_data(201);
         } catch (Exception e) {
-            return CustomResponse.Response_data(500, e);
+            return CustomResponse.Response_data(500, e.toString());
         }
     }
 
@@ -384,7 +374,7 @@ public class DocumentController {
             List<Document> edocs = documentService.getReceivedEdocList(checkOrganization.get().getId());
             return CustomResponse.Response_data(200, edocs);
         } catch (Exception e) {
-            return CustomResponse.Response_data(500, e);
+            return CustomResponse.Response_data(500, e.toString());
         }
     }
 
@@ -399,7 +389,7 @@ public class DocumentController {
             List<Document> edocs = documentService.getSentEdocList(checkOrganization.get().getId());
             return CustomResponse.Response_data(200, edocs);
         } catch (Exception e) {
-            return CustomResponse.Response_data(500, e);
+            return CustomResponse.Response_data(500, e.toString());
         }
     }
 

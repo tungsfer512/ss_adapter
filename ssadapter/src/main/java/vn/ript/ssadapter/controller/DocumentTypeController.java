@@ -38,7 +38,6 @@ public class DocumentTypeController {
     public ResponseEntity<Map<String, Object>> addDocumentType(
             @RequestBody Map<String, Object> entity) {
         try {
-            System.out.println("entity: " + entity);
             DocumentType documentType = new DocumentType();
             documentType.setType(Integer.parseInt(entity.get("type").toString()));
             documentType.setTypeDetail(entity.get("typeDetail").toString());

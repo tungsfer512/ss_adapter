@@ -52,7 +52,6 @@ public class OrganizationController {
     public ResponseEntity<Map<String, Object>> registerOrganization(
             @RequestBody Map<String, Object> entity) {
         try {
-            System.out.println("entity: " + entity);
             Organization organization = new Organization();
             String UUID = Utils.UUID();
             organization.setId(UUID);
@@ -76,7 +75,6 @@ public class OrganizationController {
     // @RequestHeader(name = "OrganizationCode", required = true) String
     // organizationCode) {
     // try {
-    // System.out.println("OrganizationCode: " + organizationCode);
     // if (organizationCode == null) {
     // return Response.Response_500();
     // } else {

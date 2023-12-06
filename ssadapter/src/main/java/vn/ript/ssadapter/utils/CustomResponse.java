@@ -2,9 +2,15 @@ package vn.ript.ssadapter.utils;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
 public class CustomResponse<T> {
@@ -14,6 +20,9 @@ public class CustomResponse<T> {
         Integer[] THAT_BAI = { 400, 401, 403, 404, 405, 406, 414, 415, 422, 500, 501, 502, 503, 504 };
     }
 
+    public static List<Integer> SUCCESS_RESPONSE = Arrays.asList(RESPONSE_STATUS_CODE.THANH_CONG);
+    public static List<Integer> FAIL_RESPONSE = Arrays.asList(RESPONSE_STATUS_CODE.THAT_BAI);
+
     Integer statusCode;
     CustomResponseData<T> responseData;
 
@@ -21,14 +30,15 @@ public class CustomResponse<T> {
         this.statusCode = status;
     }
 
-    public static ResponseEntity<Map<String, Object>> Response_no_data (int status) {
+    public static ResponseEntity<Map<String, Object>> Response_no_data(int status) {
         Map<String, Object> res = new HashMap<>();
         res.put("ErrorDesc", "Thanh cong");
         res.put("ErrorCode", "0");
         res.put("status", "OK");
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
     }
-    public static ResponseEntity<Map<String, Object>> Response_data (int status, Object data) {
+
+    public static ResponseEntity<Map<String, Object>> Response_data(int status, Object data) {
         Map<String, Object> res = new HashMap<>();
         res.put("data", data);
         res.put("ErrorDesc", "Thanh cong");
@@ -36,13 +46,37 @@ public class CustomResponse<T> {
         res.put("status", "OK");
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
     }
-    public static ResponseEntity<Map<String, Object>> Response_data (int status, String data) {
+
+    public static ResponseEntity<Map<String, Object>> Response_data(int status, String data) {
         Map<String, Object> res = new HashMap<>();
-        res.put("data", data);
+        if (SUCCESS_RESPONSE.contains(status)) {
+            if (data.startsWith("{")) {
+                JSONObject jsonObject = new JSONObject(data);
+                res.put("data", jsonObject.toMap());
+            } else if (data.startsWith("[")) {
+                JSONArray jsonArray = new JSONArray(data);
+                res.put("data", jsonArray.toList());
+            }
+        } else {
+            res.put("data", data);
+        }
         res.put("ErrorDesc", "Thanh cong");
         res.put("ErrorCode", "0");
         res.put("status", "OK");
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
+    }
+
+    public static ResponseEntity<InputStreamResource> Response_file(int status, InputStreamResource inputStreamResource,
+            String filename) {
+        if (SUCCESS_RESPONSE.contains(status)) {
+            return ResponseEntity.status(status)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + filename)
+                    .contentType(MediaType.APPLICATION_OCTET_STREAM)
+                    .body(inputStreamResource);
+        } else {
+            return ResponseEntity.status(status)
+                    .body(null);
+        }
     }
 
     public ResponseEntity<Object> response() {

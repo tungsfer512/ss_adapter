@@ -44,9 +44,8 @@ public class DocumentStatusLienThongController {
             @RequestHeader(name = "docId", required = true) String docId) {
         try {
             if (!file.isEmpty()) {
-                System.out.println("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
 
-                String document_64 = Utils.encodeToBase64(file.getBytes());
+                String document_64 = Utils.ENCODE_TO_BASE64(file.getBytes());
 
                 Status statusEdxml = EdXML.readStatus(file.getInputStream());
                 Header header = statusEdxml.getHeader();
@@ -103,7 +102,7 @@ public class DocumentStatusLienThongController {
                         null,
                         messageStatus.getStatusCode(),
                         messageStatus.getDescription(),
-                        Utils.datetime_now(),
+                        Utils.DATETIME_NOW(),
                         null,
                         null,
                         null,

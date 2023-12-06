@@ -24,9 +24,9 @@ import vn.ript.ssadapter.utils.Utils;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UserController {
 
-    @RequestMapping(path = "/user", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> login(@RequestHeader Map<String, String> headers) {
-        System.out.println(headers);
+    @RequestMapping(path = "/users/me", method = RequestMethod.GET)
+    public ResponseEntity<Map<String, Object>> login(@RequestHeader String token) {
+        System.out.println(token);
         Map<String, Object> resData = new HashMap<String, Object>();
         resData.put("_id", 1);
         resData.put("username", "xrd");

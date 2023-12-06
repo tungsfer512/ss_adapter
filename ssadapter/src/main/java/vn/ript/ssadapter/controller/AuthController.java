@@ -36,12 +36,6 @@ public class AuthController {
 
         HttpResponse httpResponse = customHttpRequest.request(multipartHttpEntity);
 
-        if (httpResponse.getStatusLine().getStatusCode() == 200) {
-            System.out.println("Form data uploaded successfully!");
-        } else {
-            System.out.println("Error uploading form data: " + httpResponse.getStatusLine());
-        }
-
         Map<String, Object> resData = new HashMap<String, Object>();
         Map<String, Object> resUser = new HashMap<String, Object>();
         resData.put("accessToken", "abcxyz");
@@ -49,6 +43,6 @@ public class AuthController {
         resUser.put("systemRole", "Admin");
         resData.put("user", resUser);
 
-        return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), resData);
+        return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), resData.toString());
     }
 }

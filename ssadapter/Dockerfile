@@ -10,6 +10,10 @@ ARG API_WORK_DIR
 
 WORKDIR ${API_WORK_DIR}
 
+RUN apt update
+RUN apt upgrade -y
+RUN apt install -y sshpass sudo
+
 COPY . .
 
 RUN ./mvnw clean package -DskipTests -q

@@ -29,11 +29,9 @@ public class TimestampingServiceController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get TSA list successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get TSA list failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }

@@ -54,7 +54,7 @@ public class DocumentController {
     @Autowired
     OrganizationService organizationService;
 
-    @PostMapping(value = "/new")
+    @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> sendDocument(
             @RequestPart(name = "files", required = false) List<MultipartFile> files,
             @RequestPart(name = "json_data", required = false) String json_data

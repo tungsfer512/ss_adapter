@@ -39,11 +39,9 @@ public class ServiceDescriptionController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -62,17 +60,11 @@ public class ServiceDescriptionController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-            System.out.println(body);
             String type = (String) body.get("type");
             String url_tmp = (String) body.get("url");
             String rest_service_code = (String) body.get("rest_service_code");
             String new_rest_service_code = (String) body.get("new_rest_service_code");
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
-            System.out.println(type);
-            System.out.println(url_tmp);
-            System.out.println(rest_service_code);
-            System.out.println(new_rest_service_code);
-            System.out.println(ignore_warnings);
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("type", type);
@@ -82,16 +74,12 @@ public class ServiceDescriptionController {
             jsonPostObject.put("ignore_warnings", ignore_warnings);
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
-            System.out.println(url);
-            System.out.println(jsonPostObject.toString());
             CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -112,10 +100,8 @@ public class ServiceDescriptionController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("DELETE", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Get initialization status successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -136,10 +122,8 @@ public class ServiceDescriptionController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -167,10 +151,8 @@ public class ServiceDescriptionController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }

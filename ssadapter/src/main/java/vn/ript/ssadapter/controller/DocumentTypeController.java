@@ -34,7 +34,7 @@ public class DocumentTypeController {
         }
     }
 
-    @PostMapping(value = "")
+    @PostMapping("")
     public ResponseEntity<Map<String, Object>> addDocumentType(
             @RequestBody Map<String, Object> entity) {
         try {

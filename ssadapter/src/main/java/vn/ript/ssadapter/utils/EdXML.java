@@ -20,7 +20,6 @@ public class EdXML {
             InputStream inputStream = new FileInputStream(file);
             ed = EdXmlParser.getInstance().parse(inputStream);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return ed;
@@ -32,7 +31,6 @@ public class EdXML {
             InputStream inputStream = new FileInputStream(file);
             ed = EdXmlParser.getInstance().parse(inputStream);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return ed;
@@ -43,7 +41,6 @@ public class EdXML {
         try {
             ed = EdXmlParser.getInstance().parse(inputStream);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
             e.printStackTrace();
         }
         return ed;

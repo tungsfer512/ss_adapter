@@ -41,7 +41,7 @@ public class DocumentLienThongController {
 
     // Gui file edxml giua cac SS, extract file, cac thong tin va luu vao DB cua ben
     // nhan
-    @PostMapping(value = "/new")
+    @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> sendDocument(
             @RequestPart(name = "file", required = true) MultipartFile file) {
         try {

@@ -34,17 +34,14 @@ public class TestController {
             String filename = "sign_csr_20231205_member_CS_GOV_MANAGESS2MC.der";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY));
-            System.out.println(url);
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
 
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 HttpEntity httpEntity = httpResponse.getEntity();
                 InputStreamResource inputStreamResource = new InputStreamResource(httpEntity.getContent());
                 return CustomResponse.Response_file(200, inputStreamResource, filename);
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse);
                 return null;
             }
         } catch (Exception e) {

@@ -40,7 +40,7 @@ public class DocumentStatusController {
     @Autowired
     OrganizationService organizationService;
 
-    @PostMapping(value = "/update")
+    @PostMapping("/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestHeader(name = "docId", required = true) String docId,
             @RequestBody(required = true) Map<String, String> status_info) {

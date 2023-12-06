@@ -19,7 +19,7 @@ public class OrganizationService {
         return organizationRepository.findAllExcept(organId);
     }
 
-    public Organization add(Organization organization) {
+    public Organization save(Organization organization) {
         if (organization.getId() != null && !organization.getId().equalsIgnoreCase("")) {
             Optional<Organization> checkExistedOrganization = organizationRepository.findById(organization.getId());
             if (checkExistedOrganization.isPresent()) {
@@ -52,6 +52,8 @@ public class OrganizationService {
         return organizationRepository.findByOrganId(organId);
     }
 
-
+    public Optional<Organization> findBySsId(String ssId) {
+        return organizationRepository.findBySsId(ssId);
+    }
 
 }

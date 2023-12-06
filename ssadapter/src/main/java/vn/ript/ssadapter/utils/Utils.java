@@ -134,13 +134,9 @@ public class Utils {
             reader.close();
             int exitCode = process.waitFor();
             if (exitCode == 0) {
-                System.out.println("Command executed successfully.");
-                System.out.println(output.toString());
                 jsonObject.put("status", "success");
                 jsonObject.put("data", output.toString());
             } else {
-                System.out.println("Command failed with exit code: " + exitCode);
-                System.out.println(error.toString());
                 jsonObject.put("status", "failed");
                 jsonObject.put("data", error.toString());
             }

@@ -2,13 +2,14 @@ package vn.ript.ssadapter.model.initialize;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
@@ -19,8 +20,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import vn.ript.ssadapter.model.Organization;
 
-@Embeddable
+@Entity
+@Table(name = "_service_description")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,7 +32,7 @@ import lombok.ToString;
 @EqualsAndHashCode
 @ToString
 
-public class Endpoint {
+public class ServiceDescription {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,21 +41,11 @@ public class Endpoint {
     @Column(name = "_ssId", columnDefinition = "text")
     private String ssId;
 
-    @Column(name = "_name", columnDefinition = "text")
-    private String name;
-
     @Column(name = "_description", columnDefinition = "text")
     private String description;
 
-    @Column(name = "_inputDescription", columnDefinition = "text")
-    private String inputDescription;
-
-    @Column(name = "_outputDescription", columnDefinition = "text")
-    private String outputDescription;
-
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "_service_id", referencedColumnName = "id")
+    @JoinColumn(name = "_organization_id", referencedColumnName = "id")
     @JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
-    private Service service;
-
+    private Organization organization;
 }

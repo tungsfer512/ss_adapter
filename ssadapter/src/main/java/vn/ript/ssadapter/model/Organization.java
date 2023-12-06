@@ -31,6 +31,9 @@ public class Organization {
     @Column(name = "_organId", columnDefinition = "text")
     private String organId;
 
+    @Column(name = "_ssId", columnDefinition = "text")
+    private String ssId;
+
     @Column(name = "_organizationInCharge", columnDefinition = "text")
     private String organizationInCharge;
 

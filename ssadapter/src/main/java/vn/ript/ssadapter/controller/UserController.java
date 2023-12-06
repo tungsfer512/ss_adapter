@@ -26,7 +26,6 @@ public class UserController {
 
     @RequestMapping(path = "/users/me", method = RequestMethod.GET)
     public ResponseEntity<Map<String, Object>> login(@RequestHeader String token) {
-        System.out.println(token);
         Map<String, Object> resData = new HashMap<String, Object>();
         resData.put("_id", 1);
         resData.put("username", "xrd");
@@ -48,16 +47,13 @@ public class UserController {
             CustomHttpRequest customHttpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = customHttpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get members successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                System.out.println(jsonResponse);
     
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 List<Object> members = jsonObject.getJSONArray("member").toList();
     
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), members);
             } else {
-                System.out.println("Get member failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine());
             }
         } catch (IOException e) {
@@ -92,29 +88,21 @@ public class UserController {
             if (httpResponseList.getStatusLine().getStatusCode() == 200) {
                 // Map<String, Object> resData = new HashMap<String, Object>();
                 String jsonResponseList = EntityUtils.toString(httpResponseList.getEntity());
-                System.out.println(jsonResponseList);
                 
                 JSONObject jsonObjectList = new JSONObject(jsonResponseList);
                 List<Object> servicesList = jsonObjectList.getJSONArray("service").toList();
                 if (httpResponseAllow.getStatusLine().getStatusCode() == 200) {
-                    String jsonResponseAllow = EntityUtils.toString(httpResponseAllow.getEntity());
-                    System.out.println(jsonResponseAllow);
+                    // String jsonResponseAllow = EntityUtils.toString(httpResponseAllow.getEntity());
                     
-                    JSONObject jsonObjectAllow = new JSONObject(jsonResponseAllow);
-                    List<Object> servicesAllow = jsonObjectAllow.getJSONArray("service").toList();
-                    for (Object obj : servicesAllow) {
-                        System.out.println("=========================");
-                        System.out.println(obj);
-                        System.out.println("=========================");
-                    }
-                    System.out.println("Get endpoint successfully!");
+                    // JSONObject jsonObjectAllow = new JSONObject(jsonResponseAllow);
+                    // List<Object> servicesAllow = jsonObjectAllow.getJSONArray("service").toList();
+                    // for (Object obj : servicesAllow) {
+                    // }
                     return CustomResponse.Response_data(httpResponseAllow.getStatusLine().getStatusCode(), servicesList);
                 } else {
-                    System.out.println("Get allowed endpoint failed: " + httpResponseList.getStatusLine());
                     return CustomResponse.Response_data(500, httpResponseList.getStatusLine());
                 }
             } else {
-                System.out.println("Get endpoint failed: " + httpResponseList.getStatusLine());
                 return CustomResponse.Response_data(500, httpResponseList.getStatusLine());
             }
         } catch (IOException e) {
@@ -143,16 +131,13 @@ public class UserController {
 
             HttpResponse httpResponse = customHttpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get endpoint successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                System.out.println(jsonResponse);
     
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 Map<String, Object> endpoints = jsonObject.toMap();
     
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), endpoints);
             } else {
-                System.out.println("Get endpoint failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine());
             }
         } catch (IOException e) {

@@ -38,7 +38,7 @@ public class DocumentStatusLienThongController {
     @Autowired
     OrganizationService organizationService;
 
-    @PostMapping(value = "/update")
+    @PostMapping("/update")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestPart(name = "file", required = true) MultipartFile file,
             @RequestHeader(name = "docId", required = true) String docId) {

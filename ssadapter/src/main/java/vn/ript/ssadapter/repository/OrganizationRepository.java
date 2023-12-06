@@ -11,6 +11,7 @@ import vn.ript.ssadapter.model.Organization;
 
 public interface OrganizationRepository extends JpaRepository<Organization, String> {
     Optional<Organization> findByOrganId(@Param("organId") String organId);
+    Optional<Organization> findBySsId(@Param("ssId") String ssIs);
 
     @Query(value = "SELECT * FROM _organization WHERE _organ_id<>:organId", nativeQuery = true)
     List<Organization> findAllExcept(@Param("organId") String organId); 

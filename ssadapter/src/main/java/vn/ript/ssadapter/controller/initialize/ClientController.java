@@ -1,7 +1,9 @@
 package vn.ript.ssadapter.controller.initialize;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
@@ -10,6 +12,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,10 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import vn.ript.ssadapter.model.Organization;
+import vn.ript.ssadapter.service.OrganizationService;
 import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
@@ -33,6 +39,9 @@ import vn.ript.ssadapter.utils.Utils;
 @RequestMapping("api/v1/initialize/clients")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ClientController {
+
+    @Autowired
+    OrganizationService organizationService;
 
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> getAll() {
@@ -44,11 +53,21 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all clients successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                List<Object> clients = new JSONArray(jsonResponse).toList();
+                JSONArray jsonArray = new JSONArray();
+                for (Object client : clients) {
+                    JSONObject jsonObject = new JSONObject(client);
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("id"));
+                    if (checkOrganization.isPresent()) {
+                        Organization organization = checkOrganization.get();
+                        jsonObject.put("adapter_data", organization);
+                        jsonArray.put(jsonObject);
+                    }
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
-                System.out.println("Get all clients failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -67,6 +86,7 @@ public class ClientController {
                     Map.entry("Accept", "application/json"));
 
             Map<String, String> client_tmp = (Map<String, String>) body.get("client");
+            Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
             JSONObject client = new JSONObject();
             client.put("member_name", client_tmp.get("member_name"));
@@ -82,11 +102,23 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                System.out.println("Add new client successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Organization organization = new Organization(
+                        Utils.UUID(),
+                        adapter_data_tmp.get("organId"),
+                        jsonObject.getString("id"),
+                        adapter_data_tmp.get("organizationInCharge"),
+                        adapter_data_tmp.get("organName"),
+                        adapter_data_tmp.get("organAdd"),
+                        adapter_data_tmp.get("email"),
+                        adapter_data_tmp.get("telephone"),
+                        adapter_data_tmp.get("fax"),
+                        adapter_data_tmp.get("website"));
+                organizationService.save(organization);
+                jsonObject.put("adapter_data", organization);
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
-                System.out.println("Add new client failed: " + httpResponse);
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -106,11 +138,15 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get client by id successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Optional<Organization> checkOrganization = organizationService.findBySsId(jsonObject.getString("id"));
+                if (checkOrganization.isPresent()) {
+                    Organization organization = checkOrganization.get();
+                    jsonObject.put("adapter_data", organization);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
-                System.out.println("Get client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -130,6 +166,8 @@ public class ClientController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
+
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("connection_type", body.get("connection_type"));
 
@@ -138,11 +176,24 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Patch client by id successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Optional<Organization> checkOrganization = organizationService.findBySsId(jsonObject.getString("id"));
+                if (checkOrganization.isPresent()) {
+                    Organization organization = checkOrganization.get();
+                    organization.setOrganId(adapter_data_tmp.get("organId"));
+                    organization.setOrganizationInCharge(adapter_data_tmp.get("organizationInCharge"));
+                    organization.setOrganName(adapter_data_tmp.get("organName"));
+                    organization.setOrganAdd(adapter_data_tmp.get("organAdd"));
+                    organization.setEmail(adapter_data_tmp.get("email"));
+                    organization.setTelephone(adapter_data_tmp.get("telephone"));
+                    organization.setFax(adapter_data_tmp.get("fax"));
+                    organization.setWebsite(adapter_data_tmp.get("website"));
+                    organizationService.save(organization);
+                    jsonObject.put("adapter_data", organization);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
-                System.out.println("Patch client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -161,10 +212,15 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("DELETE", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Delete client by id successfully!");
+                Optional<Organization> checkOrganization = organizationService.findBySsId(id);
+                if (checkOrganization.isPresent()) {
+                    Organization organization = checkOrganization.get();
+                    organizationService.deleteById(organization.getId());
+                } else {
+                    return CustomResponse.Response_data(404, "Khong tim thay don vi");
+                }
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Delete client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -185,10 +241,8 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Register client successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Register client failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -207,11 +261,21 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all service clients successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                List<Object> clients = new JSONArray(jsonResponse).toList();
+                JSONArray jsonArray = new JSONArray();
+                for (Object client : clients) {
+                    JSONObject jsonObject = new JSONObject(client);
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("id"));
+                    if (checkOrganization.isPresent()) {
+                        Organization organization = checkOrganization.get();
+                        jsonObject.put("adapter_data", organization);
+                        jsonArray.put(jsonObject);
+                    }
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
-                System.out.println("Get all service clients failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -233,11 +297,15 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get service client by id successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Optional<Organization> checkOrganization = organizationService.findBySsId(jsonObject.getString("id"));
+                if (checkOrganization.isPresent()) {
+                    Organization organization = checkOrganization.get();
+                    jsonObject.put("adapter_data", organization);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
-                System.out.println("Get service client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -259,12 +327,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all access right of service client by id successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println(
-                        "Get all access right of service client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -299,11 +364,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                System.out.println("Add access right for service client by id successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Add access right for service client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -339,11 +402,8 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Get all access right id service client by id successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println(
-                        "Get all access right id service client by id failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -364,11 +424,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all sign-certificates successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get all sign-certificates failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -389,11 +447,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all TLS certificates successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get all TLS certificates failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -418,11 +474,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                System.out.println("Add TLS certificate successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Add TLS certificate failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -445,14 +499,11 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get TLS certificate by hash successfully!");
 
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
 
-
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get TLS certificate by hash failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -475,10 +526,8 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("DELETE", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Delete TLS certificate by hash successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Delete TLS certificate by hash failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -499,10 +548,8 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Register client successfully!");
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
-                System.out.println("Register client failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -523,11 +570,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get initialization status successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -559,11 +604,9 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                System.out.println("Get initialization status successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
-                System.out.println("Get initialization status failed: " + httpResponse);
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
@@ -573,9 +616,51 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/service-client-candidates")
-    public ResponseEntity<Map<String, Object>> getAllServiceClientCandidates(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getAllServiceClientCandidates(
+            @PathVariable String id,
+            @RequestParam(name = "member_name_group_description", required = false) String member_name_group_description,
+            @RequestParam(name = "member_group_code", required = false) String member_group_code,
+            @RequestParam(name = "subsystem_code", required = false) String subsystem_code,
+            @RequestParam(name = "instance", required = false) String instance,
+            @RequestParam(name = "member_class", required = false) String member_class,
+            @RequestParam(name = "service_client_type", required = false) String service_client_type) {
         try {
-            String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/service-client-candidates";
+            String url = Utils.SS_CONFIG_URL + "/clients/" + id +
+                    "/service-client-candidates";
+            if (member_name_group_description != null && !member_name_group_description.equalsIgnoreCase("")) {
+                url += "?member_name_group_description=" + member_name_group_description;
+            } else {
+                url += "?member_name_group_description=";
+                System.out.println("Khong truyen member_name_group_description");
+            }
+            if (member_group_code != null && !member_group_code.equalsIgnoreCase("")) {
+                url += "&member_group_code=" + member_group_code;
+            } else {
+                url += "&member_group_code=";
+                System.out.println("Khong truyen member_group_code");
+            }
+            if (subsystem_code != null && !subsystem_code.equalsIgnoreCase("")) {
+                url += "&subsystem_code=" + subsystem_code;
+            } else {
+                url += "&subsystem_code=";
+                System.out.println("Khong truyen subsystem_code");
+            }
+            if (instance != null && !instance.equalsIgnoreCase("")) {
+                url += "&instance=" + instance;
+            } else {
+                System.out.println("Khong truyen instance");
+            }
+            if (member_class != null && !member_class.equalsIgnoreCase("")) {
+                url += "&member_class=" + member_class;
+            } else {
+                System.out.println("Khong truyen member_class");
+            }
+            if (service_client_type != null && !service_client_type.equalsIgnoreCase("")) {
+                url += "&service_client_type=" + service_client_type;
+            } else {
+                System.out.println("Khong truyen service_client_type");
+            }
+            System.out.println(url);
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
@@ -584,41 +669,50 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                System.out.println("Get all service client candidates successfully!");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                List<Object> clients = new JSONArray(jsonResponse).toList();
+                JSONArray jsonArray = new JSONArray();
+                for (Object client : clients) {
+                    JSONObject jsonObject = new JSONObject(client);
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("id"));
+                    if (checkOrganization.isPresent()) {
+                        Organization organization = checkOrganization.get();
+                        jsonObject.put("adapter_data", organization);
+                        jsonArray.put(jsonObject);
+                    }
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
-                System.out.println("Get all service client candidates failed: " + httpResponse.getStatusLine());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
+            // return CustomResponse.Response_no_data(200);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
         }
     }
 
-    @PutMapping("/{id}/make-owner")
-    public ResponseEntity<Map<String, Object>> makeOwner(@PathVariable String id) {
-        try {
-            String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/make-owner";
-            Map<String, String> headers = Map.ofEntries(
-                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-                    Map.entry("Content-Type", "application/json"),
-                    Map.entry("Accept", "application/json"));
+    // @PutMapping("/{id}/make-owner")
+    // public ResponseEntity<Map<String, Object>> makeOwner(@PathVariable String id) {
+    //     try {
+    //         String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/make-owner";
+    //         Map<String, String> headers = Map.ofEntries(
+    //                 Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+    //                 Map.entry("Content-Type", "application/json"),
+    //                 Map.entry("Accept", "application/json"));
 
-            CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
-            HttpResponse httpResponse = httpRequest.request();
-            if (httpResponse.getStatusLine().getStatusCode() == 204) {
-                System.out.println("Register client successfully!");
-                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
-            } else {
-                System.out.println("Register client failed: " + httpResponse.getStatusLine());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
-            }
-        } catch (Exception e) {
-            return CustomResponse.Response_data(500, e.toString());
-        }
-    }
+    //         CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
+    //         HttpResponse httpResponse = httpRequest.request();
+    //         if (httpResponse.getStatusLine().getStatusCode() == 204) {
+    //             return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+    //         } else {
+    //             return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+    //                     httpResponse.getStatusLine().toString());
+    //         }
+    //     } catch (Exception e) {
+    //         return CustomResponse.Response_data(500, e.toString());
+    //     }
+    // }
 
 }

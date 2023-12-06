@@ -48,7 +48,7 @@ public class OrganizationController {
         }
     }
 
-    @PostMapping(value = "")
+    @PostMapping("")
     public ResponseEntity<Map<String, Object>> registerOrganization(
             @RequestBody Map<String, Object> entity) {
         try {
@@ -63,14 +63,14 @@ public class OrganizationController {
             organization.setTelephone(entity.get("telephone").toString());
             organization.setFax(entity.get("fax").toString());
             organization.setWebsite(entity.get("website").toString());
-            Organization organizationRes = organizationService.add(organization);
+            Organization organizationRes = organizationService.save(organization);
             return CustomResponse.Response_data(200, organizationRes);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
         }
     }
 
-    // @DeleteMapping(value = "/")
+    // @DeleteMapping("/")
     // public ResponseEntity<Map<String, Object>> deleteOrganization(
     // @RequestHeader(name = "OrganizationCode", required = true) String
     // organizationCode) {

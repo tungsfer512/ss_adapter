@@ -100,7 +100,6 @@ public class CustomHttpRequest {
             }
 
             for (Map.Entry<String, String> entry : this.headers.entrySet()) {
-                System.out.println(entry.getKey() + "/" + entry.getValue());
                 httpRequest.setHeader(entry.getKey(), entry.getValue());
             }
 
@@ -129,7 +128,6 @@ public class CustomHttpRequest {
             }
 
             for (Map.Entry<String, String> entry : this.headers.entrySet()) {
-                System.out.println(entry.getKey() + "/" + entry.getValue());
                 httpRequest.setHeader(entry.getKey(), entry.getValue());
             }
 

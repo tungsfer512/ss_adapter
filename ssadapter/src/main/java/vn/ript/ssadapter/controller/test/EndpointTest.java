@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ript.ssadapter.model.initialize.Endpoint;
 import vn.ript.ssadapter.model.initialize.Service;
-import vn.ript.ssadapter.service.initiallize.EndpointService;
-import vn.ript.ssadapter.service.initiallize.ServiceService;
+import vn.ript.ssadapter.service.initialize.EndpointService;
+import vn.ript.ssadapter.service.initialize.ServiceService;
 import vn.ript.ssadapter.utils.CustomResponse;
 
 @RestController
 @RequestMapping("api/v1/test/endpoints")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class EndpointController {
+public class EndpointTest {
 
     @Autowired
     EndpointService endpointService;
@@ -61,13 +61,17 @@ public class EndpointController {
             Endpoint endpoint = new Endpoint();
             Integer serviceId = (Integer) body.get("service_id");
             endpoint.setSsId((String) body.get("ss_id"));
+            endpoint.setName((String) body.get("name"));
             endpoint.setDescription((String) body.get("description"));
             endpoint.setInputDescription((String) body.get("input_description"));
             endpoint.setOutputDescription((String) body.get("output_description"));
             Optional<Service> checkService = serviceService.findById(serviceId);
             if (checkService.isPresent()) {
-                endpoint.setService(checkService.get());
+                Service service = checkService.get();
                 Endpoint endpointRes = endpointService.save(endpoint);
+                List<Endpoint> endpoints = service.getEndpoints();
+                endpoints.add(endpointRes);
+                endpointService.save(endpointRes);
                 return CustomResponse.Response_data(200, endpointRes);
             } else {
                 return CustomResponse.Response_data(404, "Khong tim thay");

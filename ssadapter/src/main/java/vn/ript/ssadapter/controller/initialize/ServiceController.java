@@ -2,6 +2,7 @@ package vn.ript.ssadapter.controller.initialize;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
@@ -9,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,15 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
+import vn.ript.ssadapter.model.Organization;
+import vn.ript.ssadapter.model.initialize.Endpoint;
+import vn.ript.ssadapter.model.initialize.Service;
+import vn.ript.ssadapter.service.OrganizationService;
+import vn.ript.ssadapter.service.initialize.EndpointService;
+import vn.ript.ssadapter.service.initialize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceService;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.Utils;
@@ -28,8 +39,20 @@ import vn.ript.ssadapter.utils.Utils;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ServiceController {
 
+    @Autowired
+    OrganizationService organizationService;
+
+    @Autowired
+    ServiceDescriptionService serviceDescriptionService;
+
+    @Autowired
+    ServiceService serviceService;
+
+    @Autowired
+    EndpointService endpointService;
+
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> enableService(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getServiceById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/services/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -41,7 +64,50 @@ public class ServiceController {
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                Gson gson = new Gson();
+                JSONObject jsonService = new JSONObject(jsonResponse);
+                Optional<Service> checkService = serviceService.findBySsId(jsonService.getString("id"));
+                if (checkService.isPresent()) {
+                    Service currentService = checkService.get();
+                    System.out.println(currentService);
+                    List<Object> objectEndpoints = jsonService.getJSONArray("endpoints").toList();
+                    List<Endpoint> endpoints = currentService.getEndpoints();
+                    JSONArray jsonEndpoints = new JSONArray();
+                    for (Object objectEndpoint : objectEndpoints) {
+                        JSONObject jsonEndpoint = new JSONObject(gson.toJson(objectEndpoint));
+                        Endpoint currentEndpoint = null;
+                        for (Endpoint endpoint : endpoints) {
+                            if (endpoint.getSsId().equalsIgnoreCase(jsonEndpoint.getString("id"))) {
+                                currentEndpoint = endpoint;
+                                break;
+                            }
+                        }
+                        if (currentEndpoint != null) {
+                            System.out.println(currentEndpoint);
+                            System.out.println("add data to endpoint");
+                            JSONObject adapter_data_endpoint = new JSONObject();
+                            adapter_data_endpoint.put("name", currentEndpoint.getName());
+                            adapter_data_endpoint.put("description", currentEndpoint.getDescription());
+                            adapter_data_endpoint.put("inputDescription",
+                                    currentEndpoint.getInputDescription());
+                            adapter_data_endpoint.put("outputDescription",
+                                    currentEndpoint.getOutputDescription());
+                            jsonEndpoint.put("adapter_data", adapter_data_endpoint);
+                        } else {
+                            jsonEndpoint.put("adapter_data", new JSONObject());
+                        }
+                        jsonEndpoints.put(jsonEndpoint);
+                    }
+
+                    jsonService.put("endpoints", jsonEndpoints);
+                    System.out.println("add data to service");
+                    JSONObject adapter_data_service = new JSONObject();
+                    adapter_data_service.put("description", currentService.getDescription());
+                    jsonService.put("adapter_data", adapter_data_service);
+                } else {
+                    jsonService.put("adapter_data", new JSONObject());
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonService.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -52,7 +118,7 @@ public class ServiceController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> disableService(
+    public ResponseEntity<Map<String, Object>> patchServiceById(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -69,6 +135,7 @@ public class ServiceController {
             Boolean timeout_all = (Boolean) body.get("timeout_all");
             String url_tmp = (String) body.get("url");
             Boolean url_all = (Boolean) body.get("url_all");
+            Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("ignore_warnings", ignore_warnings);
@@ -84,7 +151,19 @@ public class ServiceController {
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonService = new JSONObject(jsonResponse);
+                Optional<Service> checkService = serviceService.findBySsId(jsonService.getString("id"));
+                if (checkService.isPresent()) {
+                    Service service = checkService.get();
+                    service.setDescription(adapter_data_tmp.get("description"));
+                    Service serviceRes = serviceService.save(service);
+                    JSONObject adapter_data_service = new JSONObject();
+                    adapter_data_service.put("description", serviceRes.getDescription());
+                    jsonService.put("adapter_data", adapter_data_service);
+                } else {
+                    jsonService.put("adapter_data", new JSONObject());
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonService.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -106,10 +185,12 @@ public class ServiceController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
-            JSONObject jsonPostObject = new JSONObject();
             String method = (String) body.get("method");
             String path = (String) body.get("path");
             String service_code = (String) body.get("service_code");
+            Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
+
+            JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("method", method);
             jsonPostObject.put("path", path);
             jsonPostObject.put("service_code", service_code);
@@ -119,7 +200,24 @@ public class ServiceController {
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonEndpoint = new JSONObject(jsonResponse);
+                Optional<Service> checkService = serviceService.findBySsId(id);
+                if (checkService.isPresent()) {
+                    Service service = checkService.get();
+                    Endpoint endpoint = new Endpoint();
+                    endpoint.setSsId(jsonEndpoint.getString("id"));
+                    endpoint.setName(adapter_data_tmp.get("name"));
+                    endpoint.setDescription(adapter_data_tmp.get("description"));
+                    endpoint.setInputDescription(adapter_data_tmp.get("input_description"));
+                    endpoint.setOutputDescription(adapter_data_tmp.get("output_description"));
+                    Endpoint endpointRes = endpointService.save(endpoint);
+                    List<Endpoint> endpoints = service.getEndpoints();
+                    endpoints.add(endpointRes);
+                    service.setEndpoints(endpoints);
+                    serviceService.save(service);
+                    jsonEndpoint.put("adapter_data", endpointRes);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonEndpoint.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -142,7 +240,22 @@ public class ServiceController {
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                List<Object> clients = new JSONArray(jsonResponse).toList();
+                JSONArray jsonArray = new JSONArray();
+                for (Object client : clients) {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(gson.toJson(client));
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("id"));
+                    if (checkOrganization.isPresent()) {
+                        Organization organization = checkOrganization.get();
+                        jsonObject.put("adapter_data", organization);
+                    } else {
+                        jsonObject.put("adapter_data", new JSONObject());
+                    }
+                    jsonArray.put(jsonObject);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());

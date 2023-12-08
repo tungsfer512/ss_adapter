@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ript.ssadapter.model.initialize.Service;
 import vn.ript.ssadapter.model.initialize.ServiceDescription;
-import vn.ript.ssadapter.service.initiallize.ServiceService;
-import vn.ript.ssadapter.service.initiallize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceService;
 import vn.ript.ssadapter.utils.CustomResponse;
 
 @RestController
 @RequestMapping("api/v1/test/services")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class ServiceController {
+public class ServiceTest {
 
     @Autowired
     ServiceService serviceService;
@@ -64,8 +64,11 @@ public class ServiceController {
             service.setDescription((String) body.get("description"));
             Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService.findById(serviceDescriptionId);
             if (checkServiceDescription.isPresent()) {
-                service.setServiceDescription(checkServiceDescription.get());
                 Service serviceRes = serviceService.save(service);
+                ServiceDescription serviceDescription = checkServiceDescription.get();
+                List<Service> services = serviceDescription.getServices();
+                services.add(serviceRes);
+                serviceDescriptionService.save(serviceDescription);
                 return CustomResponse.Response_data(200, serviceRes);
             } else {
                 return CustomResponse.Response_data(404, "Khong tim thay");

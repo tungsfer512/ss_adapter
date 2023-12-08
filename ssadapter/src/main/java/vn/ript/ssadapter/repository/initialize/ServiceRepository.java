@@ -1,4 +1,4 @@
-package vn.ript.ssadapter.repository.initiallize;
+package vn.ript.ssadapter.repository.initialize;
 
 import java.util.Optional;
 

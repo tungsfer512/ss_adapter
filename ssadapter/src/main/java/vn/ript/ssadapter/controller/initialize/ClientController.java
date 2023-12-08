@@ -28,8 +28,15 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.google.gson.Gson;
+
 import vn.ript.ssadapter.model.Organization;
+import vn.ript.ssadapter.model.initialize.Endpoint;
+import vn.ript.ssadapter.model.initialize.Service;
+import vn.ript.ssadapter.model.initialize.ServiceDescription;
 import vn.ript.ssadapter.service.OrganizationService;
+import vn.ript.ssadapter.service.initialize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceService;
 import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
@@ -43,28 +50,45 @@ public class ClientController {
     @Autowired
     OrganizationService organizationService;
 
+    @Autowired
+    ServiceDescriptionService serviceDescriptionService;
+
+    @Autowired
+    ServiceService serviceService;
+
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAll() {
+    public ResponseEntity<Map<String, Object>> getAll(
+            @RequestParam(name = "exclude_local", required = false) Boolean exclude_local,
+            @RequestParam(name = "internal_search", required = false) Boolean internal_search,
+            @RequestParam(name = "show_members", required = false) Boolean show_members,
+            @RequestParam(name = "instance", required = false) String instance) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Accept", "application/json"));
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            httpRequest.add_query_param("exclude_local", exclude_local);
+            httpRequest.add_query_param("internal_search", internal_search);
+            httpRequest.add_query_param("show_members", show_members);
+            httpRequest.add_query_param("instance", instance);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 List<Object> clients = new JSONArray(jsonResponse).toList();
                 JSONArray jsonArray = new JSONArray();
                 for (Object client : clients) {
-                    JSONObject jsonObject = new JSONObject(client);
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(gson.toJson(client));
                     Optional<Organization> checkOrganization = organizationService
                             .findBySsId(jsonObject.getString("id"));
                     if (checkOrganization.isPresent()) {
                         Organization organization = checkOrganization.get();
                         jsonObject.put("adapter_data", organization);
-                        jsonArray.put(jsonObject);
+                    } else {
+                        jsonObject.put("adapter_data", new JSONObject());
                     }
+                    jsonArray.put(jsonObject);
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
@@ -144,6 +168,8 @@ public class ClientController {
                 if (checkOrganization.isPresent()) {
                     Organization organization = checkOrganization.get();
                     jsonObject.put("adapter_data", organization);
+                } else {
+                    jsonObject.put("adapter_data", new JSONObject());
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
@@ -216,8 +242,6 @@ public class ClientController {
                 if (checkOrganization.isPresent()) {
                     Organization organization = checkOrganization.get();
                     organizationService.deleteById(organization.getId());
-                } else {
-                    return CustomResponse.Response_data(404, "Khong tim thay don vi");
                 }
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
@@ -265,14 +289,17 @@ public class ClientController {
                 List<Object> clients = new JSONArray(jsonResponse).toList();
                 JSONArray jsonArray = new JSONArray();
                 for (Object client : clients) {
-                    JSONObject jsonObject = new JSONObject(client);
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(gson.toJson(client));
                     Optional<Organization> checkOrganization = organizationService
                             .findBySsId(jsonObject.getString("id"));
                     if (checkOrganization.isPresent()) {
                         Organization organization = checkOrganization.get();
                         jsonObject.put("adapter_data", organization);
-                        jsonArray.put(jsonObject);
+                    } else {
+                        jsonObject.put("adapter_data", new JSONObject());
                     }
+                    jsonArray.put(jsonObject);
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
@@ -303,6 +330,8 @@ public class ClientController {
                 if (checkOrganization.isPresent()) {
                     Organization organization = checkOrganization.get();
                     jsonObject.put("adapter_data", organization);
+                } else {
+                    jsonObject.put("adapter_data", new JSONObject());
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
@@ -571,7 +600,88 @@ public class ClientController {
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                Gson gson = new Gson();
+
+                List<Object> objectServiceDescriptions = new JSONArray(jsonResponse).toList();
+                List<ServiceDescription> serviceDescriptions = serviceDescriptionService.findByOrganizationOrganId(id);
+                JSONArray jsonServiceDescriptions = new JSONArray();
+                for (Object objectServiceDescription : objectServiceDescriptions) {
+                    JSONObject jsonServiceDescription = new JSONObject(gson.toJson(objectServiceDescription));
+                    ServiceDescription currentServiceDescription = null;
+                    for (ServiceDescription serviceDescription : serviceDescriptions) {
+                        if (serviceDescription.getSsId().equalsIgnoreCase(jsonServiceDescription.getString("id"))) {
+                            currentServiceDescription = serviceDescription;
+                            break;
+                        }
+                    }
+                    if (currentServiceDescription != null) {
+                        System.out.println(currentServiceDescription);
+                        List<Object> objectServices = jsonServiceDescription.getJSONArray("services").toList();
+                        List<Service> services = currentServiceDescription.getServices();
+                        JSONArray jsonServices = new JSONArray();
+                        for (Object objectService : objectServices) {
+                            JSONObject jsonService = new JSONObject(gson.toJson(objectService));
+                            Service currentService = null;
+                            for (Service service : services) {
+                                if (service.getSsId().equalsIgnoreCase(jsonService.getString("id"))) {
+                                    currentService = service;
+                                    break;
+                                }
+                            }
+                            if (currentService != null) {
+                                System.out.println(currentService);
+                                List<Object> objectEndpoints = jsonService.getJSONArray("endpoints").toList();
+                                List<Endpoint> endpoints = currentService.getEndpoints();
+                                JSONArray jsonEndpoints = new JSONArray();
+                                for (Object objectEndpoint : objectEndpoints) {
+                                    JSONObject jsonEndpoint = new JSONObject(gson.toJson(objectEndpoint));
+                                    Endpoint currentEndpoint = null;
+                                    for (Endpoint endpoint : endpoints) {
+                                        if (endpoint.getSsId().equalsIgnoreCase(jsonEndpoint.getString("id"))) {
+                                            currentEndpoint = endpoint;
+                                            break;
+                                        }
+                                    }
+                                    if (currentEndpoint != null) {
+                                        System.out.println(currentEndpoint);
+                                        System.out.println("add data to endpoint");
+                                        JSONObject adapter_data_endpoint = new JSONObject();
+                                        adapter_data_endpoint.put("name", currentEndpoint.getName());
+                                        adapter_data_endpoint.put("description", currentEndpoint.getDescription());
+                                        adapter_data_endpoint.put("inputDescription",
+                                                currentEndpoint.getInputDescription());
+                                        adapter_data_endpoint.put("outputDescription",
+                                                currentEndpoint.getOutputDescription());
+                                        jsonEndpoint.put("adapter_data", adapter_data_endpoint);
+                                    } else {
+                                        jsonEndpoint.put("adapter_data", new JSONObject());
+                                    }
+                                    jsonEndpoints.put(jsonEndpoint);
+                                }
+
+                                jsonService.put("endpoints", jsonEndpoints);
+                                System.out.println("add data to service");
+                                JSONObject adapter_data_service = new JSONObject();
+                                adapter_data_service.put("description", currentService.getDescription());
+                                jsonService.put("adapter_data", adapter_data_service);
+                            } else {
+                                jsonService.put("adapter_data", new JSONObject());
+                            }
+                            jsonServices.put(jsonService);
+                        }
+
+                        jsonServiceDescription.put("services", jsonServices);
+                        System.out.println("add data to service description");
+                        JSONObject adapter_data_service_description = new JSONObject();
+                        adapter_data_service_description.put("description", currentServiceDescription.getDescription());
+                        jsonServiceDescription.put("adapter_data", adapter_data_service_description);
+                    } else {
+                        jsonServiceDescription.put("adapter_data", new JSONObject());
+                    }
+                    jsonServiceDescriptions.put(jsonServiceDescription);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        jsonServiceDescriptions.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -593,19 +703,65 @@ public class ClientController {
                     Map.entry("Accept", "application/json"));
 
             JSONObject jsonPostObject = new JSONObject();
-            if (!((String) body.get("rest_service_code")).equalsIgnoreCase("WSDL")) {
+            if (!((String) body.get("type")).equalsIgnoreCase("WSDL")) {
                 jsonPostObject.put("rest_service_code", body.get("rest_service_code"));
             }
             jsonPostObject.put("type", body.get("type"));
             jsonPostObject.put("url", body.get("url"));
+
+            Map<String, Object> adapter_data_tmp = (Map<String, Object>) body.get("adapter_data");
+            Map<String, String> adapter_data_tmp_service_description = (Map<String, String>) adapter_data_tmp
+                    .get("service_description");
+            Map<String, String> adapter_data_tmp_service = (Map<String, String>) adapter_data_tmp.get("service");
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
 
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                Gson gson = new Gson();
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonObject = new JSONObject(jsonResponse);
+                Optional<Organization> checkOrganization = organizationService
+                        .findByOrganId(jsonObject.getString("client_id"));
+                if (checkOrganization.isPresent()) {
+                    ServiceDescription serviceDescription = new ServiceDescription();
+                    serviceDescription.setSsId(jsonObject.getString("id"));
+                    serviceDescription.setDescription(adapter_data_tmp_service_description.get("description"));
+                    serviceDescription.setOrganization(checkOrganization.get());
+
+                    List<Service> services_tmp = new ArrayList<>();
+                    if (!((String) body.get("type")).equalsIgnoreCase("WSDL")) {
+                        Service service = new Service();
+                        String serviceSsId = jsonObject.getString("client_id") + ":"
+                                + ((String) body.get("rest_service_code"));
+                        service.setSsId(serviceSsId);
+                        service.setEndpoints(new ArrayList<>());
+                        service.setDescription(adapter_data_tmp_service.get("description"));
+                        Service serviceRes = serviceService.save(service);
+                        services_tmp.add(serviceRes);
+                        serviceDescription.setServices(services_tmp);
+                        ServiceDescription serviceDescriptionRes = serviceDescriptionService.save(serviceDescription);
+
+                        JSONObject adapter_data_service_description = new JSONObject();
+                        adapter_data_service_description.put("description", serviceDescriptionRes.getDescription());
+                        jsonObject.put("adapter_data", adapter_data_service_description);
+
+                        List<Object> objectServices = jsonObject.getJSONArray("services").toList();
+                        JSONArray jsonServices = new JSONArray();
+                        JSONObject jsonService = new JSONObject(gson.toJson(objectServices.get(0)));
+                        System.out.println("add data to service");
+                        JSONObject adapter_data_service = new JSONObject();
+                        adapter_data_service.put("description", serviceRes.getDescription());
+                        jsonService.put("adapter_data", adapter_data_service);
+                        jsonServices.put(jsonService);
+
+                        System.out.println("add data to service description");
+                        jsonObject.put("services", jsonServices);
+                    }
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
+
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -627,92 +783,69 @@ public class ClientController {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id +
                     "/service-client-candidates";
-            if (member_name_group_description != null && !member_name_group_description.equalsIgnoreCase("")) {
-                url += "?member_name_group_description=" + member_name_group_description;
-            } else {
-                url += "?member_name_group_description=";
-                System.out.println("Khong truyen member_name_group_description");
-            }
-            if (member_group_code != null && !member_group_code.equalsIgnoreCase("")) {
-                url += "&member_group_code=" + member_group_code;
-            } else {
-                url += "&member_group_code=";
-                System.out.println("Khong truyen member_group_code");
-            }
-            if (subsystem_code != null && !subsystem_code.equalsIgnoreCase("")) {
-                url += "&subsystem_code=" + subsystem_code;
-            } else {
-                url += "&subsystem_code=";
-                System.out.println("Khong truyen subsystem_code");
-            }
-            if (instance != null && !instance.equalsIgnoreCase("")) {
-                url += "&instance=" + instance;
-            } else {
-                System.out.println("Khong truyen instance");
-            }
-            if (member_class != null && !member_class.equalsIgnoreCase("")) {
-                url += "&member_class=" + member_class;
-            } else {
-                System.out.println("Khong truyen member_class");
-            }
-            if (service_client_type != null && !service_client_type.equalsIgnoreCase("")) {
-                url += "&service_client_type=" + service_client_type;
-            } else {
-                System.out.println("Khong truyen service_client_type");
-            }
-            System.out.println(url);
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            httpRequest.add_query_param("member_name_group_description", member_name_group_description);
+            httpRequest.add_query_param("member_group_code", member_group_code);
+            httpRequest.add_query_param("subsystem_code", subsystem_code);
+            httpRequest.add_query_param("instance", instance);
+            httpRequest.add_query_param("member_class", member_class);
+            httpRequest.add_query_param("service_client_type", service_client_type);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 List<Object> clients = new JSONArray(jsonResponse).toList();
                 JSONArray jsonArray = new JSONArray();
                 for (Object client : clients) {
-                    JSONObject jsonObject = new JSONObject(client);
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(gson.toJson(client));
                     Optional<Organization> checkOrganization = organizationService
                             .findBySsId(jsonObject.getString("id"));
                     if (checkOrganization.isPresent()) {
                         Organization organization = checkOrganization.get();
                         jsonObject.put("adapter_data", organization);
-                        jsonArray.put(jsonObject);
+                    } else {
+                        jsonObject.put("adapter_data", new JSONObject());
                     }
+                    jsonArray.put(jsonObject);
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
             }
-            // return CustomResponse.Response_no_data(200);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
         }
     }
 
     // @PutMapping("/{id}/make-owner")
-    // public ResponseEntity<Map<String, Object>> makeOwner(@PathVariable String id) {
-    //     try {
-    //         String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/make-owner";
-    //         Map<String, String> headers = Map.ofEntries(
-    //                 Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-    //                 Map.entry("Content-Type", "application/json"),
-    //                 Map.entry("Accept", "application/json"));
+    // public ResponseEntity<Map<String, Object>> makeOwner(@PathVariable String id)
+    // {
+    // try {
+    // String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/make-owner";
+    // Map<String, String> headers = Map.ofEntries(
+    // Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+    // Map.entry("Content-Type", "application/json"),
+    // Map.entry("Accept", "application/json"));
 
-    //         CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
-    //         HttpResponse httpResponse = httpRequest.request();
-    //         if (httpResponse.getStatusLine().getStatusCode() == 204) {
-    //             return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
-    //         } else {
-    //             return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-    //                     httpResponse.getStatusLine().toString());
-    //         }
-    //     } catch (Exception e) {
-    //         return CustomResponse.Response_data(500, e.toString());
-    //     }
+    // CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
+    // HttpResponse httpResponse = httpRequest.request();
+    // if (httpResponse.getStatusLine().getStatusCode() == 204) {
+    // return
+    // CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+    // } else {
+    // return
+    // CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+    // httpResponse.getStatusLine().toString());
+    // }
+    // } catch (Exception e) {
+    // return CustomResponse.Response_data(500, e.toString());
+    // }
     // }
 
 }

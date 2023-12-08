@@ -1,16 +1,11 @@
 package vn.ript.ssadapter.model.initialize;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +15,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-@Embeddable
+@Entity
+@Table(name = "_endpoint")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -49,10 +45,5 @@ public class Endpoint {
 
     @Column(name = "_outputDescription", columnDefinition = "text")
     private String outputDescription;
-
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-    @JoinColumn(name = "_service_id", referencedColumnName = "id")
-    @JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
-    private Service service;
 
 }

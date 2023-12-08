@@ -1,4 +1,4 @@
-package vn.ript.ssadapter.service.initiallize;
+package vn.ript.ssadapter.service.initialize;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.ript.ssadapter.model.initialize.ServiceDescription;
-import vn.ript.ssadapter.repository.initiallize.ServiceDescriptionRepository;
+import vn.ript.ssadapter.repository.initialize.ServiceDescriptionRepository;
 
 @Service
 public class ServiceDescriptionService {
@@ -17,6 +17,10 @@ public class ServiceDescriptionService {
 
     public List<ServiceDescription> findAll() {
         return serviceDescriptionRepository.findAll();
+    }
+    
+    public List<ServiceDescription> findByOrganizationOrganId(String organId) {
+        return serviceDescriptionRepository.findByOrganizationOrganId(organId);
     }
 
     public ServiceDescription save(ServiceDescription serviceDescription) {

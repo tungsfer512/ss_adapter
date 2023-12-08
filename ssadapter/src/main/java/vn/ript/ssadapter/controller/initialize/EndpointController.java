@@ -1,6 +1,7 @@
 package vn.ript.ssadapter.controller.initialize;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.List;
 
 import org.apache.http.HttpResponse;
@@ -9,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -20,6 +22,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
+import vn.ript.ssadapter.model.Organization;
+import vn.ript.ssadapter.model.initialize.Endpoint;
+import vn.ript.ssadapter.service.OrganizationService;
+import vn.ript.ssadapter.service.initialize.EndpointService;
+import vn.ript.ssadapter.service.initialize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceService;
 import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.Utils;
@@ -28,6 +38,18 @@ import vn.ript.ssadapter.utils.Utils;
 @RequestMapping("api/v1/initialize/endpoints")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class EndpointController {
+
+    @Autowired
+    OrganizationService organizationService;
+
+    @Autowired
+    ServiceDescriptionService serviceDescriptionService;
+
+    @Autowired
+    ServiceService serviceService;
+
+    @Autowired
+    EndpointService endpointService;
 
     @GetMapping("/{id}")
     public ResponseEntity<Map<String, Object>> getEndpointById(@PathVariable Integer id) {
@@ -42,7 +64,14 @@ public class EndpointController {
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                JSONObject jsonEndpoint = new JSONObject(jsonResponse);
+                Optional<Endpoint> checkEndpoint = endpointService.findBySsId(id.toString());
+                if (checkEndpoint.isPresent()) {
+                    jsonEndpoint.put("adapter_data", checkEndpoint.get());
+                } else {
+                    jsonEndpoint.put("adapter_data", new JSONObject());
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonEndpoint.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -68,10 +97,11 @@ public class EndpointController {
             String method = (String) body.get("method");
             String path = (String) body.get("path");
             String service_code = (String) body.get("service_code");
+            Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("generated", generated);
-            jsonPostObject.put("id_tmp", id_tmp);
+            jsonPostObject.put("id", id_tmp);
             jsonPostObject.put("method", method);
             jsonPostObject.put("path", path);
             jsonPostObject.put("service_code", service_code);
@@ -81,7 +111,21 @@ public class EndpointController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                JSONObject jsonEndpoint = new JSONObject(jsonResponse);
+                Optional<Endpoint> checkEndpoint = endpointService.findBySsId(id.toString());
+                if (checkEndpoint.isPresent()) {
+                    Endpoint endpoint = checkEndpoint.get();
+                    endpoint.setName(adapter_data_tmp.get("name"));
+                    endpoint.setDescription(adapter_data_tmp.get("description"));
+                    endpoint.setInputDescription(adapter_data_tmp.get("input_description"));
+                    endpoint.setOutputDescription(adapter_data_tmp.get("output_description"));
+                    Endpoint endpointRes = endpointService.save(endpoint);
+                    jsonEndpoint.put("adapter_data", endpointRes);
+                } else {
+                    jsonEndpoint.put("adapter_data", new JSONObject());
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonEndpoint.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());
@@ -129,7 +173,22 @@ public class EndpointController {
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+                List<Object> clients = new JSONArray(jsonResponse).toList();
+                JSONArray jsonArray = new JSONArray();
+                for (Object client : clients) {
+                    Gson gson = new Gson();
+                    JSONObject jsonObject = new JSONObject(gson.toJson(client));
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("id"));
+                    if (checkOrganization.isPresent()) {
+                        Organization organization = checkOrganization.get();
+                        jsonObject.put("adapter_data", organization);
+                    } else {
+                        jsonObject.put("adapter_data", new JSONObject());
+                    }
+                    jsonArray.put(jsonObject);
+                }
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.getStatusLine().toString());

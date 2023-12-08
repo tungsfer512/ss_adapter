@@ -1,5 +1,6 @@
 package vn.ript.ssadapter.controller.test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -17,13 +18,13 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.ript.ssadapter.model.Organization;
 import vn.ript.ssadapter.model.initialize.ServiceDescription;
 import vn.ript.ssadapter.service.OrganizationService;
-import vn.ript.ssadapter.service.initiallize.ServiceDescriptionService;
+import vn.ript.ssadapter.service.initialize.ServiceDescriptionService;
 import vn.ript.ssadapter.utils.CustomResponse;
 
 @RestController
 @RequestMapping("api/v1/test/service-descriptions")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class ServiceDescriptionController {
+public class ServiceDescriptionTest {
 
     @Autowired
     ServiceDescriptionService serviceDescriptionService;
@@ -62,6 +63,7 @@ public class ServiceDescriptionController {
             String organizationId = (String) body.get("organization_id");
             serviceDescription.setSsId((String) body.get("ss_id"));
             serviceDescription.setDescription((String) body.get("description"));
+            serviceDescription.setServices(new ArrayList<>());
             Optional<Organization> checkOrganization = organizationService.findByOrganId(organizationId);
             if (checkOrganization.isPresent()) {
                 serviceDescription.setOrganization(checkOrganization.get());

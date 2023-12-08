@@ -74,6 +74,16 @@ public class CustomHttpRequest {
         this.headers = headers;
     }
 
+    public void add_query_param(String key, Object value) {
+        if (value != null) {
+            if (this.url.contains("?")) {
+                this.url += "&" + key + "=" + value.toString().toLowerCase();
+            } else {
+                this.url += "?" + key + "=" + value.toString().toLowerCase();
+            }
+        }
+    }
+
     public HttpResponse request() {
         try {
             CloseableHttpClient httpClient = SkipSSLHttpClient.Create();

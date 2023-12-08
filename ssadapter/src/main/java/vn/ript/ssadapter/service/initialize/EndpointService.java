@@ -1,4 +1,4 @@
-package vn.ript.ssadapter.service.initiallize;
+package vn.ript.ssadapter.service.initialize;
 
 import java.util.List;
 import java.util.Optional;
@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import vn.ript.ssadapter.model.initialize.Endpoint;
-import vn.ript.ssadapter.repository.initiallize.EndpointRepository;
+import vn.ript.ssadapter.repository.initialize.EndpointRepository;
 
 @Service
 public class EndpointService {

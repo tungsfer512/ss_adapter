@@ -1,5 +1,6 @@
 package vn.ript.ssadapter.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -56,6 +57,7 @@ public class OrganizationController {
             String UUID = Utils.UUID();
             organization.setId(UUID);
             organization.setOrganId(entity.get("organId").toString());
+            organization.setSsId(entity.get("ssId").toString());
             organization.setOrganizationInCharge(entity.get("organizationInCharge").toString());
             organization.setOrganName(entity.get("organName").toString());
             organization.setOrganAdd(entity.get("organAdd").toString());

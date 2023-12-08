@@ -32,18 +32,30 @@ public class CustomResponse<T> {
 
     public static ResponseEntity<Map<String, Object>> Response_no_data(int status) {
         Map<String, Object> res = new HashMap<>();
-        res.put("ErrorDesc", "Thanh cong");
-        res.put("ErrorCode", "0");
-        res.put("status", "OK");
+        if (SUCCESS_RESPONSE.contains(status)) {
+            res.put("ErrorDesc", "Thanh cong");
+            res.put("ErrorCode", "0");
+            res.put("status", "OK");
+        } else {
+            res.put("ErrorDesc", "That bai");
+            res.put("ErrorCode", "-1");
+            res.put("status", "FAILED");
+        }
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
     }
 
     public static ResponseEntity<Map<String, Object>> Response_data(int status, Object data) {
         Map<String, Object> res = new HashMap<>();
         res.put("data", data);
-        res.put("ErrorDesc", "Thanh cong");
-        res.put("ErrorCode", "0");
-        res.put("status", "OK");
+        if (SUCCESS_RESPONSE.contains(status)) {
+            res.put("ErrorDesc", "Thanh cong");
+            res.put("ErrorCode", "0");
+            res.put("status", "OK");
+        } else {
+            res.put("ErrorDesc", "That bai");
+            res.put("ErrorCode", "-1");
+            res.put("status", "FAILED");
+        }
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
     }
 
@@ -60,9 +72,15 @@ public class CustomResponse<T> {
         } else {
             res.put("data", data);
         }
-        res.put("ErrorDesc", "Thanh cong");
-        res.put("ErrorCode", "0");
-        res.put("status", "OK");
+        if (SUCCESS_RESPONSE.contains(status)) {
+            res.put("ErrorDesc", "Thanh cong");
+            res.put("ErrorCode", "0");
+            res.put("status", "OK");
+        } else {
+            res.put("ErrorDesc", "That bai");
+            res.put("ErrorCode", "-1");
+            res.put("status", "FAILED");
+        }
         return new ResponseEntity<Map<String, Object>>(res, HttpStatus.valueOf(status));
     }
 

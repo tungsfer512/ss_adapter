@@ -62,6 +62,8 @@ public class EndpointTest {
             Integer serviceId = (Integer) body.get("serviceId");
             endpoint.setSsId((String) body.get("ssId"));
             endpoint.setName((String) body.get("name"));
+            endpoint.setPath((String) body.get("path"));
+            endpoint.setMethod((String) body.get("method"));
             endpoint.setDescription((String) body.get("description"));
             endpoint.setInputDescription((String) body.get("inputDescription"));
             endpoint.setOutputDescription((String) body.get("outputDescription"));

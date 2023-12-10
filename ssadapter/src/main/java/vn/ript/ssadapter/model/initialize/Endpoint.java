@@ -37,6 +37,12 @@ public class Endpoint {
     @Column(name = "_name", columnDefinition = "text")
     private String name;
 
+    @Column(name = "_method", columnDefinition = "text")
+    private String method;
+
+    @Column(name = "_path", columnDefinition = "text")
+    private String path;
+
     @Column(name = "_description", columnDefinition = "text")
     private String description;
 

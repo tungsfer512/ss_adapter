@@ -117,6 +117,8 @@ public class EndpointController {
                 if (checkEndpoint.isPresent()) {
                     Endpoint endpoint = checkEndpoint.get();
                     endpoint.setName(adapter_data_tmp.get("name"));
+                    endpoint.setMethod(method);
+                    endpoint.setPath(path);
                     endpoint.setDescription(adapter_data_tmp.get("description"));
                     endpoint.setInputDescription(adapter_data_tmp.get("inputDescription"));
                     endpoint.setOutputDescription(adapter_data_tmp.get("outputDescription"));

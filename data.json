@@ -1,21 +1,23 @@
 [
     {
-        "organization_id": "CS:GOV:MANAGESS2MC:ABCABC",
-        "ss_id": "78",
+        "organizationId": "CS:GOV:MANAGESS2MC:ABCABC",
+        "ssId": "78",
         "description": "Mo ta 78"
     },
     {
-        "service_description_id": 1,
-        "ss_id": "CS:GOV:MANAGESS2MC:ABCABC:1237823",
+        "serviceDescriptionId": 1,
+        "ssId": "CS:GOV:MANAGESS2MC:ABCABC:1237823",
         "description": "Mo ta 1CS:GOV:MANAGESS2MC:ABCABC:1237823"
     },
     {
-        "service_id": 1,
-        "ss_id": "1",
+        "serviceId": 1,
+        "ssId": "1",
         "name": "Ten 1",
+        "path": "Ten 1",
+        "method": "Ten 1",
         "description": "Mo ta 1",
-        "input_description": "Mo ta đau vao 1",
-        "output_description": "Mo ta dau ra 1"
+        "inputDescription": "Mo ta đau vao 1",
+        "outputDescription": "Mo ta dau ra 1"
     },
     {
         "organId": "CS:GOV:MANAGESS2MC:ABCABC",

@@ -31,7 +31,7 @@ import vn.ript.ssadapter.utils.Utils;
 public class TokenCertificateController {
 
     @PostMapping("")
-    public ResponseEntity<Map<String, Object>> importTokenCertificate(
+    public ResponseEntity<Map<String, Object>> _import(
             @RequestPart(name = "file", required = true) MultipartFile file) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates";
@@ -56,7 +56,7 @@ public class TokenCertificateController {
     }
 
     @GetMapping("/{hash}")
-    public ResponseEntity<Map<String, Object>> getTokenCertificateByHash(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> getByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash;
             Map<String, String> headers = Map.ofEntries(
@@ -77,7 +77,7 @@ public class TokenCertificateController {
     }
 
     @DeleteMapping("/{hash}")
-    public ResponseEntity<Map<String, Object>> deleteTokenCertificateByHash(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> deleteByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash;
             Map<String, String> headers = Map.ofEntries(
@@ -97,7 +97,7 @@ public class TokenCertificateController {
     }
 
     @PutMapping("/{hash}/activate")
-    public ResponseEntity<Map<String, Object>> activateTokenCertificate(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> activateByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash + "/activate";
             Map<String, String> headers = Map.ofEntries(
@@ -117,7 +117,7 @@ public class TokenCertificateController {
     }
 
     @PutMapping("/{hash}/disable")
-    public ResponseEntity<Map<String, Object>> disableTokenCertificate(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> disableByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash + "/disable";
             Map<String, String> headers = Map.ofEntries(
@@ -137,7 +137,7 @@ public class TokenCertificateController {
     }
 
     @GetMapping("/{hash}/possible-actions")
-    public ResponseEntity<Map<String, Object>> getAllPossibleActionOfTokenCertificate(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> getAllPossibleActionOfTokenCertificateByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash + "/possible-actions";
             Map<String, String> headers = Map.ofEntries(
@@ -158,7 +158,7 @@ public class TokenCertificateController {
     }
 
     @PutMapping("/{hash}/register")
-    public ResponseEntity<Map<String, Object>> registerTokenCertificate(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> registerByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash + "/register";
             Map<String, String> headers = Map.ofEntries(
@@ -184,7 +184,7 @@ public class TokenCertificateController {
     }
 
     @PutMapping("/{hash}/unregister")
-    public ResponseEntity<Map<String, Object>> unregisterTokenCertificate(@PathVariable String hash) {
+    public ResponseEntity<Map<String, Object>> unregisterByHash(@PathVariable String hash) {
         try {
             String url = Utils.SS_CONFIG_URL + "/token-certificates/" + hash + "/unregister";
             Map<String, String> headers = Map.ofEntries(

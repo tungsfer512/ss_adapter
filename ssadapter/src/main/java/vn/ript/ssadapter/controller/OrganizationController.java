@@ -1,6 +1,5 @@
 package vn.ript.ssadapter.controller;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,20 +50,20 @@ public class OrganizationController {
 
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> registerOrganization(
-            @RequestBody Map<String, Object> entity) {
+            @RequestBody Map<String, Object> body) {
         try {
             Organization organization = new Organization();
             String UUID = Utils.UUID();
             organization.setId(UUID);
-            organization.setOrganId(entity.get("organId").toString());
-            organization.setSsId(entity.get("ssId").toString());
-            organization.setOrganizationInCharge(entity.get("organizationInCharge").toString());
-            organization.setOrganName(entity.get("organName").toString());
-            organization.setOrganAdd(entity.get("organAdd").toString());
-            organization.setEmail(entity.get("email").toString());
-            organization.setTelephone(entity.get("telephone").toString());
-            organization.setFax(entity.get("fax").toString());
-            organization.setWebsite(entity.get("website").toString());
+            organization.setOrganId(body.get("organId").toString());
+            organization.setSsId(body.get("ssId").toString());
+            organization.setOrganizationInCharge(body.get("organizationInCharge").toString());
+            organization.setOrganName(body.get("organName").toString());
+            organization.setOrganAdd(body.get("organAdd").toString());
+            organization.setEmail(body.get("email").toString());
+            organization.setTelephone(body.get("telephone").toString());
+            organization.setFax(body.get("fax").toString());
+            organization.setWebsite(body.get("website").toString());
             Organization organizationRes = organizationService.save(organization);
             return CustomResponse.Response_data(200, organizationRes);
         } catch (Exception e) {

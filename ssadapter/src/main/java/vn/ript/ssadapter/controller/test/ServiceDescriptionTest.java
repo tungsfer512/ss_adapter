@@ -60,8 +60,8 @@ public class ServiceDescriptionTest {
             @RequestBody Map<String, Object> body) {
         try {
             ServiceDescription serviceDescription = new ServiceDescription();
-            String organizationId = (String) body.get("organization_id");
-            serviceDescription.setSsId((String) body.get("ss_id"));
+            String organizationId = (String) body.get("organizationId");
+            serviceDescription.setSsId((String) body.get("ssId"));
             serviceDescription.setDescription((String) body.get("description"));
             serviceDescription.setServices(new ArrayList<>());
             Optional<Organization> checkOrganization = organizationService.findByOrganId(organizationId);

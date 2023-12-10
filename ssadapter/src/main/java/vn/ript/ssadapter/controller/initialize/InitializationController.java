@@ -46,7 +46,7 @@ public class InitializationController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Map<String, Object>> initializeSS(
+    public ResponseEntity<Map<String, Object>> initialize(
             @RequestBody Map<String, Object> body) {
         try {
             String url = Utils.SS_CONFIG_URL + "/initialization";

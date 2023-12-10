@@ -182,7 +182,7 @@ public class ClientController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> patchById(
+    public ResponseEntity<Map<String, Object>> editpatchById(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -254,7 +254,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}/register")
-    public ResponseEntity<Map<String, Object>> register(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> registerById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/register";
             Map<String, String> headers = Map.ofEntries(
@@ -276,7 +276,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/service-clients")
-    public ResponseEntity<Map<String, Object>> getAllServiceClients(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getAllServiceClientsOfClient(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/service-clients";
             Map<String, String> headers = Map.ofEntries(
@@ -312,7 +312,7 @@ public class ClientController {
     }
 
     @GetMapping("/{client_id}/service-clients/{id}")
-    public ResponseEntity<Map<String, Object>> getServiceClientsById(
+    public ResponseEntity<Map<String, Object>> getServiceClientsByServiceClientId(
             @PathVariable String client_id,
             @PathVariable String id) {
         try {
@@ -344,7 +344,7 @@ public class ClientController {
     }
 
     @GetMapping("/{client_id}/service-clients/{id}/access-rights")
-    public ResponseEntity<Map<String, Object>> getAllAccessRightOfServiceClient(
+    public ResponseEntity<Map<String, Object>> getAllAccessRightOfServiceClientByServiceClientId(
             @PathVariable String client_id,
             @PathVariable String id) {
         try {
@@ -368,7 +368,7 @@ public class ClientController {
     }
 
     @PostMapping("/{client_id}/service-clients/{id}/access-rights")
-    public ResponseEntity<Map<String, Object>> addAccessRightOfServiceClient(
+    public ResponseEntity<Map<String, Object>> addAccessRightOfServiceClientByServiceClientId(
             @PathVariable String client_id,
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
@@ -405,7 +405,7 @@ public class ClientController {
     }
 
     @PostMapping("/{client_id}/service-clients/{id}/access-rights/delete")
-    public ResponseEntity<Map<String, Object>> deleteAccessRightOfServiceClient(
+    public ResponseEntity<Map<String, Object>> deleteAccessRightOfServiceClientByServiceClientId(
             @PathVariable String client_id,
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
@@ -442,7 +442,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/sign-certificates")
-    public ResponseEntity<Map<String, Object>> getAllSignCertificates(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getAllSignCertificatesByClientId(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/sign-certificates";
             Map<String, String> headers = Map.ofEntries(
@@ -465,7 +465,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/tls-certificates")
-    public ResponseEntity<Map<String, Object>> getAllTLSCertificates(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getAllTLSCertificatesByClientId(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/tls-certificates";
             Map<String, String> headers = Map.ofEntries(
@@ -488,7 +488,7 @@ public class ClientController {
     }
 
     @PostMapping("/{id}/tls-certificates")
-    public ResponseEntity<Map<String, Object>> addTLSCertificates(
+    public ResponseEntity<Map<String, Object>> addTLSCertificatesByClientId(
             @PathVariable String id,
             @RequestPart(name = "file") MultipartFile file) {
         try {
@@ -515,7 +515,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/tls-certificates/{hash}")
-    public ResponseEntity<Map<String, Object>> addTLSCertificateByHash(
+    public ResponseEntity<Map<String, Object>> addTLSCertificateOfClientByHash(
             @PathVariable String id,
             @PathVariable String hash) {
         try {
@@ -542,7 +542,7 @@ public class ClientController {
     }
 
     @DeleteMapping("/{id}/tls-certificates/{hash}")
-    public ResponseEntity<Map<String, Object>> deleteTLSCertificateByHash(
+    public ResponseEntity<Map<String, Object>> deleteTLSCertificateOfClientByHash(
             @PathVariable String id,
             @PathVariable String hash) {
         try {
@@ -566,7 +566,7 @@ public class ClientController {
     }
 
     @PutMapping("/{id}/unregister")
-    public ResponseEntity<Map<String, Object>> unregister(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> unregisterById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/unregister";
             Map<String, String> headers = Map.ofEntries(
@@ -588,7 +588,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/service-descriptions")
-    public ResponseEntity<Map<String, Object>> getAllServiceClient(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getAllServiceDescriptionOfClient(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients/" + id + "/service-descriptions";
             Map<String, String> headers = Map.ofEntries(
@@ -615,7 +615,6 @@ public class ClientController {
                         }
                     }
                     if (currentServiceDescription != null) {
-                        System.out.println(currentServiceDescription);
                         List<Object> objectServices = jsonServiceDescription.getJSONArray("services").toList();
                         List<Service> services = currentServiceDescription.getServices();
                         JSONArray jsonServices = new JSONArray();
@@ -629,7 +628,6 @@ public class ClientController {
                                 }
                             }
                             if (currentService != null) {
-                                System.out.println(currentService);
                                 List<Object> objectEndpoints = jsonService.getJSONArray("endpoints").toList();
                                 List<Endpoint> endpoints = currentService.getEndpoints();
                                 JSONArray jsonEndpoints = new JSONArray();
@@ -643,8 +641,6 @@ public class ClientController {
                                         }
                                     }
                                     if (currentEndpoint != null) {
-                                        System.out.println(currentEndpoint);
-                                        System.out.println("add data to endpoint");
                                         JSONObject adapter_data_endpoint = new JSONObject();
                                         adapter_data_endpoint.put("name", currentEndpoint.getName());
                                         adapter_data_endpoint.put("description", currentEndpoint.getDescription());
@@ -660,7 +656,6 @@ public class ClientController {
                                 }
 
                                 jsonService.put("endpoints", jsonEndpoints);
-                                System.out.println("add data to service");
                                 JSONObject adapter_data_service = new JSONObject();
                                 adapter_data_service.put("description", currentService.getDescription());
                                 jsonService.put("adapter_data", adapter_data_service);
@@ -671,7 +666,6 @@ public class ClientController {
                         }
 
                         jsonServiceDescription.put("services", jsonServices);
-                        System.out.println("add data to service description");
                         JSONObject adapter_data_service_description = new JSONObject();
                         adapter_data_service_description.put("description", currentServiceDescription.getDescription());
                         jsonServiceDescription.put("adapter_data", adapter_data_service_description);
@@ -692,7 +686,7 @@ public class ClientController {
     }
 
     @PostMapping("/{id}/service-descriptions")
-    public ResponseEntity<Map<String, Object>> addServiceClient(
+    public ResponseEntity<Map<String, Object>> addServiceDescriptionOfClient(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -750,13 +744,11 @@ public class ClientController {
                         List<Object> objectServices = jsonObject.getJSONArray("services").toList();
                         JSONArray jsonServices = new JSONArray();
                         JSONObject jsonService = new JSONObject(gson.toJson(objectServices.get(0)));
-                        System.out.println("add data to service");
                         JSONObject adapter_data_service = new JSONObject();
                         adapter_data_service.put("description", serviceRes.getDescription());
                         jsonService.put("adapter_data", adapter_data_service);
                         jsonServices.put(jsonService);
 
-                        System.out.println("add data to service description");
                         jsonObject.put("services", jsonServices);
                     }
                 }
@@ -772,7 +764,7 @@ public class ClientController {
     }
 
     @GetMapping("/{id}/service-client-candidates")
-    public ResponseEntity<Map<String, Object>> getAllServiceClientCandidates(
+    public ResponseEntity<Map<String, Object>> getAllServiceClientCandidatesOfClient(
             @PathVariable String id,
             @RequestParam(name = "member_name_group_description", required = false) String member_name_group_description,
             @RequestParam(name = "member_group_code", required = false) String member_group_code,

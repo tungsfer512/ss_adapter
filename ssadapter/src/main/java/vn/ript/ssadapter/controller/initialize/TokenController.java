@@ -27,7 +27,7 @@ import vn.ript.ssadapter.utils.Utils;
 public class TokenController {
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAllToken() {
+    public ResponseEntity<Map<String, Object>> getAll() {
         try {
             String url = Utils.SS_CONFIG_URL + "/tokens";
             Map<String, String> headers = Map.ofEntries(
@@ -48,7 +48,7 @@ public class TokenController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getTokenById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/tokens/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -69,7 +69,7 @@ public class TokenController {
     }
 
     @PutMapping("/{id}/login")
-    public ResponseEntity<Map<String, Object>> loginTokenById(
+    public ResponseEntity<Map<String, Object>> loginById(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -101,7 +101,7 @@ public class TokenController {
     }
 
     @PutMapping("/{id}/logout")
-    public ResponseEntity<Map<String, Object>> logoutTokenById(
+    public ResponseEntity<Map<String, Object>> logoutById(
             @PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/tokens/" + id + "/logout";
@@ -125,7 +125,7 @@ public class TokenController {
     }
 
     @PostMapping("/{id}/keys")
-    public ResponseEntity<Map<String, Object>> addAuthSignKey(
+    public ResponseEntity<Map<String, Object>> addAuthSignKeyOfToken(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -180,7 +180,7 @@ public class TokenController {
     }
 
     @PostMapping("/{id}/keys-with-csrs")
-    public ResponseEntity<Map<String, Object>> addAuthSignKeyWithCsrs(
+    public ResponseEntity<Map<String, Object>> addAuthSignKeyWithCsrsOfToken(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {

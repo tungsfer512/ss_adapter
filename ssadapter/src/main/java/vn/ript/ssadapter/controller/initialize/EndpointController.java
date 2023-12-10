@@ -52,7 +52,7 @@ public class EndpointController {
     EndpointService endpointService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getEndpointById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/endpoints/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -82,7 +82,7 @@ public class EndpointController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> editEndpointById(
+    public ResponseEntity<Map<String, Object>> editById(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -118,8 +118,8 @@ public class EndpointController {
                     Endpoint endpoint = checkEndpoint.get();
                     endpoint.setName(adapter_data_tmp.get("name"));
                     endpoint.setDescription(adapter_data_tmp.get("description"));
-                    endpoint.setInputDescription(adapter_data_tmp.get("input_description"));
-                    endpoint.setOutputDescription(adapter_data_tmp.get("output_description"));
+                    endpoint.setInputDescription(adapter_data_tmp.get("inputDescription"));
+                    endpoint.setOutputDescription(adapter_data_tmp.get("outputDescription"));
                     Endpoint endpointRes = endpointService.save(endpoint);
                     jsonEndpoint.put("adapter_data", endpointRes);
                 } else {
@@ -137,7 +137,7 @@ public class EndpointController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteEndpointById(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> deleteById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/endpoints/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -160,7 +160,7 @@ public class EndpointController {
     }
 
     @GetMapping("/{id}/service-clients")
-    public ResponseEntity<Map<String, Object>> getAllServiceClient(
+    public ResponseEntity<Map<String, Object>> getAllServiceClientOfEndpoint(
             @PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/endpoints/" + id + "/service-clients";
@@ -199,7 +199,7 @@ public class EndpointController {
     }
 
     @PostMapping("/{id}/service-clients")
-    public ResponseEntity<Map<String, Object>> addServiceClients(
+    public ResponseEntity<Map<String, Object>> addServiceClientsOfEndpoint(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -240,7 +240,7 @@ public class EndpointController {
     }
 
     @PostMapping("/{id}/service-clients/delete")
-    public ResponseEntity<Map<String, Object>> deleteAddServiceClients(
+    public ResponseEntity<Map<String, Object>> deleteServiceClientsOfEndpoint(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {

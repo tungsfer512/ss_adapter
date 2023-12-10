@@ -53,7 +53,7 @@ public class SystemController {
     }
 
     @PostMapping("/anchor")
-    public ResponseEntity<Map<String, Object>> postAnchor(
+    public ResponseEntity<Map<String, Object>> uploadAnchor(
             @RequestPart(name = "file", required = true) MultipartFile file) {
         try {
             String url = Utils.SS_CONFIG_URL + "/system/anchor";
@@ -77,7 +77,7 @@ public class SystemController {
     }
 
     @PutMapping("/anchor")
-    public ResponseEntity<Map<String, Object>> putAnchor(
+    public ResponseEntity<Map<String, Object>> editAnchor(
             @RequestPart(name = "file", required = true) MultipartFile file) {
         try {
             String url = Utils.SS_CONFIG_URL + "/system/anchor";
@@ -101,7 +101,7 @@ public class SystemController {
     }
 
     @GetMapping("/anchor/download")
-    public ResponseEntity<InputStreamResource> getDownloadAnchor() {
+    public ResponseEntity<InputStreamResource> downloadAnchor() {
         try {
             String filename = Utils.UUID() + ".xml";
             String url = Utils.SS_CONFIG_URL + "/system/anchor/download";
@@ -190,7 +190,7 @@ public class SystemController {
     }
 
     @PostMapping("/timestamping-services")
-    public ResponseEntity<Map<String, Object>> postAddTSA(
+    public ResponseEntity<Map<String, Object>> addTSA(
             @RequestBody Map<String, Object> body) {
         try {
             String url = Utils.SS_CONFIG_URL + "/system/timestamping-services";

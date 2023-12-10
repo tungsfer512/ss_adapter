@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -15,6 +16,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.Gson;
+
+import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.Utils;
 
@@ -29,7 +33,7 @@ public class APIKeyController {
             String url = "https://localhost:4000/api/v1/api-keys";
             String command = "lxc exec " + Utils.SS_CONTAINER_NAME + " -- sh -c \"curl -X GET -u "
                     + Utils.SS_ADMIN_USERNAME + ":" + Utils.SS_ADMIN_PASSWORD + " " + url + " -k\"";
-            List<String> commands = Arrays.asList("sshpass", "-p", "CSrcGNXnnv6U", "ssh", "-o",
+            List<String> commands = Arrays.asList("sshpass", "-p", Utils.LOCAL_PASSWORD, "ssh", "-o",
                     "StrictHostKeyChecking=no", Utils.LOCAL_USERNAME + "@" + Utils.LOCAL_IP, command);
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -45,15 +49,25 @@ public class APIKeyController {
     }
 
     @PostMapping("")
-    public ResponseEntity<Map<String, Object>> add() {
+    public ResponseEntity<Map<String, Object>> add(@RequestBody Map<String, Object> body) {
         try {
             String url = "https://localhost:4000/api/v1/api-keys";
-            String data = "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
+            // String data =
+            // "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
+            String data = "\'[";
+            Gson gson = new Gson();
+            List<Object> objectRoles = new JSONArray(gson.toJson(body.get("roles"))).toList();
+            for (Object objectRole : objectRoles) {
+                String role = objectRole.toString();
+                data += "\\\"" + role.toUpperCase() + "\\\",";
+            }
+            data = data.substring(0, data.length() - 1);
+            data += "]\'";
             String header = "\\\"Content-Type: application/json\\\"";
             String command = "lxc exec " + Utils.SS_CONTAINER_NAME + " -- sh -c \"curl -X POST -u "
                     + Utils.SS_ADMIN_USERNAME + ":" + Utils.SS_ADMIN_PASSWORD + " " + url + " --data " + data
                     + " --header " + header + " -k\"";
-            List<String> commands = Arrays.asList("sshpass", "-p", "CSrcGNXnnv6U", "ssh", "-o",
+            List<String> commands = Arrays.asList("sshpass", "-p", Utils.LOCAL_PASSWORD, "ssh", "-o",
                     "StrictHostKeyChecking=no", Utils.LOCAL_USERNAME + "@" + Utils.LOCAL_IP, command);
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -74,7 +88,7 @@ public class APIKeyController {
             String url = "https://localhost:4000/api/v1/api-keys/" + id;
             String command = "lxc exec " + Utils.SS_CONTAINER_NAME + " -- sh -c \"curl -X GET -u "
                     + Utils.SS_ADMIN_USERNAME + ":" + Utils.SS_ADMIN_PASSWORD + " " + url + " -k\"";
-            List<String> commands = Arrays.asList("sshpass", "-p", "CSrcGNXnnv6U", "ssh", "-o",
+            List<String> commands = Arrays.asList("sshpass", "-p", Utils.LOCAL_PASSWORD, "ssh", "-o",
                     "StrictHostKeyChecking=no", Utils.LOCAL_USERNAME + "@" + Utils.LOCAL_IP, command);
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -90,15 +104,27 @@ public class APIKeyController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> putById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> putById(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Object> body) {
         try {
             String url = "https://localhost:4000/api/v1/api-keys/" + id;
-            String data = "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
+            // String data =
+            // "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
+            String data = "\'[";
+            Gson gson = new Gson();
+            List<Object> objectRoles = new JSONArray(gson.toJson(body.get("roles"))).toList();
+            for (Object objectRole : objectRoles) {
+                String role = objectRole.toString();
+                data += "\\\"" + role.toUpperCase() + "\\\",";
+            }
+            data = data.substring(0, data.length() - 1);
+            data += "]\'";
             String header = "\\\"Content-Type: application/json\\\"";
             String command = "lxc exec " + Utils.SS_CONTAINER_NAME + " -- sh -c \"curl -X PUT -u "
                     + Utils.SS_ADMIN_USERNAME + ":" + Utils.SS_ADMIN_PASSWORD + " " + url + " --data " + data
                     + " --header " + header + " -k\"";
-            List<String> commands = Arrays.asList("sshpass", "-p", "CSrcGNXnnv6U", "ssh", "-o",
+            List<String> commands = Arrays.asList("sshpass", "-p", Utils.LOCAL_PASSWORD, "ssh", "-o",
                     "StrictHostKeyChecking=no", Utils.LOCAL_USERNAME + "@" + Utils.LOCAL_IP, command);
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);
@@ -118,7 +144,7 @@ public class APIKeyController {
             String url = "https://localhost:4000/api/v1/api-keys/" + id;
             String command = "lxc exec " + Utils.SS_CONTAINER_NAME + " -- sh -c \"curl -X DELETE -u "
                     + Utils.SS_ADMIN_USERNAME + ":" + Utils.SS_ADMIN_PASSWORD + " " + url + " -k\"";
-            List<String> commands = Arrays.asList("sshpass", "-p", "CSrcGNXnnv6U", "ssh", "-o",
+            List<String> commands = Arrays.asList("sshpass", "-p", Utils.LOCAL_PASSWORD, "ssh", "-o",
                     "StrictHostKeyChecking=no", Utils.LOCAL_USERNAME + "@" + Utils.LOCAL_IP, command);
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);

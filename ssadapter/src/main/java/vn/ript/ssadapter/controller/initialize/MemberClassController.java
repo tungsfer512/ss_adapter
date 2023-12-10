@@ -21,7 +21,7 @@ import vn.ript.ssadapter.utils.Utils;
 public class MemberClassController {
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAllMemberClass() {
+    public ResponseEntity<Map<String, Object>> getAll() {
         try {
             String url = Utils.SS_CONFIG_URL + "/member-classes";
             Map<String, String> headers = Map.ofEntries(
@@ -44,7 +44,7 @@ public class MemberClassController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getMemberClassByCSId(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getByCSId(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/member-classes/" + id;
             Map<String, String> headers = Map.ofEntries(

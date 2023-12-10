@@ -1,13 +1,8 @@
 package vn.ript.ssadapter.controller;
 
-import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
-import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -15,9 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
-import vn.ript.ssadapter.utils.Utils;
 
 @RestController
 @RequestMapping("/api/v1")
@@ -35,115 +28,6 @@ public class UserController {
         resData.put("gioiTinh", "nam");
         resData.put("email", "tungbv5122001@gmail.com");
         return CustomResponse.Response_data(200, resData);
-    }
-
-    @RequestMapping(path = "/members", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> members() {
-        try {
-            String url = "https://" + Utils.SS_IP + "/listClients";
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Accept", "application/json");
-            headers.put("Content-type", "application/json");
-            CustomHttpRequest customHttpRequest = new CustomHttpRequest("GET", url, headers);
-            HttpResponse httpResponse = customHttpRequest.request();
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-    
-                JSONObject jsonObject = new JSONObject(jsonResponse);
-                List<Object> members = jsonObject.getJSONArray("member").toList();
-    
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), members);
-            } else {
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return CustomResponse.Response_data(500, "Loi Loi");
-        }
-    }
-
-    @RequestMapping(path = "/services", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> services(
-            // @PathVariable String subsystemId,
-            @RequestHeader(value = "Subsystem-Code") String subsystemCode,
-            // @RequestHeader(value = "Content-Type") String contentType,
-            @RequestHeader(value = "X-Road-Client") String xRoadClient) {
-        try {
-
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Accept", "application/json");
-            headers.put("Content-type", "application/json");
-            headers.put("X-Road-Client", xRoadClient);
-            
-            String subsystem_code = subsystemCode.replace(':', '/');
-            String urlList = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/listMethods";
-            String urlAllow = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/allowedMethods";
-            
-            CustomHttpRequest customHttpRequestList = new CustomHttpRequest("GET", urlList, headers);
-            CustomHttpRequest customHttpRequestAllow = new CustomHttpRequest("GET", urlAllow, headers);
-
-            HttpResponse httpResponseList = customHttpRequestList.request();
-            HttpResponse httpResponseAllow = customHttpRequestAllow.request();
-
-            if (httpResponseList.getStatusLine().getStatusCode() == 200) {
-                // Map<String, Object> resData = new HashMap<String, Object>();
-                String jsonResponseList = EntityUtils.toString(httpResponseList.getEntity());
-                
-                JSONObject jsonObjectList = new JSONObject(jsonResponseList);
-                List<Object> servicesList = jsonObjectList.getJSONArray("service").toList();
-                if (httpResponseAllow.getStatusLine().getStatusCode() == 200) {
-                    // String jsonResponseAllow = EntityUtils.toString(httpResponseAllow.getEntity());
-                    
-                    // JSONObject jsonObjectAllow = new JSONObject(jsonResponseAllow);
-                    // List<Object> servicesAllow = jsonObjectAllow.getJSONArray("service").toList();
-                    // for (Object obj : servicesAllow) {
-                    // }
-                    return CustomResponse.Response_data(httpResponseAllow.getStatusLine().getStatusCode(), servicesList);
-                } else {
-                    return CustomResponse.Response_data(500, httpResponseList.getStatusLine());
-                }
-            } else {
-                return CustomResponse.Response_data(500, httpResponseList.getStatusLine());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return CustomResponse.Response_data(500, "Loi Loi");
-        }
-    }
-
-    @RequestMapping(path = "/getEndpoints", method = RequestMethod.GET)
-    public ResponseEntity<Map<String, Object>> getEndpoints(
-            // @PathVariable String subsystemId,
-            @RequestHeader(value = "Subsystem-Code") String subsystemCode,
-            @RequestHeader(value = "Service-Code") String serviceCode,
-            @RequestHeader(value = "Service-Endpoint") String serviceEndpoint,
-            @RequestHeader(value = "X-Road-Client") String xRoadClient) {
-        try {
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Accept", "application/json");
-            headers.put("Content-type", "application/json");
-            headers.put("X-Road-Client", xRoadClient);
-
-            String subsystem_code = subsystemCode.replace(':', '/');
-            String url = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/" + serviceCode + "/" + serviceEndpoint;
-            
-            CustomHttpRequest customHttpRequest = new CustomHttpRequest("GET", url, headers);
-
-            HttpResponse httpResponse = customHttpRequest.request();
-            if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-    
-                JSONObject jsonObject = new JSONObject(jsonResponse);
-                Map<String, Object> endpoints = jsonObject.toMap();
-    
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), endpoints);
-            } else {
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), httpResponse.getStatusLine());
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            return CustomResponse.Response_data(500, "Loi Loi");
-        }
     }
 
 }

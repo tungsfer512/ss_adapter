@@ -7,7 +7,6 @@ import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.util.EntityUtils;
-import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -32,7 +31,7 @@ import vn.ript.ssadapter.utils.Utils;
 public class KeyController {
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getKeyById(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/keys/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -53,7 +52,7 @@ public class KeyController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteKeyById(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> deleteById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/keys/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -72,30 +71,30 @@ public class KeyController {
         }
     }
 
-    // @PatchMapping("/{id}")
-    // public ResponseEntity<Map<String, Object>> patchKeyById(
-    //         @PathVariable String id,
-    //         @RequestBody Map<String, Object> body) {
-    //     try {
-    //         String url = Utils.SS_CONFIG_URL + "/keys/" + id;
-    //         Map<String, String> headers = Map.ofEntries(
-    //                 Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-    //                 Map.entry("Accept", "application/json"));
-    //         CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
-    //         HttpResponse httpResponse = httpRequest.request();
-    //         if (httpResponse.getStatusLine().getStatusCode() == 200) {
-    //             return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
-    //         } else {
-    //             return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-    //                     httpResponse.getStatusLine());
-    //         }
-    //     } catch (Exception e) {
-    //         return CustomResponse.Response_data(500, e.toString());
-    //     }
-    // }
+    @PatchMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> editById(
+            @PathVariable String id,
+            @RequestBody Map<String, Object> body) {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/keys/" + id;
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/json"));
+            CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
+            HttpResponse httpResponse = httpRequest.request();
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.getStatusLine());
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
 
     @PostMapping("/{id}/csrs")
-    public ResponseEntity<InputStreamResource> generateCSRSKey(
+    public ResponseEntity<InputStreamResource> generateCSRSOfKey(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -147,7 +146,7 @@ public class KeyController {
     }
 
     @GetMapping("/{key_id}/csrs/{id}")
-    public ResponseEntity<InputStreamResource> downloadCSRSKey(
+    public ResponseEntity<InputStreamResource> downloadCSRSOfKeyById(
             @PathVariable String key_id,
             @PathVariable String id,
             @RequestParam(name = "csr_format") String csr_format) {
@@ -175,7 +174,7 @@ public class KeyController {
     }
 
     @DeleteMapping("/{key_id}/csrs/{id}")
-    public ResponseEntity<Map<String, Object>> deleteCSRSKey(
+    public ResponseEntity<Map<String, Object>> deleteCSRSOfKeyById(
             @PathVariable String key_id,
             @PathVariable String id) {
         try {
@@ -198,7 +197,7 @@ public class KeyController {
     }
 
     @GetMapping("/{key_id}/csrs/{id}/possible-actions")
-    public ResponseEntity<Map<String, Object>> getAllPosibleActionOfCSRSKey(
+    public ResponseEntity<Map<String, Object>> getAllCSRSPosibleActionOfKeyById(
             @PathVariable String key_id,
             @PathVariable String id) {
         try {

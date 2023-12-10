@@ -59,12 +59,12 @@ public class EndpointTest {
             @RequestBody Map<String, Object> body) {
         try {
             Endpoint endpoint = new Endpoint();
-            Integer serviceId = (Integer) body.get("service_id");
-            endpoint.setSsId((String) body.get("ss_id"));
+            Integer serviceId = (Integer) body.get("serviceId");
+            endpoint.setSsId((String) body.get("ssId"));
             endpoint.setName((String) body.get("name"));
             endpoint.setDescription((String) body.get("description"));
-            endpoint.setInputDescription((String) body.get("input_description"));
-            endpoint.setOutputDescription((String) body.get("output_description"));
+            endpoint.setInputDescription((String) body.get("inputDescription"));
+            endpoint.setOutputDescription((String) body.get("outputDescription"));
             Optional<Service> checkService = serviceService.findById(serviceId);
             if (checkService.isPresent()) {
                 Service service = checkService.get();

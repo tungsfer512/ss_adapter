@@ -52,7 +52,7 @@ public class ServiceController {
     EndpointService endpointService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getServiceById(@PathVariable String id) {
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable String id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/services/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -118,7 +118,7 @@ public class ServiceController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> patchServiceById(
+    public ResponseEntity<Map<String, Object>> editById(
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -208,8 +208,8 @@ public class ServiceController {
                     endpoint.setSsId(jsonEndpoint.getString("id"));
                     endpoint.setName(adapter_data_tmp.get("name"));
                     endpoint.setDescription(adapter_data_tmp.get("description"));
-                    endpoint.setInputDescription(adapter_data_tmp.get("input_description"));
-                    endpoint.setOutputDescription(adapter_data_tmp.get("output_description"));
+                    endpoint.setInputDescription(adapter_data_tmp.get("inputDescription"));
+                    endpoint.setOutputDescription(adapter_data_tmp.get("outputDescription"));
                     Endpoint endpointRes = endpointService.save(endpoint);
                     List<Endpoint> endpoints = service.getEndpoints();
                     endpoints.add(endpointRes);

@@ -1,6 +1,5 @@
 package vn.ript.ssadapter.controller.initialize;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -51,7 +50,7 @@ public class ServiceDescriptionController {
     ServiceService serviceService;
 
     @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getServiceDescriptionById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> getById(@PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/service-descriptions/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -83,7 +82,6 @@ public class ServiceDescriptionController {
                             }
                         }
                         if (currentService != null) {
-                            System.out.println(currentService);
                             List<Object> objectEndpoints = jsonService.getJSONArray("endpoints").toList();
                             List<Endpoint> endpoints = currentService.getEndpoints();
                             JSONArray jsonEndpoints = new JSONArray();
@@ -97,8 +95,6 @@ public class ServiceDescriptionController {
                                     }
                                 }
                                 if (currentEndpoint != null) {
-                                    System.out.println(currentEndpoint);
-                                    System.out.println("add data to endpoint");
                                     JSONObject adapter_data_endpoint = new JSONObject();
                                     adapter_data_endpoint.put("name", currentEndpoint.getName());
                                     adapter_data_endpoint.put("description", currentEndpoint.getDescription());
@@ -114,7 +110,6 @@ public class ServiceDescriptionController {
                             }
 
                             jsonService.put("endpoints", jsonEndpoints);
-                            System.out.println("add data to service");
                             JSONObject adapter_data_service = new JSONObject();
                             adapter_data_service.put("description", currentService.getDescription());
                             jsonService.put("adapter_data", adapter_data_service);
@@ -125,7 +120,6 @@ public class ServiceDescriptionController {
                     }
 
                     jsonServiceDescription.put("services", jsonServices);
-                    System.out.println("add data to service description");
                     JSONObject adapter_data_service_description = new JSONObject();
                     adapter_data_service_description.put("description", currentServiceDescription.getDescription());
                     jsonServiceDescription.put("adapter_data", adapter_data_service_description);
@@ -145,7 +139,7 @@ public class ServiceDescriptionController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> patchServiceDescriptionById(
+    public ResponseEntity<Map<String, Object>> editById(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {
@@ -204,13 +198,11 @@ public class ServiceDescriptionController {
                             List<Object> objectServices = jsonObject.getJSONArray("services").toList();
                             JSONArray jsonServices = new JSONArray();
                             JSONObject jsonService = new JSONObject(gson.toJson(objectServices.get(0)));
-                            System.out.println("add data to service");
                             JSONObject adapter_data_service = new JSONObject();
                             adapter_data_service.put("description", serviceRes.getDescription());
                             jsonService.put("adapter_data", adapter_data_service);
                             jsonServices.put(jsonService);
     
-                            System.out.println("add data to service description");
                             jsonObject.put("services", jsonServices);
                         }
                     }
@@ -226,7 +218,7 @@ public class ServiceDescriptionController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> deleteServiceDescriptionById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> deleteById(@PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/service-descriptions/" + id;
             Map<String, String> headers = Map.ofEntries(
@@ -254,7 +246,7 @@ public class ServiceDescriptionController {
     }
 
     @PutMapping("/{id}/enable")
-    public ResponseEntity<Map<String, Object>> enableServiceDescriptionById(@PathVariable Integer id) {
+    public ResponseEntity<Map<String, Object>> enableById(@PathVariable Integer id) {
         try {
             String url = Utils.SS_CONFIG_URL + "/service-descriptions/" + id + "/enable";
             Map<String, String> headers = Map.ofEntries(
@@ -276,7 +268,7 @@ public class ServiceDescriptionController {
     }
 
     @PutMapping("/{id}/disable")
-    public ResponseEntity<Map<String, Object>> disableServiceDescriptionById(
+    public ResponseEntity<Map<String, Object>> disableById(
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {

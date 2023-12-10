@@ -59,8 +59,8 @@ public class ServiceTest {
             @RequestBody Map<String, Object> body) {
         try {
             Service service = new Service();
-            Integer serviceDescriptionId = (Integer) body.get("service_description_id");
-            service.setSsId((String) body.get("ss_id"));
+            Integer serviceDescriptionId = (Integer) body.get("serviceDescriptionId");
+            service.setSsId((String) body.get("ssId"));
             service.setDescription((String) body.get("description"));
             Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService.findById(serviceDescriptionId);
             if (checkServiceDescription.isPresent()) {

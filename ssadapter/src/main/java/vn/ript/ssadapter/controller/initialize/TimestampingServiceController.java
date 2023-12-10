@@ -20,7 +20,7 @@ import vn.ript.ssadapter.utils.Utils;
 public class TimestampingServiceController {
     
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAllTSA() {
+    public ResponseEntity<Map<String, Object>> getAll() {
         try {
             String url = Utils.SS_CONFIG_URL + "/timestamping-services";
             Map<String, String> headers = Map.ofEntries(

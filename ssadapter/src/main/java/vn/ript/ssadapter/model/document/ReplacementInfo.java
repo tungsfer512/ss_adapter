@@ -19,7 +19,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 @Entity
-@Table(name = "_replacement_info")
+@Table(name = "_replacementinfo")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,10 +34,10 @@ public class ReplacementInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "_replacementInfo_DocumentId", columnDefinition = "text")
-    private String replacementInfo_DocumentId;
+    @Column(name = "_replacementInfoDocumentId", columnDefinition = "text")
+    private String replacementInfoDocumentId;
 
     @ElementCollection(targetClass = String.class)
-    private List<String> replacementInfo_OrganIdList;
+    private List<String> replacementInfoOrganIdList;
 
 }

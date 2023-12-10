@@ -26,7 +26,7 @@ import lombok.ToString;
 import vn.ript.ssadapter.model.Organization;
 
 @Entity
-@Table(name = "_document")
+@Table(name = "_documentcatalog")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,7 +35,7 @@ import vn.ript.ssadapter.model.Organization;
 @EqualsAndHashCode
 @ToString
 
-public class Document {
+public class DocumentCatalog {
 
 	@Id
 	private String id;
@@ -48,12 +48,6 @@ public class Document {
 	@JoinColumn(name = "_fromId", referencedColumnName = "id")
 	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private Organization from;
-
-	// 1.2. To
-	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JoinColumn(name = "_toId", referencedColumnName = "id")
-	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
-	private Organization to;
 
 	// 1.3. Code
 	// 1.3.1. CodeNumber
@@ -100,18 +94,9 @@ public class Document {
 	@Column(name = "_signerInfoFullName", columnDefinition = "text")
 	private String signerInfoFullName;
 
-	// 1.9. DueDate
-	@Column(name = "_dueDate", columnDefinition = "text")
-	private String dueDate;
-
 	// 1.10. ToPlaces
 	@ElementCollection
 	private List<String> toPlaces;
-
-	// 1.11. OtherInfo
-	// 1.11.1. Priority
-	@Column(name = "_otherInfoPriority")
-	private Integer otherInfoPriority;
 
 	// 1.11.2. SphereOfPromulgation
 	@Column(name = "_otherInfoSphereOfPromulgation", columnDefinition = "text")
@@ -121,10 +106,6 @@ public class Document {
 	@Column(name = "_otherInfoTyperNotation", columnDefinition = "text")
 	private String otherInfoTyperNotation;
 
-	// 1.11.4. PromulgationAmount
-	@Column(name = "_otherInfoPromulgationAmount")
-	private Integer otherInfoPromulgationAmount;
-
 	// 1.11.5. PageAmount
 	@Column(name = "_otherInfoPageAmount")
 	private Integer otherInfoPageAmount;
@@ -133,23 +114,6 @@ public class Document {
 	@ElementCollection
 	private List<String> appendixes;
 
-	// 1.12. ResponseFor
-	// 1.12.1. OrganId
-	@Column(name = "_responseForOrganId", columnDefinition = "text")
-	private String responseForOrganId;
-
-	// 1.12.2. Code
-	@Column(name = "_responseForCode", columnDefinition = "text")
-	private String responseForCode;
-
-	// 1.12.3. PromulgationDate
-	@Column(name = "_responseForPromulgationDate", columnDefinition = "text")
-	private String responseForPromulgationDate;
-
-	// 1.12.4. DocumentId
-	@Column(name = "_responseForDocumentId", columnDefinition = "text")
-	private String responseForDocumentId;
-
 	// 1.13. SteeringType
 	@Column(name = "_steeringType")
 	private Integer steeringType;
@@ -157,26 +121,9 @@ public class Document {
 	// 1.14. DocumentId
 	@Column(name = "_documentId", columnDefinition = "text")
 	private String documentId;
-	
-	// Status StatusCode
-	@Column(name = "_statusCode", columnDefinition = "text")
-	private String statusCode;
-	
-	// Status Description
-	@Column(name = "_description", columnDefinition = "text")
-	private String description;
-	
-	// Status Timestamp
-	@Column(name = "_timestamp", columnDefinition = "text")
-	private String timestamp;
 
 	// ++++++++++++++++++++++++++++ End MessageHeader ++++++++++++++++++++++++++++
 	// ++++++++++++++++++++++++++++ TraceHeaderList ++++++++++++++++++++++++++++
-
-	// 2.1. TraceHeader
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "_traceHeaders")
-	private List<TraceHeader> traceHeaders;
 
 	// 2.2. Business
 	// 2.2.1. BusinessDocType
@@ -191,16 +138,6 @@ public class Document {
 	// 2.2.3.1. DocumentInfo
 	@Column(name = "_businessBussinessDocumentInfoDocumentInfo", columnDefinition = "text")
 	private Integer businessBussinessDocumentInfoDocumentInfo;
-
-	// 2.2.3.2. DocumentReceiver
-	@Column(name = "_businessBussinessDocumentInfoDocumentReceiver", columnDefinition = "text")
-	private Integer businessBussinessDocumentInfoDocumentReceiver;
-
-	// 2.2.3.3. ReceiverList
-	// @OneToMany(mappedBy = "traceHeaderList")
-	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "_businessBussinessDocumentInfoReceiverList")
-	List<UpdateReceiver> businessBussinessDocumentInfoReceiverList;
 
 	// 2.2.4. DocumentId
 	@Column(name = "_businessDocumentId", columnDefinition = "text")
@@ -223,13 +160,9 @@ public class Document {
 	@Column(name = "_businessStaffInfoEmail", columnDefinition = "text")
 	private String businessStaffInfoEmail;
 
-	// 2.2.6. Paper
-	@Column(name = "_businessPaper")
-	private Integer businessPaper;
-
 	// 2.2.8. ReplacementInfoList
-	@OneToMany(cascade = CascadeType.ALL)
-	private List<ReplacementInfo> businessReplacementInfoList;
+	@ElementCollection
+	private List<String> businessReplacementInfoDocumentIdList;
 
 	// ++++++++++++++++++++++++++++ End TraceHeaderList ++++++++++++++++++++++++++++
 	// ============================ End Header ============================
@@ -241,12 +174,6 @@ public class Document {
 
 	// ============================ End AttachmentEncoded ============================
 	// ============================ Addition ============================
-	
-	@Column(name = "_serviceType", columnDefinition = "text")
-	private String serviceType;
-
-	@Column(name = "_messageType", columnDefinition = "text")
-	private String messageType;
 
 	@Column(name = "_senderDocId", columnDefinition = "text")
 	private String senderDocId;
@@ -260,20 +187,14 @@ public class Document {
 	@Column(name = "_statusDesc", columnDefinition = "text")
 	private String statusDesc;
 
-	@Column(name = "_sendStatus", columnDefinition = "text")
-	private String sendStatus;
-
-	@Column(name = "_receiveStatus", columnDefinition = "text")
-	private String receiveStatus;
-
-	@Column(name = "_sendStatusDesc", columnDefinition = "text")
-	private String sendStatusDesc;
-
-	@Column(name = "_receiveStatusDesc", columnDefinition = "text")
-	private String receiveStatusDesc;
-	
 	@Column(name = "_data", columnDefinition = "text")
 	private String data;
+
+	@Column(name = "_isPublic")
+	private Boolean isPublic;
+
+	@OneToMany(cascade = CascadeType.ALL)
+	List<Organization> allowedOrganizations;
 	
 	// ============================ End Addition ============================
 	

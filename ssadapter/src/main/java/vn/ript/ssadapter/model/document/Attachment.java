@@ -21,18 +21,18 @@ import lombok.ToString;
 @ToString
 public class Attachment {
 
-    @Column(name = "_attachment_ContentType", columnDefinition = "text")
-    private String attachment_ContentType;
+    @Column(name = "_attachmentContentType", columnDefinition = "text")
+    private String attachmentContentType;
 
-    @Column(name = "_attachment_ContentId", columnDefinition = "text")
-    private String attachment_ContentId;
+    @Column(name = "_attachmentContentId", columnDefinition = "text")
+    private String attachmentContentId;
 
-    @Column(name = "_attachment_Description", columnDefinition = "text")
-    private String attachment_Description;
+    @Column(name = "_attachmentDescription", columnDefinition = "text")
+    private String attachmentDescription;
 
-    @Column(name = "_attachment_ContentTransferEncoded", columnDefinition = "text")
-    private String attachment_ContentTransferEncoded;
+    @Column(name = "_attachmentContentTransferEncoded", columnDefinition = "text")
+    private String attachmentContentTransferEncoded;
 
-    @Column(name = "_attachment_AttachmentName", columnDefinition = "text")
-    private String attachment_AttachmentName;
+    @Column(name = "_attachmentAttachmentName", columnDefinition = "text")
+    private String attachmentAttachmentName;
 }

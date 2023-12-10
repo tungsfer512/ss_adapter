@@ -82,71 +82,119 @@ public class EdXMLBuild {
 		Ed ed = new Ed();
 
 		// khoi tao code cho van ban
-		Code code = new Code(code_number, code_notation);
+		Code code = new Code();
+		;
+		if (code_number != null && code_notation != null) {
+			code = new Code(code_number, code_notation);
+		}
 
 		// khoi tao don vi gui
-		Organization orgFrom = new Organization(
-				from.getOrganId(),
-				from.getOrganizationInCharge(),
-				from.getOrganName(),
-				from.getOrganAdd(),
-				from.getEmail(),
-				from.getTelephone(),
-				from.getFax(),
-				from.getWebsite());
+		Organization orgFrom = new Organization();
+		if (from != null) {
+			orgFrom = new Organization(
+					from.getOrganId(),
+					from.getOrganizationInCharge(),
+					from.getOrganName(),
+					from.getOrganAdd(),
+					from.getEmail(),
+					from.getTelephone(),
+					from.getFax(),
+					from.getWebsite());
+		}
 
 		// khoi tao danh sach don vi nhan
 		List<Organization> orgToes = new ArrayList<>();
-		for (vn.ript.ssadapter.model.Organization to : to_list) {
-			orgToes.add(new Organization(
-					to.getOrganId(),
-					to.getOrganizationInCharge(),
-					to.getOrganName(),
-					to.getOrganAdd(),
-					to.getEmail(),
-					to.getTelephone(),
-					to.getFax(),
-					to.getWebsite()));
+		if (to_list != null) {
+			for (vn.ript.ssadapter.model.Organization to : to_list) {
+				orgToes.add(new Organization(
+						to.getOrganId(),
+						to.getOrganizationInCharge(),
+						to.getOrganName(),
+						to.getOrganAdd(),
+						to.getEmail(),
+						to.getTelephone(),
+						to.getFax(),
+						to.getWebsite()));
+			}
 		}
 
 		// khoi tao thong tin ban hanh
-		PromulgationInfo promulgationInfo = new PromulgationInfo(promulgation_place, DateUtils.parse(date));
-
+		PromulgationInfo promulgationInfo = new PromulgationInfo();
+		if (promulgation_place != null) {
+			promulgationInfo = new PromulgationInfo(promulgation_place, DateUtils.parse(date));
+		}
 		// khoi tao loai van ban
-		DocumentType documentType = new DocumentType(document_type.getType(), document_type.getTypeName());
+		DocumentType documentType = new DocumentType();
+		if (document_type != null) {
+			documentType = new DocumentType(document_type.getType(), document_type.getTypeName());
+		}
 
 		// khoi tao thong tin nguoi ky
-		SignerInfo signerInfo = new SignerInfo(signer_info_competence, signer_info_position, signer_info_fullname);
+		String signer_info_competence_tmp = null;
+		if (signer_info_competence != null) {
+			signer_info_competence_tmp = signer_info_competence;
+		}
+		String signer_info_position_tmp = null;
+		if (signer_info_position != null) {
+			signer_info_position_tmp = signer_info_position;
+		}
+		String signer_info_fullname_tmp = null;
+		if (signer_info_fullname != null) {
+			signer_info_fullname_tmp = signer_info_fullname;
+		}
+		SignerInfo signerInfo = new SignerInfo(signer_info_competence_tmp, signer_info_position_tmp,
+				signer_info_fullname_tmp);
 
 		// khoi tao header
+		Date dueDate = null;
+		if (due_date != null) {
+			dueDate = DateUtils.parse(due_date);
+		}
+
 		MessageHeader header = new MessageHeader(orgFrom, orgToes, code, promulgationInfo, documentType, subject,
-				content, null, signerInfo, DateUtils.parse(due_date), null, null);
+				content, null, signerInfo, dueDate, null, null);
 
 		// dia diem noi nhan va luu van ban
-		for (String to_place : to_places) {
-			header.addToPlace(to_place);
+		if (to_places != null) {
+			for (String to_place : to_places) {
+				header.addToPlace(to_place);
+			}
 		}
 
 		// khoi tao loai chi dao
-		header.setSteeringType(steering_type);
+		if (steering_type != null) {
+			header.setSteeringType(steering_type);
+		}
 
 		// khoi tao cac thong tin khac cua van ban
 		OtherInfo otherInfo = new OtherInfo();
-		otherInfo.setPriority(other_info_priority);
-		otherInfo.setPromulgationAmount(other_info_promulgation_amount);
-		otherInfo.setPageAmount(other_info_page_amount);
-		otherInfo.setSphereOfPromulgation(other_info_sphere_of_promulgation);
-		otherInfo.setTyperNotation(other_info_typer_notation);
-		otherInfo.setAppendixes(appendixes);
+		if (other_info_priority != null) {
+			otherInfo.setPriority(other_info_priority);
+		}
+		if (other_info_promulgation_amount != null) {
+			otherInfo.setPromulgationAmount(other_info_promulgation_amount);
+		}
+		if (other_info_page_amount != null) {
+			otherInfo.setPageAmount(other_info_page_amount);
+		}
+		if (other_info_sphere_of_promulgation != null) {
+			otherInfo.setSphereOfPromulgation(other_info_sphere_of_promulgation);
+		}
+		if (other_info_typer_notation != null) {
+			otherInfo.setTyperNotation(other_info_typer_notation);
+		}
+		if (appendixes != null) {
+			otherInfo.setAppendixes(appendixes);
+		}
 		header.setOtherInfo(otherInfo);
 
-		String document_id = from.getOrganId() + "," + date + "," + code_number + "/" + code_notation;
+		String document_id = orgFrom.getOrganId() + "," + date + "," + code_number + "/" + code_notation;
 		// khoi tao thong tin ma dinh danh cua van ban
 		header.setDocumentId(document_id);
 
 		// khoi tao thong tin van ban phan hoi va phuc dap
 		// List<ResponseFor> response_for_list = new
-		if (response_for != null && response_for == true) {
+		if (response_for != null && response_for == true && to_list != null) {
 			for (vn.ript.ssadapter.model.Organization to : to_list) {
 				ResponseFor responseFor = new ResponseFor(to.getOrganId(), code_number + "/" + code_notation,
 						DateUtils.parse(date), document_id);
@@ -157,47 +205,71 @@ public class EdXMLBuild {
 		// khoi tao cac thong tin traceHeader
 		TraceHeaderList trList = new TraceHeaderList();
 		TraceHeader traceFrom = new TraceHeader();
-		traceFrom.setOrganId(from.getOrganId());
+		traceFrom.setOrganId(orgFrom.getOrganId());
 		traceFrom.setTimestamp(DateUtils.parse(date));
 		trList.addTraceHeader(traceFrom);
 
 		// khoi tao danh sach cac truong thong tin duoc van ban cap nhat
 		BussinessDocumentInfo bussinessDocumentInfo = new BussinessDocumentInfo();
-		bussinessDocumentInfo.setdocumentInfo(business_bussiness_document_info_document_info.toString());
-		bussinessDocumentInfo.setdocumentReceiver(business_bussiness_document_info_document_receiver.toString());
+		if (business_bussiness_document_info_document_info != null) {
+			bussinessDocumentInfo.setdocumentInfo(business_bussiness_document_info_document_info.toString());
+		}
+		if (business_bussiness_document_info_document_receiver != null) {
+			bussinessDocumentInfo.setdocumentReceiver(business_bussiness_document_info_document_receiver.toString());
+		}
 
 		// khoi tao danh sach cac don vi nhan bi thay doi khi cap nhat van ban
 		ReceiverList receiverList = new ReceiverList();
-		for (vn.ript.ssadapter.model.document.UpdateReceiver business_bussiness_document_info_receiver : business_bussiness_document_info_receiver_list) {
-			Receiver receiver = new Receiver(business_bussiness_document_info_receiver.getUpdateReceiver_OrganId(),
-					business_bussiness_document_info_receiver.getUpdateReceiver_ReceiverType().toString());
-			receiverList.addReceiver(receiver);
+		if (business_bussiness_document_info_receiver_list != null) {
+			for (vn.ript.ssadapter.model.document.UpdateReceiver business_bussiness_document_info_receiver : business_bussiness_document_info_receiver_list) {
+				Receiver receiver = new Receiver(business_bussiness_document_info_receiver.getUpdateReceiverOrganId(),
+						business_bussiness_document_info_receiver.getUpdateReceiverReceiverType().toString());
+				receiverList.addReceiver(receiver);
+			}
 		}
 
 		// khoi tao thong tin ve nguoi xu ly
 		StaffInfo staffInfo = new StaffInfo();
-		staffInfo.setDepartment(business_staff_info_department);
-		staffInfo.setStaff(business_staff_info_staff);
-		staffInfo.setEmail(business_staff_info_email);
-		staffInfo.setMobile(business_staff_info_mobile);
+		if (business_staff_info_department != null) {
+			staffInfo.setDepartment(business_staff_info_department);
+		}
+		if (business_staff_info_staff != null) {
+			staffInfo.setStaff(business_staff_info_staff);
+		}
+		if (business_staff_info_email != null) {
+			staffInfo.setEmail(business_staff_info_email);
+		}
+		if (business_staff_info_mobile != null) {
+			staffInfo.setMobile(business_staff_info_mobile);
+		}
 
 		// khoi tao thong tin danh sach van ban bi thay the
 		ReplacementInfoList replacementInfoList = new ReplacementInfoList();
-		for (vn.ript.ssadapter.model.document.ReplacementInfo business_replacement_info : business_replacement_info_list) {
-			OrganIdList organIdList = new OrganIdList();
-			organIdList.setOrganId(business_replacement_info.getReplacementInfo_OrganIdList());
-			ReplacementInfo replacementInfo = new ReplacementInfo(
-					business_replacement_info.getReplacementInfo_DocumentId(),
-					organIdList);
-			replacementInfoList.addReplacementInfo(replacementInfo);
+		if (business_replacement_info_list != null) {
+			for (vn.ript.ssadapter.model.document.ReplacementInfo business_replacement_info : business_replacement_info_list) {
+				OrganIdList organIdList = new OrganIdList();
+				organIdList.setOrganId(business_replacement_info.getReplacementInfoOrganIdList());
+				ReplacementInfo replacementInfo = new ReplacementInfo(
+						business_replacement_info.getReplacementInfoDocumentId(),
+						organIdList);
+				replacementInfoList.addReplacementInfo(replacementInfo);
+			}
 		}
 
 		// khoi tao cac thong tin danh dau loai nghiep vu van ban
 		Bussiness bussiness = new Bussiness();
-		bussiness.setBussinessDocReason(business_bussiness_doc_reason);
-		bussiness.setBussinessDocType(business_bussiness_doc_type.toString());
-		bussiness.setDocumentId(business_document_id);
-		bussiness.setPaper(business_paper.toString());
+		if(business_bussiness_doc_reason != null) {
+			bussiness.setBussinessDocReason(business_bussiness_doc_reason);
+		}
+		if(business_bussiness_doc_type != null) {
+			bussiness.setBussinessDocType(business_bussiness_doc_type.toString());
+		}
+		if(business_document_id != null) {
+			bussiness.setDocumentId(business_document_id);
+		}
+		if(business_paper != null) {
+			bussiness.setPaper(business_paper.toString());
+		}
 		// add addreceiverList
 		bussinessDocumentInfo.addreceiverList(receiverList);
 		// add staffInfo
@@ -259,8 +331,8 @@ public class EdXMLBuild {
 		// set ResponseFor Tag
 		msgStatus.setResponseFor(new ResponseFor(
 				document.getFrom().getOrganId(),
-				document.getCode_CodeNumber() + "/" + document.getCode_CodeNotation(),
-				DateUtils.parse(document.getPromulgationInfo_PromulgationDate()),
+				document.getCodeCodeNumber() + "/" + document.getCodeCodeNotation(),
+				DateUtils.parse(document.getPromulgationInfoPromulgationDate()),
 				document.getDocumentId()));
 		// set from information (organization)
 		msgStatus.setFrom(new Organization(

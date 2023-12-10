@@ -22,10 +22,10 @@ import lombok.ToString;
 
 public class UpdateReceiver {
 
-    @Column(name = "_updateReceiver_ReceiverType")
-    private Integer updateReceiver_ReceiverType;
+    @Column(name = "_updateReceiverReceiverType")
+    private Integer updateReceiverReceiverType;
 
-    @Column(name = "_updateReceiver_OrganId", columnDefinition = "text")
-    private String updateReceiver_OrganId;
+    @Column(name = "_updateReceiverOrganId", columnDefinition = "text")
+    private String updateReceiverOrganId;
 
 }

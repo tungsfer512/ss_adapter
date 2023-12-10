@@ -22,10 +22,10 @@ import lombok.ToString;
 
 public class TraceHeader {
 
-    @Column(name = "_traceHeader_OrganId", columnDefinition = "text")
-    String traceHeader_OrganId;
+    @Column(name = "_traceHeaderOrganId", columnDefinition = "text")
+    String traceHeaderOrganId;
 
-    @Column(name = "_traceHeader_Timestamp", columnDefinition = "text")
-    String traceHeader_Timestamp;
+    @Column(name = "_traceHeaderTimestamp", columnDefinition = "text")
+    String traceHeaderTimestamp;
 
 }

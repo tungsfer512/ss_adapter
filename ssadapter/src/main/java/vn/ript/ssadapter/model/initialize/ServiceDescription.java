@@ -26,7 +26,7 @@ import lombok.ToString;
 import vn.ript.ssadapter.model.Organization;
 
 @Entity
-@Table(name = "_service_description")
+@Table(name = "_servicedescription")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,7 +51,7 @@ public class ServiceDescription {
 	private List<Service> services;
 
     @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JoinColumn(name = "_organization_id", referencedColumnName = "id")
+	@JoinColumn(name = "_organizationId", referencedColumnName = "id")
 	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private Organization organization;
 }

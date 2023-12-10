@@ -88,7 +88,7 @@ public class Utils {
         return dtf.format(now).toString();
     }
 
-    public static String date_to_yyyy_mm_dd(Date date) {
+    public static String DATE_TO_YYYY_MM_DD(Date date) {
         String pattern = "yyyy/MM/dd";
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
         return simpleDateFormat.format(date).toString();

@@ -189,6 +189,30 @@ public class SystemController {
         }
     }
 
+    @GetMapping("/timestamping-services")
+    public ResponseEntity<Map<String, Object>> getAllTSA() {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/system/timestamping-services";
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Content-Type", "application/json"),
+                    Map.entry("Accept", "application/json"));
+
+            CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            HttpResponse httpResponse = httpRequest.request();
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.getStatusLine().toString());
+            }
+            // return CustomResponse.Response_no_data(200);
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
     @PostMapping("/timestamping-services")
     public ResponseEntity<Map<String, Object>> addTSA(
             @RequestBody Map<String, Object> body) {
@@ -207,6 +231,8 @@ public class SystemController {
             jsonPostObject.append("url", tsa_url);
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+            System.out.println(entity);
+            System.out.println(entity.toString());
 
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
@@ -215,9 +241,39 @@ public class SystemController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
-            // return CustomResponse.Response_no_data(200);
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+    @PostMapping("/timestamping-services/delete")
+    public ResponseEntity<Map<String, Object>> deleteTSA(
+            @RequestBody Map<String, Object> body) {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/system/timestamping-services/delete";
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Content-Type", "application/json"),
+                    Map.entry("Accept", "application/json"));
+
+            String name = (String) body.get("name");
+            String tsa_url = (String) body.get("url");
+
+            JSONObject jsonPostObject = new JSONObject();
+            jsonPostObject.append("name", name);
+            jsonPostObject.append("url", tsa_url);
+
+            StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+
+            CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
+            HttpResponse httpResponse = httpRequest.request(entity);
+            if (httpResponse.getStatusLine().getStatusCode() == 204) {
+                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.toString());
+            }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
         }

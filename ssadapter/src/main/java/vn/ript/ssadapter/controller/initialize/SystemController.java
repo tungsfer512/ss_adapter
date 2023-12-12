@@ -227,10 +227,12 @@ public class SystemController {
             String tsa_url = (String) body.get("url");
 
             JSONObject jsonPostObject = new JSONObject();
-            jsonPostObject.append("name", name);
-            jsonPostObject.append("url", tsa_url);
+            jsonPostObject.put("name", name);
+            jsonPostObject.put("url", tsa_url);
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+            System.out.println(jsonPostObject);
+            System.out.println(jsonPostObject.toString());
             System.out.println(entity);
             System.out.println(entity.toString());
 
@@ -247,6 +249,7 @@ public class SystemController {
             return CustomResponse.Response_data(500, e.toString());
         }
     }
+
     @PostMapping("/timestamping-services/delete")
     public ResponseEntity<Map<String, Object>> deleteTSA(
             @RequestBody Map<String, Object> body) {
@@ -261,8 +264,8 @@ public class SystemController {
             String tsa_url = (String) body.get("url");
 
             JSONObject jsonPostObject = new JSONObject();
-            jsonPostObject.append("name", name);
-            jsonPostObject.append("url", tsa_url);
+            jsonPostObject.put("name", name);
+            jsonPostObject.put("url", tsa_url);
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
 

@@ -20,8 +20,8 @@
         "outputDescription": "Mo ta dau ra 1"
     },
     {
-        "organId": "CS:GOV:MANAGESS2MC:ABCABC",
-        "ssId": "CS:GOV:MANAGESS2MC:ABCABC",
+        "organId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
+        "ssId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
         "organizationInCharge": "",
         "organName": "SS1 Subsystem 1",
         "organAdd": "SS1 Subsystem 1 Address",
@@ -29,5 +29,39 @@
         "telephone": "0123456789",
         "fax": "0123456789",
         "website": "ss1sub1.com.vn"
+    },
+    {
+        "codeNumber": "123",
+        "codeNotation": "NQ-CP",
+        "promulgationDatePlace": "Ha Noi",
+        "promulgationDate": "2023/12/15",
+        "documentTypeId": 1,
+        "subject": "Nghi Quyet 20",
+        "content": "Mo ta nghi quyet 20",
+        "otherInfoPageAmount": 12,
+        "steeringType": 1,
+        "businessBussinessDocType": 2,
+        "businessBussinessDocReason": "abcabc",
+        "businessDocumentId": "abcabc",
+        "isPublic": true,
+        "enable": true
+    },
+    {
+        "type": 1,
+        "typeDetail": "Bao cao",
+        "typeName": "Mo ta bao cao"
+    },
+    {
+        "codeNumber": "123",
+        "codeNotation": "NQ-CP",
+        "promulgationDatePlace": "Ha Noi",
+        "promulgationDate": "2023/12/12",
+        "documentTypeId": 1,
+        "subject": "Nghi Quyet 20",
+        "content": "Mo ta nghi quyet 20",
+        "otherInfoPageAmount": 12,
+        "steeringType": 1,
+        "isPublic": true,
+        "enable": true
     }
 ]

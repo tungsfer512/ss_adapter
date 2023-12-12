@@ -179,6 +179,7 @@ public class DocumentController {
                     code_number,
                     code_notation,
                     promulgation_place,
+                    null,
                     document_type,
                     subject,
                     content,

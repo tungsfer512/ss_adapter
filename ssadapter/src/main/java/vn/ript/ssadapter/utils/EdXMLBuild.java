@@ -48,6 +48,7 @@ public class EdXMLBuild {
 			String code_number,
 			String code_notation,
 			String promulgation_place,
+			String promulgation_date,
 			vn.ript.ssadapter.model.document.DocumentType document_type,
 			String subject,
 			String content,
@@ -79,7 +80,9 @@ public class EdXMLBuild {
 			List<File> attachments,
 			List<String> attachment_description_list) throws Exception {
 
-		String date = Utils.DATE_NOW();
+		if (promulgation_date == null) {
+			promulgation_date = Utils.DATE_NOW();
+		}
 
 		Ed ed = new Ed();
 
@@ -123,7 +126,7 @@ public class EdXMLBuild {
 		// khoi tao thong tin ban hanh
 		PromulgationInfo promulgationInfo = new PromulgationInfo();
 		if (promulgation_place != null) {
-			promulgationInfo = new PromulgationInfo(promulgation_place, DateUtils.parse(date));
+			promulgationInfo = new PromulgationInfo(promulgation_place, DateUtils.parse(promulgation_date));
 		}
 		// khoi tao loai van ban
 		DocumentType documentType = new DocumentType();
@@ -190,7 +193,7 @@ public class EdXMLBuild {
 		}
 		header.setOtherInfo(otherInfo);
 
-		String document_id = orgFrom.getOrganId() + "," + date + "," + code_number + "/" + code_notation;
+		String document_id = orgFrom.getOrganId() + "," + promulgation_date + "," + code_number + "/" + code_notation;
 		// khoi tao thong tin ma dinh danh cua van ban
 		header.setDocumentId(document_id);
 
@@ -209,7 +212,7 @@ public class EdXMLBuild {
 		TraceHeaderList trList = new TraceHeaderList();
 		TraceHeader traceFrom = new TraceHeader();
 		traceFrom.setOrganId(orgFrom.getOrganId());
-		traceFrom.setTimestamp(DateUtils.parse(date));
+		traceFrom.setTimestamp(DateUtils.parse(promulgation_date));
 		trList.addTraceHeader(traceFrom);
 
 		// khoi tao danh sach cac truong thong tin duoc van ban cap nhat

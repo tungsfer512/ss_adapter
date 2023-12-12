@@ -1,4 +1,4 @@
-package vn.ript.ssadapter.controller.apilienthongvanban;
+package vn.ript.ssadapter.controller.apilienthong;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -39,6 +39,8 @@ import com.vnpt.xml.status.Status;
 import com.vnpt.xml.status.builder.StatusXmlBuilder;
 import com.vnpt.xml.status.header.MessageStatus;
 
+import vn.ript.ssadapter.model.document.Document;
+
 public class EdXMLBuild {
 	public static Content createEdoc_new(
 			vn.ript.ssadapter.model.Organization from,
@@ -60,7 +62,7 @@ public class EdXMLBuild {
 			Integer other_info_promulgation_amount,
 			Integer other_info_page_amount,
 			List<String> appendixes,
-			Boolean response_for,
+			Document response_for_document,
 			Integer steering_type,
 			Integer business_bussiness_doc_type,
 			String business_bussiness_doc_reason,
@@ -193,11 +195,12 @@ public class EdXMLBuild {
 		header.setDocumentId(document_id);
 
 		// khoi tao thong tin van ban phan hoi va phuc dap
-		// List<ResponseFor> response_for_list = new
-		if (response_for != null && response_for == true && to_list != null) {
+		if (response_for_document != null && to_list != null) {
 			for (vn.ript.ssadapter.model.Organization to : to_list) {
-				ResponseFor responseFor = new ResponseFor(to.getOrganId(), code_number + "/" + code_notation,
-						DateUtils.parse(date), document_id);
+				ResponseFor responseFor = new ResponseFor(to.getOrganId(),
+						response_for_document.getCodeCodeNumber() + "/" + response_for_document.getCodeCodeNotation(),
+						DateUtils.parse(response_for_document.getPromulgationInfoPromulgationDate()),
+						response_for_document.getDocumentId());
 				header.addResponseFor(responseFor);
 			}
 		}
@@ -258,16 +261,16 @@ public class EdXMLBuild {
 
 		// khoi tao cac thong tin danh dau loai nghiep vu van ban
 		Bussiness bussiness = new Bussiness();
-		if(business_bussiness_doc_reason != null) {
+		if (business_bussiness_doc_reason != null) {
 			bussiness.setBussinessDocReason(business_bussiness_doc_reason);
 		}
-		if(business_bussiness_doc_type != null) {
+		if (business_bussiness_doc_type != null) {
 			bussiness.setBussinessDocType(business_bussiness_doc_type.toString());
 		}
-		if(business_document_id != null) {
+		if (business_document_id != null) {
 			bussiness.setDocumentId(business_document_id);
 		}
-		if(business_paper != null) {
+		if (business_paper != null) {
 			bussiness.setPaper(business_paper.toString());
 		}
 		// add addreceiverList

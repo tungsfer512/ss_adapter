@@ -40,7 +40,7 @@ public class DocumentStatusController {
     @Autowired
     OrganizationService organizationService;
 
-    @PostMapping("/update")
+    @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestHeader(name = "docId", required = true) String docId,
             @RequestBody(required = true) Map<String, String> status_info) {
@@ -142,8 +142,8 @@ public class DocumentStatusController {
                     null,
                     null,
                     document.getFrom().getOrganId(),
-                    document.getCode_CodeNumber() + "/" + document.getCode_CodeNotation(),
-                    document.getPromulgationInfo_PromulgationDate(),
+                    document.getCodeCodeNumber() + "/" + document.getCodeCodeNotation(),
+                    document.getPromulgationInfoPromulgationDate(),
                     document.getDocumentId(),
                     null,
                     null,
@@ -182,7 +182,6 @@ public class DocumentStatusController {
         }
     }
 
-    // Get danh sach VBDT, goi tin trang thai da nhan
     @GetMapping("/getReceivedStatusEdocList")
     public ResponseEntity<Map<String, Object>> getReceivedStatusEdocList() {
         try {
@@ -197,7 +196,6 @@ public class DocumentStatusController {
         }
     }
 
-    // Get danh sach VBDT, goi tin trang thai da gui
     @GetMapping("/getSentStatusEdocList")
     public ResponseEntity<Map<String, Object>> getSentStatusEdocList() {
         try {

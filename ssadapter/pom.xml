@@ -241,6 +241,20 @@
 		</dependency>
 		<dependency>
 			<groupId>com.example</groupId>
+			<artifactId>minio</artifactId>
+			<version>8.5.7</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/libs/minio-8.5.7.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.example</groupId>
+			<artifactId>listenablefuture-9999.0-empty-to-avoid-conflict-with-guava</artifactId>
+			<version>0.0.1</version>
+			<scope>system</scope>
+			<systemPath>${basedir}/libs/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava-0.0.1.jar</systemPath>
+		</dependency>
+		<dependency>
+			<groupId>com.example</groupId>
 			<artifactId>SDKVXP</artifactId>
 			<version>2.0.0</version>
 			<scope>system</scope>

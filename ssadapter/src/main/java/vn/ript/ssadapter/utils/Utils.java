@@ -94,18 +94,28 @@ public class Utils {
         return simpleDateFormat.format(date).toString();
     }
 
+    public static String DATE_TO_YYYY_MM_DD_HH_MM_SS(Date date) {
+        String pattern = "yyyy/MM/dd HH:mm:ss";
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(pattern);
+        return simpleDateFormat.format(date).toString();
+    }
+
     public static String SHA256_HASH(String text) {
         String sha256hex = Hashing.sha256().hashString(text, StandardCharsets.UTF_8).toString();
         return sha256hex;
     }
 
     public static List<String> JSON_GET_STRING_LIST(JSONObject jsonObject, String key) {
-        List<Object> jsonArray = jsonObject.getJSONArray(key).toList();
-        List<String> res = new ArrayList<>();
-        for (Object obj : jsonArray) {
-            res.add(obj.toString());
+        if (jsonObject.has(key)) {
+            List<Object> jsonArray = jsonObject.getJSONArray(key).toList();
+            List<String> res = new ArrayList<>();
+            for (Object obj : jsonArray) {
+                res.add(obj.toString());
+            }
+            return res;
+        } else {
+            return new ArrayList<>();
         }
-        return res;
     }
 
     public static String EXEC_SHELL_COMMAND(List<String> command) {

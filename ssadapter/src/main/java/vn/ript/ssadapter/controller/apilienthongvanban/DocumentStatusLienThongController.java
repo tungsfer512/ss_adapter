@@ -38,7 +38,7 @@ public class DocumentStatusLienThongController {
     @Autowired
     OrganizationService organizationService;
 
-    @PostMapping("/update")
+    @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> sendStatusEdoc(
             @RequestPart(name = "file", required = true) MultipartFile file,
             @RequestHeader(name = "docId", required = true) String docId) {
@@ -96,7 +96,7 @@ public class DocumentStatusLienThongController {
                         null,
                         responseFor.getOrganId(),
                         responseFor.getCode(),
-                        Utils.date_to_yyyy_mm_dd(responseFor.getPromulgationDate()),
+                        Utils.DATE_TO_YYYY_MM_DD(responseFor.getPromulgationDate()),
                         responseFor.getDocumentId(),
                         null,
                         null,

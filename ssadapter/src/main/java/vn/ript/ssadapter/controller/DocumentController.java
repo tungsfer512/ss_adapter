@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -28,9 +27,11 @@ import com.vnpt.xml.ed.Ed;
 import com.vnpt.xml.ed.header.MessageHeader;
 
 import vn.ript.ssadapter.model.Organization;
+import vn.ript.ssadapter.model.document.Attachment;
 import vn.ript.ssadapter.model.document.Document;
 import vn.ript.ssadapter.model.document.DocumentType;
 import vn.ript.ssadapter.model.document.ReplacementInfo;
+import vn.ript.ssadapter.model.document.TraceHeader;
 import vn.ript.ssadapter.model.document.UpdateReceiver;
 import vn.ript.ssadapter.service.DocumentService;
 import vn.ript.ssadapter.service.DocumentTypeService;
@@ -57,144 +58,78 @@ public class DocumentController {
     @PostMapping("/new")
     public ResponseEntity<Map<String, Object>> sendDocument(
             @RequestPart(name = "files", required = false) List<MultipartFile> files,
-            @RequestPart(name = "json_data", required = false) String json_data
-    // @RequestPart(name = "to_ids", required = true) List<String> to_ids,
-    // @RequestPart(name = "code_number", required = true) String code_number,
-    // @RequestPart(name = "code_notation", required = true) String code_notation,
-    // @RequestPart(name = "promulgation_place", required = true) String
-    // promulgation_place,
-    // @RequestPart(name = "document_type_id", required = true) Integer
-    // document_type_id,
-    // @RequestPart(name = "subject", required = true) String subject,
-    // @RequestPart(name = "content", required = true) String content,
-    // @RequestPart(name = "signer_info_competence", required = true) String
-    // signer_info_competence,
-    // @RequestPart(name = "signer_info_position", required = true) String
-    // signer_info_position,
-    // @RequestPart(name = "signer_info_fullname", required = true) String
-    // signer_info_fullname,
-    // @RequestPart(name = "due_date", required = true) String due_date,
-    // @RequestPart(name = "to_places", required = true) List<String> to_places,
-    // @RequestPart(name = "other_info_priority", required = true) Integer
-    // other_info_priority,
-    // @RequestPart(name = "other_info_sphere_of_promulgation", required = true)
-    // String other_info_sphere_of_promulgation,
-    // @RequestPart(name = "other_info_typer_notation", required = true) String
-    // other_info_typer_notation,
-    // @RequestPart(name = "other_info_promulgation_amount", required = true)
-    // Integer other_info_promulgation_amount,
-    // @RequestPart(name = "other_info_page_amount", required = true) Integer
-    // other_info_page_amount,
-    // @RequestPart(name = "appendixes", required = true) List<String> appendixes,
-    // @RequestPart(name = "response_for", required = true) Boolean response_for,
-    // @RequestPart(name = "steering_type", required = true) Integer steering_type,
-    // @RequestPart(name = "status_status_code", required = true) String
-    // status_status_code,
-    // @RequestPart(name = "status_description", required = true) String
-    // status_description,
-    // @RequestPart(name = "status_timestamp", required = true) String
-    // status_timestamp,
-    // @RequestPart(name = "business_bussiness_doc_type", required = true) Integer
-    // business_bussiness_doc_type,
-    // @RequestPart(name = "business_bussiness_doc_reason", required = true) String
-    // business_bussiness_doc_reason,
-    // @RequestPart(name = "business_bussiness_document_info_document_info",
-    // required = true) Integer business_bussiness_document_info_document_info,
-    // @RequestPart(name = "business_bussiness_document_info_document_receiver",
-    // required = true) Integer business_bussiness_document_info_document_receiver,
-    // @RequestPart(name =
-    // "business_bussiness_document_info_receiver_json_str_list", required = true)
-    // List<String> business_bussiness_document_info_receiver_json_str_list,
-    // @RequestPart(name = "business_document_id", required = true) String
-    // business_document_id,
-    // @RequestPart(name = "business_staff_info_department", required = true) String
-    // business_staff_info_department,
-    // @RequestPart(name = "business_staff_info_staff", required = true) String
-    // business_staff_info_staff,
-    // @RequestPart(name = "business_staff_info_mobile", required = true) String
-    // business_staff_info_mobile,
-    // @RequestPart(name = "business_staff_info_email", required = true) String
-    // business_staff_info_email,
-    // @RequestPart(name = "business_paper", required = true) Integer
-    // business_paper,
-    // @RequestPart(name = "business_replacement_info_json_str_list", required =
-    // true) List<String> business_replacement_info_json_str_list,
-    // @RequestPart(name = "attachment_description_list", required = true)
-    // List<String> attachment_description_list
-    ) {
+            @RequestPart(name = "json_data", required = true) String json_data) {
         try {
             JSONObject jsonObject = new JSONObject(json_data);
-            List<String> to_ids = Utils.JSON_GET_STRING_LIST(jsonObject, "to_ids");
-            String code_number = jsonObject.getString("code_number");
-            String code_notation = jsonObject.getString("code_notation");
-            String promulgation_place = jsonObject.getString("promulgation_place");
-            Integer document_type_id = jsonObject.getInt("document_type_id");
+            List<String> to_ids = Utils.JSON_GET_STRING_LIST(jsonObject, "toIds");
+            String code_number = jsonObject.getString("codeNumber");
+            String code_notation = jsonObject.getString("codeNotation");
+            String promulgation_place = jsonObject.getString("promulgationPlace");
+            Integer document_type_id = jsonObject.getInt("documentTypeId");
             String subject = jsonObject.getString("subject");
             String content = jsonObject.getString("content");
-            String signer_info_competence = jsonObject.getString("signer_info_competence");
-            String signer_info_position = jsonObject.getString("signer_info_position");
-            String signer_info_fullname = jsonObject.getString("signer_info_fullname");
-            String due_date = jsonObject.getString("due_date");
-            List<String> to_places = Utils.JSON_GET_STRING_LIST(jsonObject, "to_places");
-            Integer other_info_priority = jsonObject.getInt("other_info_priority");
+            String signer_info_competence = jsonObject.getString("signerInfoCompetence");
+            String signer_info_position = jsonObject.getString("signerInfoPosition");
+            String signer_info_fullname = jsonObject.getString("signerInfoFullname");
+            String due_date = jsonObject.getString("dueDate");
+            List<String> to_places = Utils.JSON_GET_STRING_LIST(jsonObject, "toPlaces");
+            Integer other_info_priority = jsonObject.getInt("otherInfoPriority");
             String other_info_sphere_of_promulgation = jsonObject
-                    .getString("other_info_sphere_of_promulgation");
-            String other_info_typer_notation = jsonObject.getString("other_info_typer_notation");
-            Integer other_info_promulgation_amount = jsonObject.getInt("other_info_promulgation_amount");
-            Integer other_info_page_amount = jsonObject.getInt("other_info_page_amount");
+                    .getString("otherInfoSphereOfPromulgation");
+            String other_info_typer_notation = jsonObject.getString("otherInfoTyperNotation");
+            Integer other_info_promulgation_amount = jsonObject.getInt("otherInfoPromulgationAmount");
+            Integer other_info_page_amount = jsonObject.getInt("otherInfoPageAmount");
             List<String> appendixes = Utils.JSON_GET_STRING_LIST(jsonObject, "appendixes");
-            Boolean response_for = jsonObject.getBoolean("response_for");
-            Integer steering_type = jsonObject.getInt("steering_type");
-            // String status_status_code = jsonObject.getString("status_status_code");
-            // String status_description = jsonObject.getString("status_description");
-            // String status_timestamp = jsonObject.getString("status_timestamp");
-            Integer business_bussiness_doc_type = jsonObject.getInt("business_bussiness_doc_type");
-            String business_bussiness_doc_reason = jsonObject.getString("business_bussiness_doc_reason");
+            String response_for_document_id = jsonObject.getString("responseForDocumentId");
+            Integer steering_type = jsonObject.getInt("steeringType");
+            Integer business_bussiness_doc_type = jsonObject.getInt("businessBussinessDocType");
+            String business_bussiness_doc_reason = jsonObject.getString("businessBussinessDocReason");
             Integer business_bussiness_document_info_document_info = jsonObject
-                    .getInt("business_bussiness_document_info_document_info");
+                    .getInt("businessBussinessDocumentInfoDocumentInfo");
             Integer business_bussiness_document_info_document_receiver = jsonObject
-                    .getInt("business_bussiness_document_info_document_receiver");
+                    .getInt("businessBussinessDocumentInfoDocumentReceiver");
             List<String> business_bussiness_document_info_receiver_json_str_list = Utils.JSON_GET_STRING_LIST(
                     jsonObject,
-                    "business_bussiness_document_info_receiver_json_str_list");
-            String business_document_id = jsonObject.getString("business_document_id");
-            String business_staff_info_department = jsonObject.getString("business_staff_info_department");
-            String business_staff_info_staff = jsonObject.getString("business_staff_info_staff");
-            String business_staff_info_mobile = jsonObject.getString("business_staff_info_mobile");
-            String business_staff_info_email = jsonObject.getString("business_staff_info_email");
-            Integer business_paper = jsonObject.getInt("business_paper");
+                    "businessBussinessDocumentInfoReceiverJsonStrList");
+            String business_document_id = jsonObject.getString("businessDocumentId");
+            String business_staff_info_department = jsonObject.getString("businessStaffInfoDepartment");
+            String business_staff_info_staff = jsonObject.getString("businessStaffInfoStaff");
+            String business_staff_info_mobile = jsonObject.getString("businessStaffInfoMobile");
+            String business_staff_info_email = jsonObject.getString("businessStaffInfoEmail");
+            Integer business_paper = jsonObject.getInt("businessPaper");
             List<String> business_replacement_info_json_str_list = Utils.JSON_GET_STRING_LIST(jsonObject,
-                    "business_replacement_info_json_str_list");
+                    "businessReplacementInfoJsonStrList");
             List<String> attachment_description_list = Utils.JSON_GET_STRING_LIST(jsonObject,
-                    "attachment_description_list");
+                    "attachmentDescriptionList");
 
             Content edXmlContent;
             String senderDocId = Utils.UUID();
-            List<File> attachments = null;
+            List<File> attachments = new ArrayList<>();
             if (!files.isEmpty()) {
-                attachments = new ArrayList<>();
                 for (MultipartFile file : files) {
                     attachments.add(Utils.MULTIPART_FILE_TO_FILE(file, Constants.LOAI_FILE.ATTACHMENT.ma()));
                 }
             }
             Optional<Organization> checkFrom = organizationService.findByOrganId(Utils.SS_ID);
             if (!checkFrom.isPresent()) {
-                return CustomResponse.Response_data(404, "Khong tim thay don vi");
+                return CustomResponse.Response_data(404, "Khong tim thay don vi gui");
             }
             Organization from = checkFrom.get();
             List<Organization> to_list = new ArrayList<>();
             for (String to_id : to_ids) {
                 Optional<Organization> checkTo = organizationService.findByOrganId(to_id);
                 if (!checkTo.isPresent()) {
-                    return CustomResponse.Response_data(404, "Khong tim thay don vi");
+                    return CustomResponse.Response_data(404, "Khong tim thay don vi nhan");
                 }
                 to_list.add(checkTo.get());
             }
-            TimeUnit.SECONDS.sleep(3);
-
-            Optional<DocumentType> check_document_type = documentTypeService.findById(document_type_id);
-            if (!check_document_type.isPresent()) {
-                return CustomResponse.Response_data(404, "Khong tim thay loai van ban");
+            DocumentType document_type = null;
+            if (document_type_id != null) {
+                Optional<DocumentType> check_document_type = documentTypeService.findById(document_type_id);
+                if (!check_document_type.isPresent()) {
+                    return CustomResponse.Response_data(404, "Khong tim thay loai van ban");
+                }
+                document_type = check_document_type.get();
             }
 
             List<UpdateReceiver> business_bussiness_document_info_receiver_list = new ArrayList<>();
@@ -202,8 +137,8 @@ public class DocumentController {
                 JSONObject jsonReceiverObject = new JSONObject(
                         business_bussiness_document_info_receiver_json_str);
                 UpdateReceiver updateReceiver = new UpdateReceiver(
-                        jsonReceiverObject.getInt("update_receiver_receiver_type"),
-                        jsonReceiverObject.getString("update_receiver_organ_id"));
+                        jsonReceiverObject.getInt("updateReceiverReceiverType"),
+                        jsonReceiverObject.getString("updateReceiverOrganId"));
                 business_bussiness_document_info_receiver_list.add(updateReceiver);
             }
 
@@ -212,19 +147,31 @@ public class DocumentController {
                 JSONObject jsonReplacementObject = new JSONObject(business_replacement_info_json_str);
                 ReplacementInfo replacementInfo = new ReplacementInfo();
                 replacementInfo
-                        .setReplacementInfo_DocumentId(jsonReplacementObject
-                                .getString("replacement_info_document_id"));
+                        .setReplacementInfoDocumentId(jsonReplacementObject
+                                .getString("replacementInfoDocumentId"));
                 List<String> replacement_info_organ_id_list = new ArrayList<>();
-                List<Object> tmp = jsonReplacementObject.getJSONArray("replacement_info_organ_id_list")
+                List<Object> tmp = jsonReplacementObject.getJSONArray("replacementInfoOrganIdList")
                         .toList();
                 for (Object t : tmp) {
                     replacement_info_organ_id_list.add(t.toString());
                 }
-                replacementInfo.setReplacementInfo_OrganIdList(replacement_info_organ_id_list);
+                replacementInfo.setReplacementInfoOrganIdList(replacement_info_organ_id_list);
                 business_replacement_info_list.add(replacementInfo);
             }
 
-            DocumentType document_type = check_document_type.get();
+            Document response_for_document = null;
+            String response_for_code = null;
+            String response_for_promulgation_date = null;
+            if (response_for_document_id != null) {
+                Optional<Document> check_response_for_document = documentService
+                        .findByDocumentId(response_for_document_id);
+                if (check_response_for_document.isPresent()) {
+                    response_for_document = check_response_for_document.get();
+                    response_for_code = response_for_document.getCodeCodeNumber() + "/"
+                            + response_for_document.getCodeCodeNotation();
+                    response_for_promulgation_date = response_for_document.getPromulgationInfoPromulgationDate();
+                }
+            }
 
             edXmlContent = EdXMLBuild.createEdoc_new(
                     from,
@@ -246,7 +193,7 @@ public class DocumentController {
                     other_info_promulgation_amount,
                     other_info_page_amount,
                     appendixes,
-                    response_for,
+                    response_for_document,
                     steering_type,
                     business_bussiness_doc_type,
                     business_bussiness_doc_reason,
@@ -269,6 +216,34 @@ public class DocumentController {
             Header header = ed.getHeader();
             MessageHeader messageHeader = (MessageHeader) header.getMessageHeader();
             String docIdEdxml = messageHeader.getDocumentId();
+            List<TraceHeader> trace_headers = new ArrayList<>();
+
+            com.vnpt.xml.base.header.TraceHeaderList traceHeaderList = header.getTraceHeaderList();
+            if (traceHeaderList != null) {
+                if (traceHeaderList.getTraceHeaders() != null) {
+                    com.vnpt.xml.base.header.TraceHeader xml_trace_header = traceHeaderList.getTraceHeaders()
+                            .get(0);
+                    if (xml_trace_header != null) {
+                        TraceHeader traceHeader = new TraceHeader();
+                        traceHeader.setTraceHeaderOrganId(xml_trace_header.getOrganId());
+                        traceHeader.setTraceHeaderTimestamp(
+                                Utils.DATE_TO_YYYY_MM_DD_HH_MM_SS(xml_trace_header.getTimestamp()));
+                        trace_headers.add(traceHeader);
+                    }
+                }
+            }
+
+            List<Attachment> adapter_attachments = new ArrayList<>();
+            List<com.vnpt.xml.base.attachment.Attachment> edoc_attachments = ed.getAttachments();
+            for (com.vnpt.xml.base.attachment.Attachment edoc_attachment : edoc_attachments) {
+                Attachment adapter_attachment = new Attachment(
+                        edoc_attachment.getContentType(),
+                        edoc_attachment.getContentId(),
+                        edoc_attachment.getDescription(),
+                        edoc_attachment.getContentTransferEncoded(),
+                        edoc_attachment.getName());
+                adapter_attachments.add(adapter_attachment);
+            }
 
             for (String to_id : to_ids) {
                 Optional<Organization> checkTo = organizationService.findByOrganId(to_id);
@@ -320,16 +295,16 @@ public class DocumentController {
                         other_info_promulgation_amount,
                         other_info_page_amount,
                         appendixes,
-                        null,
-                        null,
-                        null,
-                        null,
+                        to_id,
+                        response_for_code,
+                        response_for_promulgation_date,
+                        response_for_document_id,
                         steering_type,
                         docIdEdxml,
                         null,
                         null,
                         null,
-                        null,
+                        trace_headers,
                         business_bussiness_doc_type,
                         business_bussiness_doc_reason,
                         business_bussiness_document_info_document_info,
@@ -342,7 +317,7 @@ public class DocumentController {
                         business_staff_info_email,
                         business_paper,
                         business_replacement_info_list,
-                        null,
+                        adapter_attachments,
                         "eDoc",
                         "edoc",
                         senderDocId,
@@ -363,7 +338,6 @@ public class DocumentController {
         }
     }
 
-    // Get danh sach VBDT, goi tin trang thai da nhan
     @GetMapping("/getReceivedEdocList")
     public ResponseEntity<Map<String, Object>> getReceivedEdocList() {
         try {
@@ -378,7 +352,6 @@ public class DocumentController {
         }
     }
 
-    // Get danh sach VBDT, goi tin trang thai da gui
     @GetMapping("/getSentEdocList")
     public ResponseEntity<Map<String, Object>> getSentEdocList() {
         try {

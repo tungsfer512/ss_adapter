@@ -229,6 +229,7 @@ public class Document {
 
 	// 2.2.8. ReplacementInfoList
 	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private List<ReplacementInfo> businessReplacementInfoList;
 
 	// ++++++++++++++++++++++++++++ End TraceHeaderList ++++++++++++++++++++++++++++

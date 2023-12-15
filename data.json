@@ -55,13 +55,25 @@
         "codeNumber": "123",
         "codeNotation": "NQ-CP",
         "promulgationDatePlace": "Ha Noi",
-        "promulgationDate": "2023/12/12",
+        "promulgationDate": "2023/12/20",
         "documentTypeId": 1,
-        "subject": "Nghi Quyet 20",
+        "subject": "ABC",
         "content": "Mo ta nghi quyet 20",
         "otherInfoPageAmount": 12,
-        "steeringType": 1,
-        "isPublic": true,
-        "enable": true
+        "steeringType": 2,
+        "isPublic": false,
+        "enable": true,
+        "attachmentDescriptionList": [
+            "abc",
+            "xyz"
+        ],
+        "allowedOrganizations": [
+            "CS:GOV:MANAGESS2MC:ABCABC"
+        ]
+    },
+    {
+        "documentCatalogId": "b33622f1-eab8-4ad9-955e-fa324827e074",
+        "organizationId": "CS:GOV:MANAGESS2MC:MEMBER4SC",
+        "description": "Member 4 xin quyen truy cap file"
     }
 ]

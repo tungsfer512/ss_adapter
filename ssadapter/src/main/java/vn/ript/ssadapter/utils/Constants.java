@@ -8,6 +8,8 @@ public class Constants {
     private static HashMap<String, TRANG_THAI_GOI_TIN> TRANG_THAI_GOI_TIN_MAP = new HashMap<>();
     private static HashMap<String, TRANG_THAI_LIEN_THONG> TRANG_THAI_LIEN_THONG_MAP = new HashMap<>();
     private static HashMap<String, LOAI_FILE> LOAI_FILE_MAP = new HashMap<>();
+    private static HashMap<String, TRANG_THAI_YEU_CAU_THU_VIEN> TRANG_THAI_YEU_CAU_THU_VIEN_MAP = new HashMap<>();
+    private static HashMap<String, TRANG_THAI_BAO_CAO_THU_VIEN> TRANG_THAI_BAO_CAO_THU_VIEN_MAP = new HashMap<>();
 
     public enum TRANG_THAI_VAN_BAN {
         CHO_TIEP_NHAN("01",
@@ -162,6 +164,61 @@ public class Constants {
 
         public LOAI_FILE getByMa(String ma) {
             return LOAI_FILE_MAP.get(ma);
+        }
+
+    }
+
+    public enum TRANG_THAI_YEU_CAU_THU_VIEN {
+        PENDING("PENDING", "Yêu cầu đang chờ phản hồi"),
+        APPROVED("APPROVED", "Yêu cầu đã được chấp thuận"),
+        DECLINED("DECLINED", "Yêu cầu đã bị từ chối");
+
+        private final String ma;
+        private final String moTa;
+
+        private TRANG_THAI_YEU_CAU_THU_VIEN(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            TRANG_THAI_YEU_CAU_THU_VIEN_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public TRANG_THAI_YEU_CAU_THU_VIEN getByMa(String ma) {
+            return TRANG_THAI_YEU_CAU_THU_VIEN_MAP.get(ma);
+        }
+
+    }
+
+    public enum TRANG_THAI_BAO_CAO_THU_VIEN {
+        PENDING("PENDING", "Báo cáo chưa đọc"),
+        APPROVED("APPROVED", "Báo cáo đã đọc");
+
+        private final String ma;
+        private final String moTa;
+
+        private TRANG_THAI_BAO_CAO_THU_VIEN(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            TRANG_THAI_BAO_CAO_THU_VIEN_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public TRANG_THAI_BAO_CAO_THU_VIEN getByMa(String ma) {
+            return TRANG_THAI_BAO_CAO_THU_VIEN_MAP.get(ma);
         }
 
     }

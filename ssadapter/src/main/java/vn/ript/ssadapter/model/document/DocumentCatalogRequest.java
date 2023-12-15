@@ -1,6 +1,4 @@
-package vn.ript.ssadapter.model.initialize;
-
-import java.util.List;
+package vn.ript.ssadapter.model.document;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,7 +9,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -26,7 +23,7 @@ import lombok.ToString;
 import vn.ript.ssadapter.model.Organization;
 
 @Entity
-@Table(name = "_servicedescription")
+@Table(name = "_documentcatalog_request")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,24 +32,32 @@ import vn.ript.ssadapter.model.Organization;
 @EqualsAndHashCode
 @ToString
 
-public class ServiceDescription {
+public class DocumentCatalogRequest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-    @Column(name = "_ssId", columnDefinition = "text")
-    private String ssId;
-
-    @Column(name = "_description", columnDefinition = "text")
-    private String description;
-
-    @OneToMany(cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
-	private List<Service> services;
-
-    @ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
-	@JoinColumn(name = "_organizationId", referencedColumnName = "id")
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@JoinColumn(name = "_fromId", referencedColumnName = "id")
 	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private Organization organization;
+
+	@ManyToOne(cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+	@JoinColumn(name = "_documentCatalog", referencedColumnName = "id")
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+	private DocumentCatalog documentCatalog;
+
+	@Column(name = "_description", columnDefinition = "text")
+	private String description;
+
+	@Column(name = "_status", columnDefinition = "text")
+	private String status;
+
+	@Column(name = "_statusDesc", columnDefinition = "text")
+	private String statusDesc;
+
+	@Column(name = "_timestamp", columnDefinition = "text")
+	private String timestamp;
+
 }

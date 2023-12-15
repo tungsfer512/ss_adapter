@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -42,6 +44,7 @@ public class Service {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	private List<Endpoint> endpoints;
 
 }

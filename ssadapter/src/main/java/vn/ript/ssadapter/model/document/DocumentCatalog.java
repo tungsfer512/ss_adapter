@@ -72,7 +72,7 @@ public class DocumentCatalog {
 	private Integer pageAmount;
 
 	@ElementCollection(fetch = FetchType.LAZY)
-	@CollectionTable(name = "_attachments")
+	@CollectionTable(name = "_documentcatalog_attachments")
 	private List<Attachment> attachments;
 
 	@Column(name = "_steeringType")
@@ -100,6 +100,7 @@ public class DocumentCatalog {
 	private Boolean isPublic;
 
 	@OneToMany(cascade = CascadeType.ALL)
+	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
 	List<Organization> allowedOrganizations;
 
 }

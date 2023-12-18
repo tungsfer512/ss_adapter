@@ -190,8 +190,8 @@ public class DocumentCatalogController {
                                 Constants.LOAI_FILE.ATTACHMENT.ma());
                         Minio minio = new Minio();
                         String file_name = Utils.UUID();
-                        minio.createBucketIfNotExist("filecatalogs");
-                        minio.uploadObject("filecatalogs", file_name, file_file.getAbsolutePath().toString());
+                        minio.createBucketIfNotExist(Utils.SS_MINIO_BUCKET);
+                        minio.uploadObject(Utils.SS_MINIO_BUCKET, file_name, file_file.getAbsolutePath().toString());
                         Attachment attachment = new Attachment();
                         attachment.setAttachmentAttachmentName(file_file.getName());
                         attachment.setAttachmentDescription(attachment_description_list.get(i));
@@ -263,7 +263,7 @@ public class DocumentCatalogController {
     public ResponseEntity<InputStreamResource> downloadAttachmentById(@PathVariable String id) {
         try {
             Minio minio = new Minio();
-            InputStream inputStream = minio.getObject("filecatalogs", id);
+            InputStream inputStream = minio.getObject(Utils.SS_MINIO_BUCKET, id);
             InputStreamResource inputStreamResource = new InputStreamResource(inputStream);
             return CustomResponse.Response_file(200, inputStreamResource, id);
         } catch (Exception e) {

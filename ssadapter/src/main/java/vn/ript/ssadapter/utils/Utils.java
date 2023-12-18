@@ -59,9 +59,12 @@ public class Utils {
     public static String SS_MINIO_SECRET_KEY = System.getenv("SS_MINIO_SECRET_KEY") != null
             ? System.getenv("SS_MINIO_SECRET_KEY")
             : "";
-    public static Boolean SS_MINIO_SECURE = System.getenv("SS_MINIO_SECRET_KEY") != null
-            ? Boolean.valueOf(System.getenv("SS_MINIO_SECRET_KEY"))
+    public static Boolean SS_MINIO_SECURE = System.getenv("SS_MINIO_SECURE") != null
+            ? Boolean.valueOf(System.getenv("SS_MINIO_SECURE"))
             : false;
+    public static String SS_MINIO_BUCKET = System.getenv("SS_MINIO_BUCKET") != null
+            ? System.getenv("SS_MINIO_BUCKET")
+            : "";
 
     public static String UUID() {
         return UUID.randomUUID().toString();

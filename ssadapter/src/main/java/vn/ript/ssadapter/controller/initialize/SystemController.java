@@ -106,8 +106,7 @@ public class SystemController {
             String filename = Utils.UUID() + ".xml";
             String url = Utils.SS_CONFIG_URL + "/system/anchor/download";
             Map<String, String> headers = Map.ofEntries(
-                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-                    Map.entry("Accept", "application/json"));
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY));
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {

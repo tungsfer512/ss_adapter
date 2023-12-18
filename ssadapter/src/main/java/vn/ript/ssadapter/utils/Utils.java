@@ -49,6 +49,19 @@ public class Utils {
             : "";
     public static String SS_CONFIG_URL = "https://" + SS_IP + ":4000/api/v1";
     public static String SS_BASE_URL = "https://" + SS_IP;
+    public static String SS_MINIO_HOST = System.getenv("SS_MINIO_HOST") != null ? System.getenv("SS_MINIO_HOST") : "";
+    public static Integer SS_MINIO_PORT = System.getenv("SS_MINIO_PORT") != null
+            ? Integer.parseInt(System.getenv("SS_MINIO_PORT"))
+            : 9000;
+    public static String SS_MINIO_ACCESS_KEY = System.getenv("SS_MINIO_ACCESS_KEY") != null
+            ? System.getenv("SS_MINIO_ACCESS_KEY")
+            : "";
+    public static String SS_MINIO_SECRET_KEY = System.getenv("SS_MINIO_SECRET_KEY") != null
+            ? System.getenv("SS_MINIO_SECRET_KEY")
+            : "";
+    public static Boolean SS_MINIO_SECURE = System.getenv("SS_MINIO_SECRET_KEY") != null
+            ? Boolean.valueOf(System.getenv("SS_MINIO_SECRET_KEY"))
+            : false;
 
     public static String UUID() {
         return UUID.randomUUID().toString();

@@ -27,14 +27,16 @@ import io.minio.errors.XmlParserException;
 import io.minio.messages.Bucket;
 import io.minio.messages.DeleteError;
 import io.minio.messages.DeleteObject;
+import vn.ript.ssadapter.utils.Utils;
 
 public class Minio {
 
     MinioClient minioClient;
 
     public Minio() {
-        this.minioClient = MinioClient.builder().endpoint("192.168.10.73", 9000, false)
-                .credentials("4HTs7PEE1EiOSbieRiPb", "wHVG8bep3VXADtT6xUppW9YKM0cEdQSTR6CXEvJ4").build();
+        this.minioClient = MinioClient.builder()
+                .endpoint(Utils.SS_MINIO_HOST, Utils.SS_MINIO_PORT, Utils.SS_MINIO_SECURE)
+                .credentials(Utils.SS_MINIO_ACCESS_KEY, Utils.SS_MINIO_SECRET_KEY).build();
     }
 
     public Boolean isBucketExisted(String bucket_name) {

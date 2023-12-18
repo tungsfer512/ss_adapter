@@ -1,9 +1,7 @@
 package vn.ript.ssadapter.controller.test;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -14,14 +12,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import vn.ript.ssadapter.model.Organization;
-import vn.ript.ssadapter.model.document.DocumentType;
-import vn.ript.ssadapter.model.document.ReplacementInfo;
-import vn.ript.ssadapter.model.document.UpdateReceiver;
 import vn.ript.ssadapter.service.DocumentService;
 import vn.ript.ssadapter.service.DocumentTypeService;
 import vn.ript.ssadapter.service.OrganizationService;
-import vn.ript.ssadapter.utils.Constants;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.EdXML;
 import vn.ript.ssadapter.utils.Utils;

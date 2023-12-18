@@ -38,7 +38,7 @@ public class InitializationController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -77,7 +77,7 @@ public class InitializationController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

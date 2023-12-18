@@ -93,7 +93,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -144,7 +144,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -174,7 +174,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -221,7 +221,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -246,7 +246,7 @@ public class ClientController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -268,7 +268,7 @@ public class ClientController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -304,7 +304,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -336,7 +336,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -360,7 +360,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -397,7 +397,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -434,7 +434,7 @@ public class ClientController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -457,7 +457,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -480,7 +480,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -507,7 +507,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -534,7 +534,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -558,7 +558,7 @@ public class ClientController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -580,7 +580,7 @@ public class ClientController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -678,7 +678,7 @@ public class ClientController {
                         jsonServiceDescriptions.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -756,7 +756,7 @@ public class ClientController {
 
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -808,7 +808,7 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -833,7 +833,7 @@ public class ClientController {
     // } else {
     // return
     // CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-    // httpResponse.getStatusLine().toString());
+    // httpResponse.toString());
     // }
     // } catch (Exception e) {
     // return CustomResponse.Response_data(500, e.toString());

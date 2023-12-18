@@ -1,11 +1,11 @@
 package vn.ript.ssadapter.controller.initialize;
 
+import java.io.File;
 import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.FileEntity;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.util.EntityUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
@@ -44,7 +44,7 @@ public class BackupController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -67,7 +67,7 @@ public class BackupController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -90,7 +90,7 @@ public class BackupController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -103,20 +103,20 @@ public class BackupController {
         try {
             String url = Utils.SS_CONFIG_URL + "/backups/upload";
             Map<String, String> headers = Map.ofEntries(
-                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-                    Map.entry("Content-Type", "application/json"),
-                    Map.entry("Accept", "application/json"));
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY));
 
-            FileEntity entity = new FileEntity(Utils.MULTIPART_FILE_TO_FILE(file, Constants.LOAI_FILE.CONFIG.ma()),
-                    ContentType.APPLICATION_OCTET_STREAM);
+            File file_tmp = Utils.MULTIPART_FILE_TO_FILE(file, Constants.LOAI_FILE.CONFIG.ma());
+            MultipartEntityBuilder multipartEntityBuilder = MultipartEntityBuilder.create();
+            multipartEntityBuilder.addBinaryBody("file", file_tmp);
+            HttpEntity multipartHttpEntity = multipartEntityBuilder.build();
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
-            HttpResponse httpResponse = httpRequest.request(entity);
+            HttpResponse httpResponse = httpRequest.request(multipartHttpEntity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -139,7 +139,7 @@ public class BackupController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -163,7 +163,7 @@ public class BackupController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

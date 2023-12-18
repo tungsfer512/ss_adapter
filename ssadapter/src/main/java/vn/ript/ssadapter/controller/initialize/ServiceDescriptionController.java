@@ -131,7 +131,7 @@ public class ServiceDescriptionController {
                         jsonServiceDescription.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -210,7 +210,7 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -238,7 +238,7 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -260,7 +260,7 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -289,7 +289,7 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine().toString());
+                        httpResponse.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

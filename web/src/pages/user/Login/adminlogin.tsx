@@ -40,7 +40,7 @@ const Login: React.FC = () => {
         });
         localStorage.setItem('token', msg?.data?.data?.accessToken);
         localStorage.setItem('vaiTro', msg?.data?.data.user.systemRole);
-        const info = await getInfoAdmin();
+        const info = await getInfoAdmin({ token: msg?.data?.data?.accessToken });
         setInitialState({
           ...initialState,
           currentUser: info?.data?.data,

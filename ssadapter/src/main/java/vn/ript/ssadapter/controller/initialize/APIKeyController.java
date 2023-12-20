@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.google.gson.Gson;
 
-import io.swagger.v3.oas.annotations.parameters.RequestBody;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.Utils;
 
@@ -56,6 +56,7 @@ public class APIKeyController {
             // "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
             String data = "\'[";
             Gson gson = new Gson();
+            System.out.println(body.get("roles"));
             List<Object> objectRoles = new JSONArray(gson.toJson(body.get("roles"))).toList();
             for (Object objectRole : objectRoles) {
                 String role = objectRole.toString();
@@ -72,6 +73,7 @@ public class APIKeyController {
             String jsonResponse = Utils.EXEC_SHELL_COMMAND(commands);
             JSONObject jsonObject = new JSONObject(jsonResponse);
             String dataStr = jsonObject.getString("data");
+            System.out.println(dataStr);
             if (jsonObject.getString("status").equalsIgnoreCase("success")) {
                 return CustomResponse.Response_data(200, dataStr);
             } else {

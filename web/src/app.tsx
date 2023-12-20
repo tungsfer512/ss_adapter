@@ -56,7 +56,7 @@ export async function getInitialState(): Promise<{
 
       if (auth && token) {
         if ([ESystemRole.Admin, ESystemRole.QuanTriVien].includes(auth))
-          currentUser = (await getInfoAdmin())?.data?.data;
+          currentUser = (await getInfoAdmin({ token: token }))?.data?.data;
         else currentUser = (await getInfo())?.data?.data;
       }
       return currentUser;

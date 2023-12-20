@@ -62,7 +62,7 @@ public class DocumentStatusController {
                 status_staff_info_mobile = status_info.get("statusStaffInfoMobile");
             }
             if (status_info.containsKey("status_StaffInfoEmail")) {
-                status_staff_info_email = status_info.get("status_StaffInfoEmail");
+                status_staff_info_email = status_info.get("statusStaffInfoEmail");
             }
             if (status_info.containsKey("statusStatusCode")) {
                 status_status_code = status_info.get("statusStatusCode");

@@ -16,8 +16,10 @@ export async function register(payload: Login.RegisterPayload) {
   return axios.post(`${ip3}/user/register`, payload);
 }
 
-export async function getInfoAdmin() {
-  return axios.get(`${ip3}/api/v1/user`);
+export async function getInfoAdmin(headers: any) {
+  return axios.get(`${ip3}/api/v1/users/me`, {
+    headers: headers
+  });
 }
 
 export async function login(payload: {

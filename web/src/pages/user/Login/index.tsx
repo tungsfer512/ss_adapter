@@ -32,7 +32,7 @@ const Login: React.FC = () => {
   }) => {
     setSubmitting(true);
     try {
-      const msg = await adminlogin({...values});
+      const msg = await adminlogin({ ...values });
       if (msg.status === 200) {
         const defaultloginSuccessMessage = intl.formatMessage({
           id: 'pages.login.success',
@@ -41,7 +41,7 @@ const Login: React.FC = () => {
         console.log(msg?.data?.data);
         localStorage.setItem('token', msg?.data?.data?.accessToken);
         localStorage.setItem('vaiTro', msg?.data?.data.user.systemRole);
-        const info = await getInfoAdmin();
+        const info = await getInfoAdmin({ token: msg?.data?.data?.accessToken });
         setInitialState({
           ...initialState,
           currentUser: info?.data?.data,

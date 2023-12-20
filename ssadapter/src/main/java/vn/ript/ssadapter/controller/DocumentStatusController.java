@@ -45,6 +45,7 @@ public class DocumentStatusController {
             @RequestHeader(name = "docId", required = true) String docId,
             @RequestBody(required = true) Map<String, String> status_info) {
         try {
+
             String status_staff_info_department = null;
             String status_staff_info_staff = null;
             String status_staff_info_mobile = null;

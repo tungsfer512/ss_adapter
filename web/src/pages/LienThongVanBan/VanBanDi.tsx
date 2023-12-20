@@ -25,12 +25,12 @@ const VanBanDi = (): React.Fragment => {
       docId: record.documentId,
     }
     let payload = {
-      status_staff_info_department: "Phong hanh chinh",
-      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-      status_staff_info_mobile: "84912000002",
-      status_staff_info_email: "ngoctram@nghean.vn",
-      status_status_code: ETrangThaiVanBan.DA_YEU_CAU_THU_HOI,
-      status_description: "Đã yêu cầu thu hồi"
+      statusStaffInfoDepartment: "Phong hanh chinh",
+      statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+      statusStaffInfoMobile: "84912000002",
+      statusStaffInfoEmail: "ngoctram@nghean.vn",
+      statusStatusCode: ETrangThaiVanBan.DA_YEU_CAU_THU_HOI,
+      statusDescription: "Đã yêu cầu thu hồi"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };

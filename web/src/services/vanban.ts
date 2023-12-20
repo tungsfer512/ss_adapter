@@ -30,7 +30,7 @@ export const sendEdoc = (headers: any, payload: any) => {
 }
 
 export const sendStatusEdoc = (headers: any, payload: any) => {
-    return axios.post(`${ip3}/api/v1/document/status/update`, payload, {
+    return axios.post(`${ip3}/api/v1/document/status/new`, payload, {
       headers: headers
     })
 }

@@ -44,7 +44,6 @@ public class DocumentStatusLienThongController {
             @RequestHeader(name = "docId", required = true) String docId) {
         try {
             if (!file.isEmpty()) {
-
                 String document_64 = Utils.ENCODE_TO_BASE64(file.getBytes());
 
                 Status statusEdxml = EdXML.readStatus(file.getInputStream());
@@ -140,10 +139,10 @@ public class DocumentStatusLienThongController {
                 pdocument.setReceiveStatus(status_status_code);
                 pdocument.setSendStatusDesc(
                         Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiGui()
-                        + "\n (" + messageStatus.getDescription() + ")");
+                                + "\n (" + messageStatus.getDescription() + ")");
                 pdocument.setReceiveStatusDesc(
                         Constants.TRANG_THAI_VAN_BAN.getByMaTrangThai(status_status_code).moTaTrangThaiNhan()
-                        + "\n (" + messageStatus.getDescription() + ")");
+                                + "\n (" + messageStatus.getDescription() + ")");
 
                 documentService.saveDocument(document);
                 documentService.updateDocument(pdocument);

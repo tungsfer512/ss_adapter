@@ -60,43 +60,125 @@ public class DocumentController {
             @RequestPart(name = "files", required = false) List<MultipartFile> files,
             @RequestPart(name = "json_data", required = true) String json_data) {
         try {
+            String code_number = null;
+            String code_notation = null;
+            String promulgation_place = null;
+            Integer document_type_id = null;
+            String subject = null;
+            String content = null;
+            String signer_info_competence = null;
+            String signer_info_position = null;
+            String signer_info_fullname = null;
+            String due_date = null;
+            Integer other_info_priority = null;
+            String other_info_sphere_of_promulgation = null;
+            String other_info_typer_notation = null;
+            Integer other_info_promulgation_amount = null;
+            Integer other_info_page_amount = null;
+            String response_for_document_id = null;
+            Integer steering_type = null;
+            Integer business_bussiness_doc_type = null;
+            String business_bussiness_doc_reason = null;
+            Integer business_bussiness_document_info_document_info = null;
+            Integer business_bussiness_document_info_document_receiver = null;
+            String business_document_id = null;
+            String business_staff_info_department = null;
+            String business_staff_info_staff = null;
+            String business_staff_info_mobile = null;
+            String business_staff_info_email = null;
+            Integer business_paper = null;
+
             JSONObject jsonObject = new JSONObject(json_data);
+
             List<String> to_ids = Utils.JSON_GET_STRING_LIST(jsonObject, "toIds");
-            String code_number = jsonObject.getString("codeNumber");
-            String code_notation = jsonObject.getString("codeNotation");
-            String promulgation_place = jsonObject.getString("promulgationPlace");
-            Integer document_type_id = jsonObject.getInt("documentTypeId");
-            String subject = jsonObject.getString("subject");
-            String content = jsonObject.getString("content");
-            String signer_info_competence = jsonObject.getString("signerInfoCompetence");
-            String signer_info_position = jsonObject.getString("signerInfoPosition");
-            String signer_info_fullname = jsonObject.getString("signerInfoFullname");
-            String due_date = jsonObject.getString("dueDate");
+            if (jsonObject.has("codeNumber")) {
+                code_number = jsonObject.getString("codeNumber");
+            }
+            if (jsonObject.has("codeNotation")) {
+                code_notation = jsonObject.getString("codeNotation");
+            }
+            if (jsonObject.has("promulgationPlace")) {
+                promulgation_place = jsonObject.getString("promulgationPlace");
+            }
+            if (jsonObject.has("documentTypeId")) {
+                document_type_id = jsonObject.getInt("documentTypeId");
+            }
+            if (jsonObject.has("subject")) {
+                subject = jsonObject.getString("subject");
+            }
+            if (jsonObject.has("content")) {
+                content = jsonObject.getString("content");
+            }
+            if (jsonObject.has("signerInfoCompetence")) {
+                signer_info_competence = jsonObject.getString("signerInfoCompetence");
+            }
+            if (jsonObject.has("signerInfoPosition")) {
+                signer_info_position = jsonObject.getString("signerInfoPosition");
+            }
+            if (jsonObject.has("signerInfoFullname")) {
+                signer_info_fullname = jsonObject.getString("signerInfoFullname");
+            }
+            if (jsonObject.has("dueDate")) {
+                due_date = jsonObject.getString("dueDate");
+            }
             List<String> to_places = Utils.JSON_GET_STRING_LIST(jsonObject, "toPlaces");
-            Integer other_info_priority = jsonObject.getInt("otherInfoPriority");
-            String other_info_sphere_of_promulgation = jsonObject
-                    .getString("otherInfoSphereOfPromulgation");
-            String other_info_typer_notation = jsonObject.getString("otherInfoTyperNotation");
-            Integer other_info_promulgation_amount = jsonObject.getInt("otherInfoPromulgationAmount");
-            Integer other_info_page_amount = jsonObject.getInt("otherInfoPageAmount");
+            if (jsonObject.has("otherInfoPriority")) {
+                other_info_priority = jsonObject.getInt("otherInfoPriority");
+            }
+            if (jsonObject.has("otherInfoSphereOfPromulgation")) {
+                other_info_sphere_of_promulgation = jsonObject.getString("otherInfoSphereOfPromulgation");
+            }
+            if (jsonObject.has("otherInfoTyperNotation")) {
+                other_info_typer_notation = jsonObject.getString("otherInfoTyperNotation");
+            }
+            if (jsonObject.has("otherInfoPromulgationAmount")) {
+                other_info_promulgation_amount = jsonObject.getInt("otherInfoPromulgationAmount");
+            }
+            if (jsonObject.has("otherInfoPageAmount")) {
+                other_info_page_amount = jsonObject.getInt("otherInfoPageAmount");
+            }
             List<String> appendixes = Utils.JSON_GET_STRING_LIST(jsonObject, "appendixes");
-            String response_for_document_id = jsonObject.getString("responseForDocumentId");
-            Integer steering_type = jsonObject.getInt("steeringType");
-            Integer business_bussiness_doc_type = jsonObject.getInt("businessBussinessDocType");
-            String business_bussiness_doc_reason = jsonObject.getString("businessBussinessDocReason");
-            Integer business_bussiness_document_info_document_info = jsonObject
-                    .getInt("businessBussinessDocumentInfoDocumentInfo");
-            Integer business_bussiness_document_info_document_receiver = jsonObject
-                    .getInt("businessBussinessDocumentInfoDocumentReceiver");
+            if (jsonObject.has("responseForDocumentId")) {
+                response_for_document_id = jsonObject.getString("responseForDocumentId");
+            }
+            if (jsonObject.has("steeringType")) {
+                steering_type = jsonObject.getInt("steeringType");
+            }
+            if (jsonObject.has("businessBussinessDocType")) {
+                business_bussiness_doc_type = jsonObject.getInt("businessBussinessDocType");
+            }
+            if (jsonObject.has("businessBussinessDocReason")) {
+                business_bussiness_doc_reason = jsonObject.getString("businessBussinessDocReason");
+            }
+            if (jsonObject.has("businessBussinessDocumentInfoDocumentInfo")) {
+                business_bussiness_document_info_document_info = jsonObject
+                        .getInt("businessBussinessDocumentInfoDocumentInfo");
+            }
+            if (jsonObject.has("businessBussinessDocumentInfoDocumentReceiver")) {
+                business_bussiness_document_info_document_receiver = jsonObject
+                        .getInt("businessBussinessDocumentInfoDocumentReceiver");
+            }
             List<String> business_bussiness_document_info_receiver_json_str_list = Utils.JSON_GET_STRING_LIST(
                     jsonObject,
                     "businessBussinessDocumentInfoReceiverJsonStrList");
-            String business_document_id = jsonObject.getString("businessDocumentId");
-            String business_staff_info_department = jsonObject.getString("businessStaffInfoDepartment");
-            String business_staff_info_staff = jsonObject.getString("businessStaffInfoStaff");
-            String business_staff_info_mobile = jsonObject.getString("businessStaffInfoMobile");
-            String business_staff_info_email = jsonObject.getString("businessStaffInfoEmail");
-            Integer business_paper = jsonObject.getInt("businessPaper");
+            if (jsonObject.has("businessDocumentId")) {
+                business_document_id = jsonObject.getString("businessDocumentId");
+            }
+            if (jsonObject.has("businessStaffInfoDepartment")) {
+                business_staff_info_department = jsonObject.getString("businessStaffInfoDepartment");
+            }
+            if (jsonObject.has("businessStaffInfoStaff")) {
+                business_staff_info_staff = jsonObject.getString("businessStaffInfoStaff");
+            }
+            if (jsonObject.has("businessStaffInfoMobile")) {
+                business_staff_info_mobile = jsonObject.getString("businessStaffInfoMobile");
+            }
+            if (jsonObject.has("businessStaffInfoEmail")) {
+                business_staff_info_email = jsonObject.getString("businessStaffInfoEmail");
+            }
+            if (jsonObject.has("businessPaper")) {
+                business_paper = jsonObject.getInt("businessPaper");
+            }
             List<String> business_replacement_info_json_str_list = Utils.JSON_GET_STRING_LIST(jsonObject,
                     "businessReplacementInfoJsonStrList");
             List<String> attachment_description_list = Utils.JSON_GET_STRING_LIST(jsonObject,
@@ -136,9 +218,17 @@ public class DocumentController {
             for (String business_bussiness_document_info_receiver_json_str : business_bussiness_document_info_receiver_json_str_list) {
                 JSONObject jsonReceiverObject = new JSONObject(
                         business_bussiness_document_info_receiver_json_str);
+                Integer updateReceiverReceiverType = null;
+                String updateReceiverOrganId = null;
+                if (jsonReceiverObject.has("updateReceiverReceiverType")) {
+                    updateReceiverReceiverType = jsonReceiverObject.getInt("updateReceiverReceiverType");
+                }
+                if (jsonReceiverObject.has("updateReceiverOrganId")) {
+                    updateReceiverOrganId = jsonReceiverObject.getString("updateReceiverOrganId");
+                }
                 UpdateReceiver updateReceiver = new UpdateReceiver(
-                        jsonReceiverObject.getInt("updateReceiverReceiverType"),
-                        jsonReceiverObject.getString("updateReceiverOrganId"));
+                        updateReceiverReceiverType,
+                        updateReceiverOrganId);
                 business_bussiness_document_info_receiver_list.add(updateReceiver);
             }
 
@@ -146,12 +236,16 @@ public class DocumentController {
             for (String business_replacement_info_json_str : business_replacement_info_json_str_list) {
                 JSONObject jsonReplacementObject = new JSONObject(business_replacement_info_json_str);
                 ReplacementInfo replacementInfo = new ReplacementInfo();
-                replacementInfo
-                        .setReplacementInfoDocumentId(jsonReplacementObject
-                                .getString("replacementInfoDocumentId"));
+                String replacementInfoDocumentId = null;
+                if (jsonReplacementObject.has("replacementInfoDocumentId")) {
+                    replacementInfoDocumentId = jsonReplacementObject.getString("replacementInfoDocumentId");
+                }
+                replacementInfo.setReplacementInfoDocumentId(replacementInfoDocumentId);
                 List<String> replacement_info_organ_id_list = new ArrayList<>();
-                List<Object> tmp = jsonReplacementObject.getJSONArray("replacementInfoOrganIdList")
-                        .toList();
+                List<Object> tmp = new ArrayList<>();
+                if (jsonReplacementObject.has("replacementInfoOrganIdList")) {
+                    tmp = jsonReplacementObject.getJSONArray("replacementInfoOrganIdList").toList();
+                }
                 for (Object t : tmp) {
                     replacement_info_organ_id_list.add(t.toString());
                 }

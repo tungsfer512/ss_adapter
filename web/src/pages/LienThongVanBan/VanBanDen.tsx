@@ -31,12 +31,12 @@ const VanBanDen = (): React.Fragment => {
       window.alert("Nghiệp vụ cập nhật chưa có!")
     } else {
       let payload = {
-        status_staff_info_department: "Phong hanh chinh",
-        status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-        status_staff_info_mobile: "84912000002",
-        status_staff_info_email: "ngoctram@nghean.vn",
-        status_status_code: ETrangThaiVanBan.DA_TIEP_NHAN_CHO_PHAN_CONG,
-        status_description: "Chờ Phân công xử lý"
+        statusStaffInfoDepartment: "Phong hanh chinh",
+        statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+        statusStaffInfoMobile: "84912000002",
+        statusStaffInfoEmail: "ngoctram@nghean.vn",
+        statusStatusCode: ETrangThaiVanBan.DA_TIEP_NHAN_CHO_PHAN_CONG,
+        statusDescription: "Chờ Phân công xử lý"
       }
       vanbanModel.send_status_edoc(headers, payload, type);
     }
@@ -47,12 +47,12 @@ const VanBanDen = (): React.Fragment => {
       docId: record.documentId
     }
     let payload = {
-      status_staff_info_department: "Phong hanh chinh",
-      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-      status_staff_info_mobile: "84912000002",
-      status_staff_info_email: "ngoctram@nghean.vn",
-      status_status_code: ETrangThaiVanBan.DA_PHAN_CONG_CHO_XU_LY,
-      status_description: "Chờ Phân công xử lý"
+      statusStaffInfoDepartment: "Phong hanh chinh",
+      statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+      statusStaffInfoMobile: "84912000002",
+      statusStaffInfoEmail: "ngoctram@nghean.vn",
+      statusStatusCode: ETrangThaiVanBan.DA_PHAN_CONG_CHO_XU_LY,
+      statusDescription: "Chờ Phân công xử lý"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };
@@ -62,12 +62,12 @@ const VanBanDen = (): React.Fragment => {
       docId: record.documentId
     }
     let payload = {
-      status_staff_info_department: "Phong hanh chinh",
-      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-      status_staff_info_mobile: "84912000002",
-      status_staff_info_email: "ngoctram@nghean.vn",
-      status_status_code: ETrangThaiVanBan.DANG_XU_LY,
-      status_description: "Chờ Phân công xử lý"
+      statusStaffInfoDepartment: "Phong hanh chinh",
+      statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+      statusStaffInfoMobile: "84912000002",
+      statusStaffInfoEmail: "ngoctram@nghean.vn",
+      statusStatusCode: ETrangThaiVanBan.DANG_XU_LY,
+      statusDescription: "Chờ Phân công xử lý"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };
@@ -77,12 +77,12 @@ const VanBanDen = (): React.Fragment => {
       docId: record.documentId
     }
     let payload = {
-      status_staff_info_department: "Phong hanh chinh",
-      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-      status_staff_info_mobile: "84912000002",
-      status_staff_info_email: "ngoctram@nghean.vn",
-      status_status_code: ETrangThaiVanBan.DA_HOAN_THANH_XU_LY,
-      status_description: "Chờ Phân công xử lý"
+      statusStaffInfoDepartment: "Phong hanh chinh",
+      statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+      statusStaffInfoMobile: "84912000002",
+      statusStaffInfoEmail: "ngoctram@nghean.vn",
+      statusStatusCode: ETrangThaiVanBan.DA_HOAN_THANH_XU_LY,
+      statusDescription: "Chờ Phân công xử lý"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };
@@ -92,12 +92,12 @@ const VanBanDen = (): React.Fragment => {
       docId: record.documentId
     }
     let payload = {
-      status_staff_info_department: "Phong hanh chinh",
-      status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-      status_staff_info_mobile: "84912000002",
-      status_staff_info_email: "ngoctram@nghean.vn",
-      status_status_code: ETrangThaiVanBan.DA_THU_HOI,
-      status_description: "Da thu hoi"
+      statusStaffInfoDepartment: "Phong hanh chinh",
+      statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+      statusStaffInfoMobile: "84912000002",
+      statusStaffInfoEmail: "ngoctram@nghean.vn",
+      statusStatusCode: ETrangThaiVanBan.DA_THU_HOI,
+      statusDescription: "Da thu hoi"
     }
     vanbanModel.send_status_edoc(headers, payload, type);
   };
@@ -119,12 +119,12 @@ const VanBanDen = (): React.Fragment => {
       window.alert("Nghiệp vụ cập nhật chưa có!")
     } else {
       let payload = {
-        status_staff_info_department: "Phong hanh chinh",
-        status_staff_info_staff: "Nguyen Thi Ngoc Tram",
-        status_staff_info_mobile: "84912000002",
-        status_staff_info_email: "ngoctram@nghean.vn",
-        status_status_code: ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN,
-        status_description: "Đã từ chối tiếp nhận"
+        statusStaffInfoDepartment: "Phong hanh chinh",
+        statusStaffInfoStaff: "Nguyen Thi Ngoc Tram",
+        statusStaffInfoMobile: "84912000002",
+        statusStaffInfoEmail: "ngoctram@nghean.vn",
+        statusStatusCode: ETrangThaiVanBan.DA_TU_CHOI_TIEP_NHAN,
+        statusDescription: "Đã từ chối tiếp nhận"
       }
       vanbanModel.send_status_edoc(headers, payload, type);
     }

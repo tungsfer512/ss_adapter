@@ -46,12 +46,30 @@ public class DocumentStatusController {
             @RequestBody(required = true) Map<String, String> status_info) {
         try {
 
-            String status_staff_info_department = status_info.get("status_staff_info_department");
-            String status_staff_info_staff = status_info.get("status_staff_info_staff");
-            String status_staff_info_mobile = status_info.get("status_staff_info_mobile");
-            String status_staff_info_email = status_info.get("status_staff_info_email");
-            String status_status_code = status_info.get("status_status_code");
-            String status_description = status_info.get("status_description");
+            String status_staff_info_department = null;
+            String status_staff_info_staff = null;
+            String status_staff_info_mobile = null;
+            String status_staff_info_email = null;
+            String status_status_code = null;
+            String status_description = null;
+            if (status_info.containsKey("statusStaffInfoDepartment")) {
+                status_staff_info_department = status_info.get("statusStaffInfoDepartment");
+            }
+            if (status_info.containsKey("statusStaffInfoStaff")) {
+                status_staff_info_staff = status_info.get("statusStaffInfoStaff");
+            }
+            if (status_info.containsKey("statusStaffInfoMobile")) {
+                status_staff_info_mobile = status_info.get("statusStaffInfoMobile");
+            }
+            if (status_info.containsKey("status_StaffInfoEmail")) {
+                status_staff_info_email = status_info.get("status_StaffInfoEmail");
+            }
+            if (status_info.containsKey("statusStatusCode")) {
+                status_status_code = status_info.get("statusStatusCode");
+            }
+            if (status_info.containsKey("statusDescription")) {
+                status_description = status_info.get("statusDescription");
+            }
 
             Optional<Document> check_document = documentService.findByDocumentId(docId);
             if (!check_document.isPresent()) {
@@ -82,7 +100,7 @@ public class DocumentStatusController {
 
             String subsystem_code = checkTo.get().getOrganId().replace(':', '/');
             String xRoadClient = Utils.SS_ID.replace(':', '/');
-            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code + "/lienthongvanban/document/status/update";
+            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code + "/lienthongvanban/document/status/new";
             Map<String, String> headers = new HashMap<>();
             headers.put("docId", docId);
             headers.put("X-Road-Client", xRoadClient);

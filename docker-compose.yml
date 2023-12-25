@@ -1,31 +1,30 @@
 version: '3.8'
 
 networks:
-  ssadapter:
+  qlvb:
     driver: bridge
 
 services:
-  ssadapterdbhost:
-    container_name: ssadapterdbhost
-    hostname: ssadapterdbhost
+  qlvbdbhost:
+    container_name: qlvbdbhost
+    hostname: qlvbdbhost
     image: postgres:12
     env_file:
       - ./.env
     ports:
       - $POSTGRES_EXTERNAL_PORT:$POSTGRES_INTERNAL_PORT
     networks:
-      ssadapter:
-          null
+      qlvb: null
     restart: unless-stopped
     volumes:
       - $MOUNT_PGDATA:$PGDATA
-  ssadapterapi:
-    container_name: ssadapterapi
-    hostname: ssadapterapi
+  qlvbapi:
+    container_name: qlvbapi
+    hostname: qlvbapi
     env_file:
       - ./.env
     build:
-      context: ./ssadapter
+      context: ./base
       dockerfile: Dockerfile
       args:
         - SERVER_INTERNAL_PORT=$SERVER_INTERNAL_PORT
@@ -36,35 +35,15 @@ services:
         - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
         - API_WORK_DIR=$API_WORK_DIR
     depends_on:
-      - ssadapterdbhost
+      - qlvbdbhost
     ports:
       - $SERVER_EXTERNAL_PORT:$SERVER_INTERNAL_PORT
     networks:
-      ssadapter:
-          null
+      qlvb: null
     restart: unless-stopped
     volumes:
-      - ./ssadapter/src/main/:$API_WORK_DIR/src/main
-      - ./ssadapter/src/test:$API_WORK_DIR/src/test
-      - ./ssadapter/target:$API_WORK_DIR/target
-      - ./ssadapter/libs:$API_WORK_DIR/libs
-      - ./ssadapter/:$API_WORK_DIR
-  # ssadapterweb:
-  #   container_name: ssadapterweb
-  #   hostname: ssadapterweb
-  #   env_file:
-  #     - ./.env
-  #   build:
-  #     context: ./web
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - WEB_WORK_DIR=$WEB_WORK_DIR
-  #   ports:
-  #     - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
-  #   volumes:
-  #     - ./web/src:$WEB_WORK_DIR/src
-  #     - ./web/config:$WEB_WORK_DIR/config
-  #   networks:
-  #     ssadapter:
-  #         null
-  #   restart: unless-stopped
+      - ./base/src/main/:$API_WORK_DIR/src/main
+      - ./base/src/test:$API_WORK_DIR/src/test
+      - ./base/target:$API_WORK_DIR/target
+      - ./base/libs:$API_WORK_DIR/libs
+      - ./base/:$API_WORK_DIR

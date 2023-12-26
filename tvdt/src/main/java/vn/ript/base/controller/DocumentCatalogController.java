@@ -109,6 +109,7 @@ public class DocumentCatalogController {
             @RequestPart(name = "files", required = false) List<MultipartFile> files,
             @RequestPart(name = "json_data", required = true) String json_data) {
         try {
+            String from_id = null;
             String code_number = null;
             String code_notation = null;
             String promulgation_place = null;
@@ -124,6 +125,11 @@ public class DocumentCatalogController {
             Boolean enable = true;
 
             JSONObject jsonObject = new JSONObject(json_data);
+            if (jsonObject.has("fromId")) {
+                from_id = jsonObject.getString("fromId");
+            } else {
+                return CustomResponse.Response_data(400, "Thieu thong tin !!!");
+            }
             if (jsonObject.has("codeNumber")) {
                 code_number = jsonObject.getString("codeNumber");
             }
@@ -204,7 +210,7 @@ public class DocumentCatalogController {
                 }
             } else {
             }
-            Optional<Organization> checkFrom = organizationService.findByOrganId(Utils.SS_ID);
+            Optional<Organization> checkFrom = organizationService.findByOrganId(from_id);
             if (!checkFrom.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }

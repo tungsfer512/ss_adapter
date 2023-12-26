@@ -46,6 +46,54 @@ public class DocumentCatalogReportService {
                 .and(conditions.condition("organization.organId", organizationId, "equal"))
                 .and(conditions.condition("documentCatalog.id", documentCatalogId, "equal")), sort);
     }
+    
+    public List<DocumentCatalogReport> findSentWithConditions(
+            String status,
+            String organizationId,
+            String documentCatalogId,
+            String sortTimestamp) {
+
+        CustomSpecification<DocumentCatalogReport> conditions = new CustomSpecification<>();
+
+        List<Order> orders = new ArrayList<>();
+        if (sortTimestamp != null) {
+            if (sortTimestamp.equalsIgnoreCase("ASC")) {
+                orders.add(new Order(Sort.Direction.ASC, "timestamp"));
+            } else if (sortTimestamp.equalsIgnoreCase("DESC")) {
+                orders.add(new Order(Sort.Direction.DESC, "timestamp"));
+            }
+        }
+        Sort sort = Sort.by(orders);
+
+        return documentCatalogReportRepository.findAll(conditions
+                .and(conditions.condition("status", status, "equal"))
+                .and(conditions.condition("organization.organId", organizationId, "equal"))
+                .and(conditions.condition("documentCatalog.id", documentCatalogId, "equal")), sort);
+    }
+    
+    public List<DocumentCatalogReport> findReceivedWithConditions(
+            String status,
+            String organizationId,
+            String documentCatalogId,
+            String sortTimestamp) {
+
+        CustomSpecification<DocumentCatalogReport> conditions = new CustomSpecification<>();
+
+        List<Order> orders = new ArrayList<>();
+        if (sortTimestamp != null) {
+            if (sortTimestamp.equalsIgnoreCase("ASC")) {
+                orders.add(new Order(Sort.Direction.ASC, "timestamp"));
+            } else if (sortTimestamp.equalsIgnoreCase("DESC")) {
+                orders.add(new Order(Sort.Direction.DESC, "timestamp"));
+            }
+        }
+        Sort sort = Sort.by(orders);
+
+        return documentCatalogReportRepository.findAll(conditions
+                .and(conditions.condition("status", status, "equal"))
+                .and(conditions.condition("documentCatalog.from.organId", organizationId, "equal"))
+                .and(conditions.condition("documentCatalog.id", documentCatalogId, "equal")), sort);
+    }
 
     public Optional<DocumentCatalogReport> findById(Integer id) {
         return documentCatalogReportRepository.findById(id);

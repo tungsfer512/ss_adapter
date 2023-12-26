@@ -1,5 +1,6 @@
 package vn.ript.base.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,14 +29,21 @@ public class OrganizationController {
     OrganizationService organizationService;
 
     @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getOrganizationsList() {
+    public ResponseEntity<Map<String, Object>> getOrganizationsList(
+            @RequestHeader(name = "organizationId", required = false) String organizationId) {
         try {
-            List<Organization> organizations = organizationService.findAllExcept(Utils.SS_ID);
+            List<Organization> organizations = new ArrayList<>();
+            if (organizationId != null && !organizationId.equalsIgnoreCase("")) {
+                organizations = organizationService.findAllExcept(organizationId);
+            } else {
+                organizations = organizationService.findAll();
+            }
             return CustomResponse.Response_data(200, organizations);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
         }
     }
+
     @GetMapping("/{organId}")
     public ResponseEntity<Map<String, Object>> getOrganizationsByOrganId(@PathVariable String organId) {
         try {

@@ -1,0 +1,21 @@
+{
+    "fromId": "CS:GOV:MANAGESSMC:MANAGEMENT",
+    "codeNumber": "134",
+    "codeNotation": "NQ-CP",
+    "promulgationDatePlace": "Ha Noi",
+    "promulgationDate": "2023/12/23",
+    "documentTypeId": 1,
+    "subject": "ABC",
+    "content": "Mo ta nghi quyet 20",
+    "otherInfoPageAmount": 12,
+    "steeringType": 2,
+    "isPublic": false,
+    "enable": true,
+    "attachmentDescriptionList": [
+        "abc",
+        "xyz"
+    ],
+    "allowedOrganizationIds": [
+        "CS:GOV:MANAGESS2MC:ABCABC"
+    ]
+}

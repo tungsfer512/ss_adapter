@@ -46,7 +46,7 @@ import vn.ript.base.utils.Utils;
 import vn.ript.base.utils.minio.Minio;
 
 @RestController
-@RequestMapping("/api/lienthong/v1/document-catalog/documents")
+@RequestMapping("/api/lienthong/v1/document-catalogs")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class DocumentCatalogLienThongController {
 
@@ -79,9 +79,31 @@ public class DocumentCatalogLienThongController {
         }
     }
 
+    Boolean isDocumentCatalogRequestOwnerOrDocumentCatalogOwner(String organizationId,
+            DocumentCatalogRequest documentCatalogRequest) {
+        String ownerId = documentCatalogRequest.getOrganization().getOrganId();
+        String documentCatalogOwnerId = documentCatalogRequest.getDocumentCatalog().getFrom().getOrganId();
+        if (ownerId.equalsIgnoreCase(organizationId) || documentCatalogOwnerId.equalsIgnoreCase(organizationId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     Boolean isDocumentCatalogReportOwner(String organizationId, DocumentCatalogReport documentCatalogReport) {
         String ownerId = documentCatalogReport.getOrganization().getOrganId();
         if (ownerId.equalsIgnoreCase(organizationId)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    Boolean isDocumentCatalogReportOwnerOrDocumentCatalogOwner(String organizationId,
+            DocumentCatalogReport documentCatalogReport) {
+        String ownerId = documentCatalogReport.getOrganization().getOrganId();
+        String documentCatalogOwnerId = documentCatalogReport.getDocumentCatalog().getFrom().getOrganId();
+        if (ownerId.equalsIgnoreCase(organizationId) || documentCatalogOwnerId.equalsIgnoreCase(organizationId)) {
             return true;
         } else {
             return false;
@@ -562,9 +584,10 @@ public class DocumentCatalogLienThongController {
             Optional<DocumentCatalogRequest> checkDocumentCatalogRequests = documentCatalogRequestService.findById(id);
             DocumentCatalogRequest documentCatalogRequest = checkDocumentCatalogRequests.get();
             String interactorId = xRoadClient.replace('/', ':');
-            Boolean isOwnerInteract = isDocumentCatalogRequestOwner(interactorId, documentCatalogRequest);
+            Boolean isOwnerInteract = isDocumentCatalogRequestOwnerOrDocumentCatalogOwner(interactorId,
+                    documentCatalogRequest);
             if (!isOwnerInteract) {
-                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai la nguoi gui yeu cau !!!");
+                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai la nguoi gui yeu cau hoac chu so huu tai lieu !!!");
             }
             return CustomResponse.Response_data(200, documentCatalogRequest);
         } catch (Exception e) {
@@ -674,14 +697,24 @@ public class DocumentCatalogLienThongController {
 
     @GetMapping("/reports")
     public ResponseEntity<Map<String, Object>> getAllReportForAccessRightOfDocument(
+            @RequestParam(name = "type", required = true) String type,
             @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "documentCatalogId", required = false) String documentCatalogId,
             @RequestParam(name = "sortTimestamp", required = false) String sortTimestamp,
             @RequestHeader(name = "X-Road-Client", required = true) String xRoadClient) {
         try {
-            List<DocumentCatalogReport> documentCatalogReports = documentCatalogReportService
-                    .findWithConditions(status, xRoadClient, documentCatalogId, sortTimestamp);
-            return CustomResponse.Response_data(200, documentCatalogReports);
+            String interactorId = xRoadClient.replace('/', ':');
+            if (type.equalsIgnoreCase("sent")) {
+                List<DocumentCatalogReport> documentCatalogReports = documentCatalogReportService
+                        .findSentWithConditions(status, interactorId, documentCatalogId, sortTimestamp);
+                return CustomResponse.Response_data(200, documentCatalogReports);
+            } else if (type.equalsIgnoreCase("received")) {
+                List<DocumentCatalogReport> documentCatalogReports = documentCatalogReportService
+                        .findReceivedWithConditions(status, interactorId, documentCatalogId, sortTimestamp);
+                return CustomResponse.Response_data(200, documentCatalogReports);
+            } else {
+                return CustomResponse.Response_data(400, "Co loi xay ra");
+            }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
         }
@@ -695,9 +728,10 @@ public class DocumentCatalogLienThongController {
             Optional<DocumentCatalogReport> checkDocumentCatalogReports = documentCatalogReportService.findById(id);
             DocumentCatalogReport documentCatalogReport = checkDocumentCatalogReports.get();
             String interactorId = xRoadClient.replace('/', ':');
-            Boolean isOwnerInteract = isDocumentCatalogReportOwner(interactorId, documentCatalogReport);
+            Boolean isOwnerInteract = isDocumentCatalogReportOwnerOrDocumentCatalogOwner(interactorId,
+                    documentCatalogReport);
             if (!isOwnerInteract) {
-                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai la nguoi gui yeu cau !!!");
+                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai la nguoi gui bao cao hoac chu so huu tai lieu !!!");
             }
             return CustomResponse.Response_data(200, documentCatalogReport);
         } catch (Exception e) {
@@ -720,7 +754,7 @@ public class DocumentCatalogLienThongController {
             String interactorId = xRoadClient.replace('/', ':');
             Boolean isOwnerInteract = isDocumentCatalogOwner(interactorId, document);
             if (!isOwnerInteract) {
-                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai la nguoi gui yeu cau !!!");
+                return CustomResponse.Response_data(403, "Khong co quyen do ban khong phai chu so huu tai lieu !!!");
             }
             List<Organization> allowedOrganizations = document.getAllowedOrganizations();
             allowedOrganizations.add(organization);

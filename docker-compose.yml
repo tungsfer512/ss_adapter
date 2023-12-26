@@ -1,7 +1,7 @@
 version: '3.8'
 
 networks:
-  ssadapter:
+  tvdt:
     driver: bridge
 
 x-minio-common: &minio-common
@@ -20,26 +20,26 @@ x-minio-common: &minio-common
     retries: 5
 
 services:
-  ssadapterdbhost-tvdt:
-    container_name: ssadapterdbhost-tvdt
-    hostname: ssadapterdbhost-tvdt
+  tvdtdbhost:
+    container_name: tvdtdbhost
+    hostname: tvdtdbhost
     image: postgres:12
     env_file:
       - ./.env
     ports:
       - $POSTGRES_EXTERNAL_PORT:$POSTGRES_INTERNAL_PORT
     networks:
-      ssadapter: null
+      tvdt: null
     restart: unless-stopped
     volumes:
       - $MOUNT_PGDATA:$PGDATA
-  ssadapterapi-tvdt:
-    container_name: ssadapterapi-tvdt
-    hostname: ssadapterapi-tvdt
+  tvdtapi:
+    container_name: tvdtapi
+    hostname: tvdtapi
     env_file:
       - ./.env
     build:
-      context: ./ssadapter
+      context: ./tvdt
       dockerfile: Dockerfile
       args:
         - SERVER_INTERNAL_PORT=$SERVER_INTERNAL_PORT
@@ -50,36 +50,18 @@ services:
         - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
         - API_WORK_DIR=$API_WORK_DIR
     depends_on:
-      - ssadapterdbhost-tvdt
+      - tvdtdbhost
     ports:
       - $SERVER_EXTERNAL_PORT:$SERVER_INTERNAL_PORT
     networks:
-      ssadapter: null
+      tvdt: null
     restart: unless-stopped
     volumes:
-      - ./ssadapter/src/main/:$API_WORK_DIR/src/main
-      - ./ssadapter/src/test:$API_WORK_DIR/src/test
-      - ./ssadapter/target:$API_WORK_DIR/target
-      - ./ssadapter/libs:$API_WORK_DIR/libs
-      - ./ssadapter/:$API_WORK_DIR
-  ssadapterweb-tvdt:
-    container_name: ssadapterweb-tvdt
-    hostname: ssadapterweb-tvdt
-    env_file:
-      - ./.env
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-      args:
-        - WEB_WORK_DIR=$WEB_WORK_DIR
-    ports:
-      - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
-    volumes:
-      - ./web/src:$WEB_WORK_DIR/src
-      - ./web/config:$WEB_WORK_DIR/config
-    networks:
-      ssadapter: null
-    restart: unless-stopped
+      - ./tvdt/src/main/:$API_WORK_DIR/src/main
+      - ./tvdt/src/test:$API_WORK_DIR/src/test
+      - ./tvdt/target:$API_WORK_DIR/target
+      - ./tvdt/libs:$API_WORK_DIR/libs
+      - ./tvdt/:$API_WORK_DIR
 
   # starts 4 docker containers running minio server instances.
   # using nginx reverse proxy, load balancing, you can access
@@ -91,7 +73,7 @@ services:
       - ./minio/data/data1-1:/data1
       - ./minio/data/data1-2:/data2
     networks:
-      ssadapter: null
+      tvdt: null
 
   minio2:
     <<: *minio-common
@@ -100,7 +82,7 @@ services:
       - ./minio/data/data2-1:/data1
       - ./minio/data/data2-2:/data2
     networks:
-      ssadapter: null
+      tvdt: null
 
   minio3:
     <<: *minio-common
@@ -109,7 +91,7 @@ services:
       - ./minio/data/data3-1:/data1
       - ./minio/data/data3-2:/data2
     networks:
-      ssadapter: null
+      tvdt: null
 
   minio4:
     <<: *minio-common
@@ -118,7 +100,7 @@ services:
       - ./minio/data/data4-1:/data1
       - ./minio/data/data4-2:/data2
     networks:
-      ssadapter: null
+      tvdt: null
 
   nginx:
     image: nginx:1.19.2-alpine
@@ -134,4 +116,4 @@ services:
       - minio3
       - minio4
     networks:
-      ssadapter: null
+      tvdt: null

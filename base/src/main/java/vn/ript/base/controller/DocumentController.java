@@ -360,7 +360,7 @@ public class DocumentController {
                 }
                 String subsystem_code = to_id.replace(':', '/');
                 String xRoadClient = from_id.replace(':', '/');
-                String url = Utils.SS_BASE_URL + subsystem_code +
+                String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                         "/" + Utils.SS_QLVB_SERVICE_CODE + "/document/edocs/new";
                 Map<String, String> headers = new HashMap<>();
                 headers.put("from", from_id);

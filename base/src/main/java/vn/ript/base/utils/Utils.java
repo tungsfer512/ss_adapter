@@ -33,7 +33,7 @@ public class Utils {
     public static String SS_QLVB_SERVICE_CODE = System.getenv("SS_QLVB_SERVICE_CODE") != null
             ? System.getenv("SS_QLVB_SERVICE_CODE")
             : "";
-    public static String SS_BASE_URL = "https://" + SS_IP + "/r1/";
+    public static String SS_BASE_URL = "https://" + SS_IP;
 
     public static String UUID() {
         return UUID.randomUUID().toString();

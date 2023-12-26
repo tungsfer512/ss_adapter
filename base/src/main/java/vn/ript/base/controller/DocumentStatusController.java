@@ -98,7 +98,7 @@ public class DocumentStatusController {
 
             String subsystem_code = checkTo.get().getOrganId().replace(':', '/');
             String xRoadClient = tmp_from_id.replace(':', '/');
-            String url = Utils.SS_BASE_URL + subsystem_code +
+            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                         "/" + Utils.SS_QLVB_SERVICE_CODE + "/document/status/new";
             Map<String, String> headers = new HashMap<>();
             headers.put("docId", docId);

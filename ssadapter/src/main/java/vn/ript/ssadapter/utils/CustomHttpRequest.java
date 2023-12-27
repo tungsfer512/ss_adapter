@@ -77,9 +77,9 @@ public class CustomHttpRequest {
     public void add_query_param(String key, Object value) {
         if (value != null) {
             if (this.url.contains("?")) {
-                this.url += "&" + key + "=" + value.toString().toLowerCase();
+                this.url += "&" + key + "=" + value.toString();
             } else {
-                this.url += "?" + key + "=" + value.toString().toLowerCase();
+                this.url += "?" + key + "=" + value.toString();
             }
         }
     }

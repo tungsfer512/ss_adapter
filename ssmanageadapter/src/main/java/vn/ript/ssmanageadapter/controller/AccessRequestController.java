@@ -68,7 +68,7 @@ public class AccessRequestController {
             String fromId = Utils.SS_ID;
             String fromName = (String) body.get("fromName");
             String handleType = (String) body.get("handleType");
-            if (!handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
+            if (handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
                 toId = Utils.SS_MANAGE_ID;
             } else {
                 toId = (String) body.get("toId");
@@ -151,15 +151,30 @@ public class AccessRequestController {
         }
     }
 
-    @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAll(
+    @GetMapping("/sent")
+    public ResponseEntity<Map<String, Object>> getSentList(
+            @RequestParam(name = "toId", required = false) String toId,
+            @RequestParam(name = "type", required = false) String type,
+            @RequestParam(name = "status", required = false) String status,
+            @RequestParam(name = "sortCreateAt", required = false) String sortCreateAt) {
+        try {
+            List<AccessRequest> accessRequests = accessRequestService
+                    .findSentWithConditions(toId, type, status, sortCreateAt);
+            return CustomResponse.Response_data(200, accessRequests);
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+    
+    @GetMapping("/received")
+    public ResponseEntity<Map<String, Object>> getReceivedList(
             @RequestParam(name = "fromId", required = false) String fromId,
             @RequestParam(name = "type", required = false) String type,
             @RequestParam(name = "status", required = false) String status,
             @RequestParam(name = "sortCreateAt", required = false) String sortCreateAt) {
         try {
             List<AccessRequest> accessRequests = accessRequestService
-                    .findWithConditions(fromId, type, status, sortCreateAt);
+                    .findReceivedWithConditions(fromId, type, status, sortCreateAt);
             return CustomResponse.Response_data(200, accessRequests);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -197,7 +212,7 @@ public class AccessRequestController {
 
                 JSONArray jsonPostArray = new JSONArray();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", accessRequest.getFrom().getOrganId());
+                jsonObject.put("id", accessRequest.getFrom().getSsId());
                 jsonObject.put("name", accessRequest.getFromName());
                 jsonObject.put("service_client_type", "SUBSYSTEM");
                 jsonPostArray.put(jsonObject);
@@ -208,8 +223,8 @@ public class AccessRequestController {
                 CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
                 HttpResponse httpResponse = httpRequest.request(entity);
                 if (httpResponse.getStatusLine().getStatusCode() == 200) {
-                    String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
-                    String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
+                    String subsystem_code = accessRequest.getFrom().getSsId().replace(':', '/');
+                    String xRoadClient = accessRequest.getTo().getSsId().replace(':', '/');
                     String urlApprove = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                             "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                             + "/approve";
@@ -243,7 +258,7 @@ public class AccessRequestController {
 
                 JSONArray jsonPostArray = new JSONArray();
                 JSONObject jsonObject = new JSONObject();
-                jsonObject.put("id", accessRequest.getFrom().getOrganId());
+                jsonObject.put("id", accessRequest.getFrom().getSsId());
                 jsonObject.put("name", accessRequest.getFromName());
                 jsonObject.put("service_client_type", "SUBSYSTEM");
                 jsonPostArray.put(jsonObject);
@@ -254,8 +269,8 @@ public class AccessRequestController {
                 CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
                 HttpResponse httpResponse = httpRequest.request(entity);
                 if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                    String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
-                    String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
+                    String subsystem_code = accessRequest.getFrom().getSsId().replace(':', '/');
+                    String xRoadClient = accessRequest.getTo().getSsId().replace(':', '/');
                     String urlApprove = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                             "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                             + "/approve";
@@ -299,8 +314,8 @@ public class AccessRequestController {
                 return CustomResponse.Response_no_data(404);
             }
             AccessRequest accessRequest = checkAccessRequest.get();
-            String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
-            String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
+            String subsystem_code = accessRequest.getFrom().getSsId().replace(':', '/');
+            String xRoadClient = accessRequest.getTo().getSsId().replace(':', '/');
             String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                     "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                     + "/decline";

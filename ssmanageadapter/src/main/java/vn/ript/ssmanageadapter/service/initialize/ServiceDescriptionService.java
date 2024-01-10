@@ -18,14 +18,15 @@ public class ServiceDescriptionService {
     public List<ServiceDescription> findAll() {
         return serviceDescriptionRepository.findAll();
     }
-    
-    public List<ServiceDescription> findByOrganizationOrganId(String organId) {
-        return serviceDescriptionRepository.findByOrganizationOrganId(organId);
+
+    public List<ServiceDescription> findByOrganizationSsId(String ssId) {
+        return serviceDescriptionRepository.findByOrganizationSsId(ssId);
     }
 
     public ServiceDescription save(ServiceDescription serviceDescription) {
         if (serviceDescription.getId() != null) {
-            Optional<ServiceDescription> checkExistedServiceDescription = serviceDescriptionRepository.findById(serviceDescription.getId());
+            Optional<ServiceDescription> checkExistedServiceDescription = serviceDescriptionRepository
+                    .findById(serviceDescription.getId());
             if (checkExistedServiceDescription.isPresent()) {
                 ServiceDescription existedServiceDescription = checkExistedServiceDescription.get();
                 serviceDescription.setId(existedServiceDescription.getId());

@@ -91,10 +91,10 @@ public class ServiceCatalogController {
         try {
 
             Gson gson = new Gson();
-            // String xRoadClient = Utils.SS_ID.replace(':', '/');
-            // String subsystem_code = subsystemCode.replace(':', '/');
-            String xRoadClient = "CS/GOV/MANAGESS2MC/ABCABC";
-            String subsystem_code = "CS/GOV/MANAGESSMC/MANAGESSSUB2";
+            String xRoadClient = Utils.SS_ID.replace(':', '/');
+            String subsystem_code = subsystemCode.replace(':', '/');
+            // String xRoadClient = "CS/GOV/MANAGESS2MC/MANAGEMENT";
+            // String subsystem_code = "CS/GOV/MANAGESS2MC/ABCABC";
             String urlList = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/listMethods";
             String urlAllow = "https://" + Utils.SS_IP + "/r1/" + subsystem_code + "/allowedMethods";
 

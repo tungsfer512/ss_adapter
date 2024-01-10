@@ -173,7 +173,7 @@ public class ServiceDescriptionController {
                 Gson gson = new Gson();
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 Optional<Organization> checkOrganization = organizationService
-                        .findByOrganId(jsonObject.getString("client_id"));
+                        .findBySsId(jsonObject.getString("client_id"));
                 if (checkOrganization.isPresent()) {
                     Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService.findBySsId(jsonObject.getString("id"));
                     if (checkServiceDescription.isPresent()) {

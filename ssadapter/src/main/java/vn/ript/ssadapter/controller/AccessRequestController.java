@@ -87,8 +87,8 @@ public class AccessRequestController {
                 externalEndpointId = Integer.parseInt((String) body.get("externalEndpointId"));
             }
 
-            Optional<Organization> checkFrom = organizationService.findByOrganId(fromId);
-            Optional<Organization> checkTo = organizationService.findByOrganId(toId);
+            Optional<Organization> checkFrom = organizationService.findBySsId(fromId);
+            Optional<Organization> checkTo = organizationService.findBySsId(toId);
             if (!checkFrom.isPresent() || !checkTo.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }

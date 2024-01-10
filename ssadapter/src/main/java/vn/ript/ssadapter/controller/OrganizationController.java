@@ -35,10 +35,10 @@ public class OrganizationController {
             return CustomResponse.Response_data(500, e);
         }
     }
-    @GetMapping("/{organId}")
-    public ResponseEntity<Map<String, Object>> getOrganizationsByOrganId(@PathVariable String organId) {
+    @GetMapping("/{ssId}")
+    public ResponseEntity<Map<String, Object>> getOrganizationsBySsId(@PathVariable String organId) {
         try {
-            Optional<Organization> checkOrganization = organizationService.findByOrganId(organId);
+            Optional<Organization> checkOrganization = organizationService.findBySsId(organId);
             if (!checkOrganization.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }

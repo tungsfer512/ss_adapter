@@ -21,7 +21,7 @@ public class OrganizationService {
 
     public Organization save(Organization organization) {
         if (organization.getId() != null && !organization.getId().equalsIgnoreCase("")) {
-            Optional<Organization> checkExistedOrganization = organizationRepository.findById(organization.getId());
+            Optional<Organization> checkExistedOrganization = organizationRepository.findBySsId(organization.getSsId());
             if (checkExistedOrganization.isPresent()) {
                 Organization existedOrganization = checkExistedOrganization.get();
                 organization.setId(existedOrganization.getId());
@@ -43,9 +43,12 @@ public class OrganizationService {
         return organizationRepository.findById(id);
     }
 
-    
     public void deleteByOrganId(String organId) {
         organizationRepository.deleteByOrganId(organId);
+    }
+
+    public void deleteBySsId(String ssId) {
+        organizationRepository.deleteBySsId(ssId);
     }
 
     public Optional<Organization> findByOrganId(String organId) {

@@ -43,9 +43,12 @@ public class OrganizationService {
         return organizationRepository.findById(id);
     }
 
-    
     public void deleteByOrganId(String organId) {
         organizationRepository.deleteByOrganId(organId);
+    }
+    
+    public void deleteBySsId(String ssId) {
+        organizationRepository.deleteBySsId(ssId);
     }
 
     public Optional<Organization> findByOrganId(String organId) {

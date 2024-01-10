@@ -1,4 +1,4 @@
-package vn.ript.ssmanageadapter.controller;
+package vn.ript.ssmanageadapter.controller.apilienthong;
 
 import java.util.List;
 import java.util.Map;
@@ -20,9 +20,9 @@ import vn.ript.ssmanageadapter.utils.CustomResponse;
 import vn.ript.ssmanageadapter.utils.Utils;
 
 @RestController
-@RequestMapping("/api/v1/organizations")
+@RequestMapping("/api/lienthong/v1/organizations")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class OrganizationController {
+public class OrganizationLienThongController {
     @Autowired
     OrganizationService organizationService;
 
@@ -71,20 +71,4 @@ public class OrganizationController {
             return CustomResponse.Response_data(500, e);
         }
     }
-
-    // @DeleteMapping("/")
-    // public ResponseEntity<Map<String, Object>> deleteOrganization(
-    // @RequestHeader(name = "OrganizationCode", required = true) String
-    // organizationCode) {
-    // try {
-    // if (organizationCode == null) {
-    // return Response.Response_500();
-    // } else {
-    // organizationService.deleteOrganizationByCode(organizationCode);
-    // return Response.Response_200();
-    // }
-    // } catch (Exception e) {
-    // return Response.Response_500(e);
-    // }
-    // }
 }

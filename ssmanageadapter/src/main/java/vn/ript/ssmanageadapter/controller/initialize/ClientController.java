@@ -717,7 +717,7 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 JSONObject jsonObject = new JSONObject(jsonResponse);
                 Optional<Organization> checkOrganization = organizationService
-                        .findByOrganId(jsonObject.getString("client_id"));
+                        .findBySsId(jsonObject.getString("client_id"));
                 if (checkOrganization.isPresent()) {
                     ServiceDescription serviceDescription = new ServiceDescription();
                     serviceDescription.setSsId(jsonObject.getString("id"));

@@ -19,8 +19,8 @@ public class ServiceDescriptionService {
         return serviceDescriptionRepository.findAll();
     }
     
-    public List<ServiceDescription> findByOrganizationOrganId(String organId) {
-        return serviceDescriptionRepository.findByOrganizationOrganId(organId);
+    public List<ServiceDescription> findByOrganizationSsId(String ssId) {
+        return serviceDescriptionRepository.findByOrganizationSsId(ssId);
     }
 
     public ServiceDescription save(ServiceDescription serviceDescription) {

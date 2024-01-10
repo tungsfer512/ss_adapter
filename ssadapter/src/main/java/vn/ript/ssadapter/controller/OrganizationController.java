@@ -36,9 +36,9 @@ public class OrganizationController {
         }
     }
     @GetMapping("/{ssId}")
-    public ResponseEntity<Map<String, Object>> getOrganizationsBySsId(@PathVariable String organId) {
+    public ResponseEntity<Map<String, Object>> getOrganizationsBySsId(@PathVariable String ssId) {
         try {
-            Optional<Organization> checkOrganization = organizationService.findBySsId(organId);
+            Optional<Organization> checkOrganization = organizationService.findBySsId(ssId);
             if (!checkOrganization.isPresent()) {
                 return CustomResponse.Response_data(404, "Khong tim thay don vi");
             }

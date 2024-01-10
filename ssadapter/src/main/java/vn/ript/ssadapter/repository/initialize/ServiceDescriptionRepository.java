@@ -10,5 +10,5 @@ import vn.ript.ssadapter.model.initialize.ServiceDescription;
 
 public interface ServiceDescriptionRepository extends JpaRepository<ServiceDescription, Integer> {
     Optional<ServiceDescription> findBySsId(@Param("ssId") String ssIs);
-    List<ServiceDescription> findByOrganizationOrganId(@Param("organId") String organId);
+    List<ServiceDescription> findByOrganizationSsId(@Param("ssId") String ssId);
 }

@@ -603,7 +603,7 @@ public class ClientController {
                 Gson gson = new Gson();
 
                 List<Object> objectServiceDescriptions = new JSONArray(jsonResponse).toList();
-                List<ServiceDescription> serviceDescriptions = serviceDescriptionService.findByOrganizationOrganId(id);
+                List<ServiceDescription> serviceDescriptions = serviceDescriptionService.findByOrganizationSsId(id);
                 JSONArray jsonServiceDescriptions = new JSONArray();
                 for (Object objectServiceDescription : objectServiceDescriptions) {
                     JSONObject jsonServiceDescription = new JSONObject(gson.toJson(objectServiceDescription));

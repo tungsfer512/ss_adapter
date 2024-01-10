@@ -1,6 +1,5 @@
 package vn.ript.ssadapter.controller;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import org.json.JSONObject;

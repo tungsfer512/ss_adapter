@@ -10,6 +10,9 @@ public class Constants {
     private static HashMap<String, LOAI_FILE> LOAI_FILE_MAP = new HashMap<>();
     private static HashMap<String, TRANG_THAI_YEU_CAU_THU_VIEN> TRANG_THAI_YEU_CAU_THU_VIEN_MAP = new HashMap<>();
     private static HashMap<String, TRANG_THAI_BAO_CAO_THU_VIEN> TRANG_THAI_BAO_CAO_THU_VIEN_MAP = new HashMap<>();
+    private static HashMap<String, TRANG_THAI_YEU_CAU_CAP_QUYEN> TRANG_THAI_YEU_CAU_CAP_QUYEN_MAP = new HashMap<>();
+    private static HashMap<String, LOAI_YEU_CAU_CAP_QUYEN> LOAI_YEU_CAU_CAP_QUYEN_MAP = new HashMap<>();
+    private static HashMap<String, LOAI_XU_LY_YEU_CAU_CAP_QUYEN> LOAI_XU_LY_YEU_CAU_CAP_QUYEN_MAP = new HashMap<>();
 
     public enum TRANG_THAI_VAN_BAN {
         CHO_TIEP_NHAN("01",
@@ -219,6 +222,86 @@ public class Constants {
 
         public TRANG_THAI_BAO_CAO_THU_VIEN getByMa(String ma) {
             return TRANG_THAI_BAO_CAO_THU_VIEN_MAP.get(ma);
+        }
+
+    }
+    public enum LOAI_XU_LY_YEU_CAU_CAP_QUYEN {
+        MANAGE("MANAGE", "SS Manage xử lý yêu cầu"),
+        OWNER("OWNER", "SS cung cấp service/endpoint xử lý yêu cầu");
+
+        private final String ma;
+        private final String moTa;
+
+        private LOAI_XU_LY_YEU_CAU_CAP_QUYEN(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            LOAI_XU_LY_YEU_CAU_CAP_QUYEN_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public LOAI_XU_LY_YEU_CAU_CAP_QUYEN getByMa(String ma) {
+            return LOAI_XU_LY_YEU_CAU_CAP_QUYEN_MAP.get(ma);
+        }
+
+    }
+    public enum TRANG_THAI_YEU_CAU_CAP_QUYEN {
+        PENDING("PENDING", "Yêu cầu đang chờ xử lý"),
+        APPROVED("APPROVED", "Đã chấp thuận yêu cầu"),
+        DECLINED("DECLINED", "Đã từ chối yêu cầu");
+
+        private final String ma;
+        private final String moTa;
+
+        private TRANG_THAI_YEU_CAU_CAP_QUYEN(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            TRANG_THAI_YEU_CAU_CAP_QUYEN_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public TRANG_THAI_YEU_CAU_CAP_QUYEN getByMa(String ma) {
+            return TRANG_THAI_YEU_CAU_CAP_QUYEN_MAP.get(ma);
+        }
+
+    }
+
+    public enum LOAI_YEU_CAU_CAP_QUYEN {
+        SERVICE("SERVICE", "SERVICE"),
+        ENDPOINT("ENDPOINT", "ENDPOINT");
+
+        private final String ma;
+        private final String moTa;
+
+        private LOAI_YEU_CAU_CAP_QUYEN(final String ma, final String moTa) {
+            this.ma = ma;
+            this.moTa = moTa;
+            LOAI_YEU_CAU_CAP_QUYEN_MAP.put(ma, this);
+        }
+
+        public String ma() {
+            return this.ma;
+        }
+
+        public String moTa() {
+            return this.moTa;
+        }
+
+        public LOAI_YEU_CAU_CAP_QUYEN getByMa(String ma) {
+            return LOAI_YEU_CAU_CAP_QUYEN_MAP.get(ma);
         }
 
     }

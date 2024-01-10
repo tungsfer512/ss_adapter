@@ -49,7 +49,15 @@ public class Utils {
             : "";
     public static String SS_CONFIG_URL = "https://" + SS_IP + ":4000/api/v1";
     public static String SS_BASE_URL = "https://" + SS_IP;
+    public static String SS_MANAGE_ID = System.getenv("SS_MANAGE_ID") != null ? System.getenv("SS_MANAGE_ID") : "";
+    public static String SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE = System
+            .getenv("SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE") != null
+                    ? System.getenv("SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE")
+                    : "";
     public static String TVDT_ID = System.getenv("TVDT_ID") != null ? System.getenv("TVDT_ID") : "";
+    public static String TVDT_SERVICE_CODE = System.getenv("TVDT_SERVICE_CODE") != null
+            ? System.getenv("TVDT_SERVICE_CODE")
+            : "";
 
     public static String UUID() {
         return UUID.randomUUID().toString();

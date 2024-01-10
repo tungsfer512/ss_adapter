@@ -68,7 +68,7 @@ public class AccessRequestController {
             String fromId = Utils.SS_ID;
             String fromName = (String) body.get("fromName");
             String handleType = (String) body.get("handleType");
-            if (!handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
+            if (handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
                 toId = Utils.SS_MANAGE_ID;
             } else {
                 toId = (String) body.get("toId");

@@ -66,7 +66,7 @@ public class OrganizationLienThongController {
             organization.setFax(body.get("fax").toString());
             organization.setWebsite(body.get("website").toString());
             Organization organizationRes = organizationService.save(organization);
-            return CustomResponse.Response_data(200, organizationRes);
+            return CustomResponse.Response_data(201, organizationRes);
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
         }

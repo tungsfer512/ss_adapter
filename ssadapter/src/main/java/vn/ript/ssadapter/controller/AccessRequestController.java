@@ -96,7 +96,7 @@ public class AccessRequestController {
             String subsystem_code = toId.replace(':', '/');
             String xRoadClient = fromId.replace(':', '/');
             String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
-                    "/" + Utils.SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE;
+                    "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests";
             Map<String, String> headers = new HashMap<>();
             headers.put("X-Road-Client", xRoadClient);
 
@@ -211,7 +211,7 @@ public class AccessRequestController {
                     String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
                     String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
                     String urlApprove = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
-                            "/" + Utils.SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE + "/" + accessRequest.getExternalId()
+                            "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                             + "/approve";
                     Map<String, String> headersApprove = new HashMap<>();
                     headersApprove.put("X-Road-Client", xRoadClient);
@@ -257,7 +257,7 @@ public class AccessRequestController {
                     String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
                     String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
                     String urlApprove = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
-                            "/" + Utils.SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE + "/" + accessRequest.getExternalId()
+                            "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                             + "/approve";
                     Map<String, String> headersApprove = new HashMap<>();
                     headersApprove.put("X-Road-Client", xRoadClient);
@@ -302,7 +302,7 @@ public class AccessRequestController {
             String subsystem_code = accessRequest.getFrom().getOrganId().replace(':', '/');
             String xRoadClient = accessRequest.getTo().getOrganId().replace(':', '/');
             String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
-                    "/" + Utils.SS_MANAGE_ACCESS_REQUEST_SERVICE_CODE + "/" + accessRequest.getExternalId()
+                    "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests/" + accessRequest.getExternalId()
                     + "/decline";
             Map<String, String> headers = new HashMap<>();
             headers.put("X-Road-Client", xRoadClient);

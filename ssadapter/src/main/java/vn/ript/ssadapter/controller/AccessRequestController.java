@@ -11,7 +11,10 @@ import org.apache.http.entity.StringEntity;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,6 +43,11 @@ public class AccessRequestController {
     AccessRequestService accessRequestService;
     @Autowired
     OrganizationService organizationService;
+    @Autowired
+    JavaMailSender javaMailSender;
+
+    @Value("${spring.mail.username}")
+    private String sender;
 
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> add(
@@ -125,7 +133,14 @@ public class AccessRequestController {
                 accessRequest.setDeclinedReason(null);
 
                 AccessRequest accessRequestRes = accessRequestService.saveAccessRequest(accessRequest);
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
 
+                mailMessage.setFrom(sender);
+                mailMessage.setSubject("YÊU CẦU XIN CẤP QUYỂN MỚI");
+                mailMessage.setTo(accessRequest.getTo().getEmail());
+                mailMessage.setText("Có yêu cầu xin cấp quyền mới!");
+
+                javaMailSender.send(mailMessage);
                 return CustomResponse.Response_data(201, accessRequestRes);
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
@@ -173,7 +188,8 @@ public class AccessRequestController {
             }
             AccessRequest accessRequest = checkAccessRequest.get();
             if (accessRequest.getType().equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.SERVICE.ma())) {
-                String url = Utils.SS_CONFIG_URL + "/services/" + accessRequest.getService().getSsId() + "/service-clients";
+                String url = Utils.SS_CONFIG_URL + "/services/" + accessRequest.getService().getSsId()
+                        + "/service-clients";
                 Map<String, String> headers = Map.ofEntries(
                         Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                         Map.entry("Content-Type", "application/json"),
@@ -218,7 +234,8 @@ public class AccessRequestController {
             } else if (accessRequest.getType().equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.ENDPOINT.ma())) {
                 System.out.println(accessRequest);
                 System.out.println(accessRequest.getEndpoint());
-                String url = Utils.SS_CONFIG_URL + "/endpoints/" + accessRequest.getEndpoint().getSsId() + "/service-clients";
+                String url = Utils.SS_CONFIG_URL + "/endpoints/" + accessRequest.getEndpoint().getSsId()
+                        + "/service-clients";
                 Map<String, String> headers = Map.ofEntries(
                         Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                         Map.entry("Content-Type", "application/json"),

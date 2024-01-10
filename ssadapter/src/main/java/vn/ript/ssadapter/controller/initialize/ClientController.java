@@ -1,6 +1,7 @@
 package vn.ript.ssadapter.controller.initialize;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,27 +127,107 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                System.out.println("-------------------------------1");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                System.out.println("-------------------------------2");
                 JSONObject jsonObject = new JSONObject(jsonResponse);
-                Organization organization = new Organization(
-                        Utils.UUID(),
-                        adapter_data_tmp.get("organId"),
-                        jsonObject.getString("id"),
-                        adapter_data_tmp.get("organizationInCharge"),
-                        adapter_data_tmp.get("organName"),
-                        adapter_data_tmp.get("organAdd"),
-                        adapter_data_tmp.get("email"),
-                        adapter_data_tmp.get("telephone"),
-                        adapter_data_tmp.get("fax"),
-                        adapter_data_tmp.get("website"));
-                organizationService.save(organization);
-                jsonObject.put("adapter_data", organization);
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
+                System.out.println("-------------------------------3");
+                String organId = adapter_data_tmp.get("organId");
+                System.out.println("-------------------------------4");
+                String ssId = jsonObject.getString("id");
+                System.out.println("-------------------------------5");
+                String organizationInCharge = adapter_data_tmp.get("organizationInCharge");
+                System.out.println("-------------------------------6");
+                String organName = adapter_data_tmp.get("organName");
+                System.out.println("-------------------------------7");
+                String organAdd = adapter_data_tmp.get("organAdd");
+                System.out.println("-------------------------------8");
+                String email = adapter_data_tmp.get("email");
+                System.out.println("-------------------------------9");
+                String telephone = adapter_data_tmp.get("telephone");
+                System.out.println("-------------------------------10");
+                String fax = adapter_data_tmp.get("fax");
+                System.out.println("-------------------------------11");
+                String website = adapter_data_tmp.get("website");
+                System.out.println("-------------------------------12");
+                String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
+                System.out.println("-------------------------------13");
+                String xRoadClient = Utils.SS_ID.replace(':', '/');
+                System.out.println("-------------------------------14");
+                String urlManage = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
+                        "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
+                System.out.println("-------------------------------15");
+                Map<String, String> headersManage = new HashMap<>();
+                System.out.println("-------------------------------16");
+                headersManage.put("X-Road-Client", xRoadClient);
+                System.out.println("-------------------------------17");
+
+                System.out.println("-------------------------------18");
+                JSONObject jsonPostObjectManage = new JSONObject();
+                System.out.println("-------------------------------19");
+                jsonPostObjectManage.put("organId", organId);
+                System.out.println("-------------------------------20");
+                jsonPostObjectManage.put("ssId", ssId);
+                System.out.println("-------------------------------21");
+                jsonPostObjectManage.put("organizationInCharge", organizationInCharge);
+                System.out.println("-------------------------------22");
+                jsonPostObjectManage.put("organName", organName);
+                System.out.println("-------------------------------23");
+                jsonPostObjectManage.put("organAdd", organAdd);
+                System.out.println("-------------------------------24");
+                jsonPostObjectManage.put("email", email);
+                System.out.println("-------------------------------25");
+                jsonPostObjectManage.put("telephone", telephone);
+                System.out.println("-------------------------------26");
+                jsonPostObjectManage.put("fax", fax);
+                System.out.println("-------------------------------27");
+                jsonPostObjectManage.put("website", website);
+                System.out.println("-------------------------------28");
+
+                StringEntity entityManage = new StringEntity(jsonPostObjectManage.toString(),
+                        ContentType.APPLICATION_JSON);
+                System.out.println("-------------------------------29");
+
+                CustomHttpRequest httpRequestManage = new CustomHttpRequest("POST", urlManage, headersManage);
+                System.out.println("-------------------------------30");
+                HttpResponse httpResponseManage = httpRequestManage.request(entityManage);
+                System.out.println("-------------------------------31");
+                if (httpResponseManage.getStatusLine().getStatusCode() == 201) {
+                    System.out.println("-------------------------------32");
+                    Organization organization = new Organization();
+                    System.out.println("-------------------------------33");
+                    String UUID = Utils.UUID();
+                    System.out.println("-------------------------------34");
+                    organization.setId(UUID);
+                    System.out.println("-------------------------------35");
+                    organization.setOrganId(organId);
+                    organization.setSsId(ssId);
+                    organization.setOrganizationInCharge(organizationInCharge);
+                    organization.setOrganName(organName);
+                    organization.setOrganAdd(organAdd);
+                    organization.setEmail(email);
+                    organization.setTelephone(telephone);
+                    organization.setFax(fax);
+                    organization.setWebsite(website);
+                    System.out.println("-------------------------------36");
+                    Organization organizationRes = organizationService.save(organization);
+                    System.out.println("-------------------------------37");
+                    jsonObject.put("adapter_data", organizationRes);
+                    System.out.println("-------------------------------38");
+                    return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
+                            jsonObject.toMap());
+                } else {
+                    System.out.println("-------------------------------xxx1");
+                    return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
+                            httpResponseManage.toString());
+                }
             } else {
+                System.out.println("-------------------------------xxx2");
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.toString());
             }
         } catch (Exception e) {
+            System.out.println("-------------------------------xxx3");
             return CustomResponse.Response_data(500, e.toString());
         }
     }

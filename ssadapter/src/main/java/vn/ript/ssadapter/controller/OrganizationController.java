@@ -1,9 +1,14 @@
 package vn.ript.ssadapter.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import vn.ript.ssadapter.model.Organization;
 import vn.ript.ssadapter.service.OrganizationService;
+import vn.ript.ssadapter.utils.CustomHttpRequest;
 import vn.ript.ssadapter.utils.CustomResponse;
 import vn.ript.ssadapter.utils.Utils;
 
@@ -35,6 +41,7 @@ public class OrganizationController {
             return CustomResponse.Response_data(500, e);
         }
     }
+
     @GetMapping("/{ssId}")
     public ResponseEntity<Map<String, Object>> getOrganizationsBySsId(@PathVariable String ssId) {
         try {
@@ -53,19 +60,57 @@ public class OrganizationController {
             @RequestBody Map<String, Object> body) {
         try {
             Organization organization = new Organization();
-            String UUID = Utils.UUID();
-            organization.setId(UUID);
-            organization.setOrganId(body.get("organId").toString());
-            organization.setSsId(body.get("ssId").toString());
-            organization.setOrganizationInCharge(body.get("organizationInCharge").toString());
-            organization.setOrganName(body.get("organName").toString());
-            organization.setOrganAdd(body.get("organAdd").toString());
-            organization.setEmail(body.get("email").toString());
-            organization.setTelephone(body.get("telephone").toString());
-            organization.setFax(body.get("fax").toString());
-            organization.setWebsite(body.get("website").toString());
-            Organization organizationRes = organizationService.save(organization);
-            return CustomResponse.Response_data(200, organizationRes);
+            String organId = body.get("organId").toString();
+            String ssId = body.get("ssId").toString();
+            String organizationInCharge = body.get("organizationInCharge").toString();
+            String organName = body.get("organName").toString();
+            String organAdd = body.get("organAdd").toString();
+            String email = body.get("email").toString();
+            String telephone = body.get("telephone").toString();
+            String fax = body.get("fax").toString();
+            String website = body.get("website").toString();
+
+            String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
+            String xRoadClient = Utils.SS_ID.replace(':', '/');
+            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
+                    "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
+            Map<String, String> headers = new HashMap<>();
+            headers.put("X-Road-Client", xRoadClient);
+
+            JSONObject jsonPostObject = new JSONObject();
+            jsonPostObject.put("organId", organId);
+            jsonPostObject.put("ssId", ssId);
+            jsonPostObject.put("organizationInCharge", organizationInCharge);
+            jsonPostObject.put("organName", organName);
+            jsonPostObject.put("organAdd", organAdd);
+            jsonPostObject.put("email", email);
+            jsonPostObject.put("telephone", telephone);
+            jsonPostObject.put("fax", fax);
+            jsonPostObject.put("website", website);
+
+            StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+
+            CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
+            HttpResponse httpResponse = httpRequest.request(entity);
+            if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                
+                String UUID = Utils.UUID();
+                organization.setId(UUID);
+                organization.setOrganId(organId);
+                organization.setSsId(ssId);
+                organization.setOrganizationInCharge(organizationInCharge);
+                organization.setOrganName(organName);
+                organization.setOrganAdd(organAdd);
+                organization.setEmail(email);
+                organization.setTelephone(telephone);
+                organization.setFax(fax);
+                organization.setWebsite(website);
+                Organization organizationRes = organizationService.save(organization);
+                return CustomResponse.Response_data(201, organizationRes);
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.toString());
+            }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
         }

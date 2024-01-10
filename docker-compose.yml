@@ -1,31 +1,31 @@
 version: '3.8'
 
 networks:
-  ssadapter:
+  ssmanageadapter:
     driver: bridge
 
 services:
-  ssadapterdbhost:
-    container_name: ssadapterdbhost
-    hostname: ssadapterdbhost
+  ssmanageadapterdbhost:
+    container_name: ssmanageadapterdbhost
+    hostname: ssmanageadapterdbhost
     image: postgres:12
     env_file:
       - ./.env
     ports:
       - $POSTGRES_EXTERNAL_PORT:$POSTGRES_INTERNAL_PORT
     networks:
-      ssadapter:
+      ssmanageadapter:
           null
     restart: unless-stopped
     volumes:
       - $MOUNT_PGDATA:$PGDATA
-  ssadapterapi:
-    container_name: ssadapterapi
-    hostname: ssadapterapi
+  ssmanageadapterapi:
+    container_name: ssmanageadapterapi
+    hostname: ssmanageadapterapi
     env_file:
       - ./.env
     build:
-      context: ./ssadapter
+      context: ./ssmanageadapter
       dockerfile: Dockerfile
       args:
         - SERVER_INTERNAL_PORT=$SERVER_INTERNAL_PORT
@@ -42,22 +42,22 @@ services:
         - MAIL_PROPERTIES_MAIL_SMTP_AUTH=$MAIL_PROPERTIES_MAIL_SMTP_AUTH
         - MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=$MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
     depends_on:
-      - ssadapterdbhost
+      - ssmanageadapterdbhost
     ports:
       - $SERVER_EXTERNAL_PORT:$SERVER_INTERNAL_PORT
     networks:
-      ssadapter:
+      ssmanageadapter:
           null
     restart: unless-stopped
     volumes:
-      - ./ssadapter/src/main/:$API_WORK_DIR/src/main
-      - ./ssadapter/src/test:$API_WORK_DIR/src/test
-      - ./ssadapter/target:$API_WORK_DIR/target
-      - ./ssadapter/libs:$API_WORK_DIR/libs
-      - ./ssadapter/:$API_WORK_DIR
-  ssadapterweb:
-    container_name: ssadapterweb
-    hostname: ssadapterweb
+      - ./ssmanageadapter/src/main/:$API_WORK_DIR/src/main
+      - ./ssmanageadapter/src/test:$API_WORK_DIR/src/test
+      - ./ssmanageadapter/target:$API_WORK_DIR/target
+      - ./ssmanageadapter/libs:$API_WORK_DIR/libs
+      - ./ssmanageadapter/:$API_WORK_DIR
+  ssmanageadapterweb:
+    container_name: ssmanageadapterweb
+    hostname: ssmanageadapterweb
     env_file:
       - ./.env
     build:
@@ -71,6 +71,6 @@ services:
       - ./web/src:$WEB_WORK_DIR/src
       - ./web/config:$WEB_WORK_DIR/config
     networks:
-      ssadapter:
+      ssmanageadapter:
           null
     restart: unless-stopped

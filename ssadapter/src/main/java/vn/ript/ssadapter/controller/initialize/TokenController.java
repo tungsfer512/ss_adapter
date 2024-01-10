@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -59,6 +60,71 @@ public class TokenController {
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.toString());
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<Map<String, Object>> editById(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Object> body) {
+        try {
+            if (!body.containsKey("name")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+            String name = (String) body.get("name");
+            String url = Utils.SS_CONFIG_URL + "/tokens/" + id;
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/json"));
+            JSONObject jsonPostObject = new JSONObject();
+            jsonPostObject.put("name", name);
+
+            StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+
+            CustomHttpRequest httpRequest = new CustomHttpRequest("PATCH", url, headers);
+            HttpResponse httpResponse = httpRequest.request(entity);
+            if (httpResponse.getStatusLine().getStatusCode() == 200) {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
+            } else {
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        httpResponse.toString());
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
+    @PutMapping("/{id}/pin")
+    public ResponseEntity<Map<String, Object>> changePinById(
+            @PathVariable Integer id,
+            @RequestBody Map<String, Object> body) {
+        try {
+            if (!body.containsKey("old_pin") || !body.containsKey("new_pin")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+            String old_pin = (String) body.get("old_pin");
+            String new_pin = (String) body.get("new_pin");
+            String url = Utils.SS_CONFIG_URL + "/tokens/" + id + "/pin";
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/json"));
+            JSONObject jsonPostObject = new JSONObject();
+            jsonPostObject.put("old_pin", old_pin);
+            jsonPostObject.put("new_pin", new_pin);
+
+            StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+
+            CustomHttpRequest httpRequest = new CustomHttpRequest("PUT", url, headers);
+            HttpResponse httpResponse = httpRequest.request(entity);
+            if (httpResponse.getStatusLine().getStatusCode() == 204) {
+                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         httpResponse.toString());
@@ -195,8 +261,8 @@ public class TokenController {
             String ca_name = (String) csr_generate_request_tmp.get("ca_name");
             String csr_format = (String) csr_generate_request_tmp.get("csr_format");
             Map<String, String> subject_field_values_tmp = (Map<String, String>) csr_generate_request_tmp
-            .get("subject_field_values");
-            
+                    .get("subject_field_values");
+
             JSONObject subject_field_values = new JSONObject();
             subject_field_values.put("C", subject_field_values_tmp.get("C"));
             subject_field_values.put("CN", subject_field_values_tmp.get("CN"));
@@ -212,11 +278,11 @@ public class TokenController {
                 String member_id = (String) csr_generate_request_tmp.get("member_id");
                 csr_generate_request.put("member_id", member_id);
             }
-            
+
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("key_label", key_label);
             jsonPostObject.put("csr_generate_request", csr_generate_request);
-            
+
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
 
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);

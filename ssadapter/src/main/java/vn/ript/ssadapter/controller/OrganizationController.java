@@ -8,6 +8,7 @@ import java.util.Optional;
 import org.apache.http.HttpResponse;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.util.EntityUtils;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -59,10 +60,22 @@ public class OrganizationController {
     public ResponseEntity<Map<String, Object>> registerOrganization(
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("organId") ||
+                    !body.containsKey("organName") ||
+                    !body.containsKey("organAdd") ||
+                    !body.containsKey("email") ||
+                    !body.containsKey("telephone") ||
+                    !body.containsKey("fax") ||
+                    !body.containsKey("website")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             Organization organization = new Organization();
             String organId = body.get("organId").toString();
             String ssId = body.get("ssId").toString();
-            String organizationInCharge = body.get("organizationInCharge").toString();
+            String organizationInCharge = null;
+            if (body.containsKey("organizationInCharge")) {
+                organizationInCharge = (String) body.get("organizationInCharge");
+            }
             String organName = body.get("organName").toString();
             String organAdd = body.get("organAdd").toString();
             String email = body.get("email").toString();
@@ -93,7 +106,7 @@ public class OrganizationController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                
+
                 String UUID = Utils.UUID();
                 organization.setId(UUID);
                 organization.setOrganId(organId);
@@ -108,8 +121,9 @@ public class OrganizationController {
                 Organization organizationRes = organizationService.save(organization);
                 return CustomResponse.Response_data(201, organizationRes);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);

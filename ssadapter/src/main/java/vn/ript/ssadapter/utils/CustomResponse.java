@@ -70,7 +70,13 @@ public class CustomResponse<T> {
                 res.put("data", jsonArray.toList());
             }
         } else {
-            res.put("data", data);
+            if (data.startsWith("{")) {
+                JSONObject jsonObject = new JSONObject(data);
+                res.put("error", jsonObject.toMap());
+            } else if (data.startsWith("[")) {
+                JSONArray jsonArray = new JSONArray(data);
+                res.put("error", jsonArray.toList());
+            }
         }
         if (SUCCESS_RESPONSE.contains(status)) {
             res.put("ErrorDesc", "Thanh cong");

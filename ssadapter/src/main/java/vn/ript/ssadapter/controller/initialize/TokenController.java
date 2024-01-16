@@ -40,8 +40,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -61,8 +62,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -93,8 +95,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -126,8 +129,9 @@ public class TokenController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -144,7 +148,9 @@ public class TokenController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
+            if (!body.containsKey("password")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
             String password = (String) body.get("password");
 
             JSONObject jsonPostObject = new JSONObject();
@@ -158,8 +164,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -182,8 +189,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -200,14 +208,30 @@ public class TokenController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
+            if (!body.containsKey("key_label") ||
+                    !body.containsKey("csr_generate_request")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
             String key_label = (String) body.get("key_label");
             Map<String, Object> csr_generate_request_tmp = (Map<String, Object>) body.get("csr_generate_request");
+            if (!csr_generate_request_tmp.containsKey("key_usage_type") ||
+                    !csr_generate_request_tmp.containsKey("ca_name") ||
+                    !csr_generate_request_tmp.containsKey("csr_format") ||
+                    !csr_generate_request_tmp.containsKey("subject_field_values")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+
             String key_usage_type = (String) csr_generate_request_tmp.get("key_usage_type");
             String ca_name = (String) csr_generate_request_tmp.get("ca_name");
             String csr_format = (String) csr_generate_request_tmp.get("csr_format");
             Map<String, String> subject_field_values_tmp = (Map<String, String>) csr_generate_request_tmp
                     .get("subject_field_values");
+            if (!subject_field_values_tmp.containsKey("C") ||
+                    !subject_field_values_tmp.containsKey("CN") ||
+                    !subject_field_values_tmp.containsKey("serialNumber") ||
+                    !subject_field_values_tmp.containsKey("O")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
 
             JSONObject subject_field_values = new JSONObject();
             subject_field_values.put("C", subject_field_values_tmp.get("C"));
@@ -221,6 +245,9 @@ public class TokenController {
             csr_generate_request.put("subject_field_values", subject_field_values);
 
             if (key_usage_type.equalsIgnoreCase("SIGNING")) {
+                if (!csr_generate_request_tmp.containsKey("member_id")) {
+                    return CustomResponse.Response_data(400, "Thieu thong tin");
+                }
                 String member_id = (String) csr_generate_request_tmp.get("member_id");
                 csr_generate_request.put("member_id", member_id);
             }
@@ -237,8 +264,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -254,14 +282,30 @@ public class TokenController {
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"));
-
+            if (!body.containsKey("key_label") ||
+                    !body.containsKey("csr_generate_request")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
             String key_label = (String) body.get("key_label");
             Map<String, Object> csr_generate_request_tmp = (Map<String, Object>) body.get("csr_generate_request");
+            if (!csr_generate_request_tmp.containsKey("key_usage_type") ||
+                    !csr_generate_request_tmp.containsKey("ca_name") ||
+                    !csr_generate_request_tmp.containsKey("csr_format") ||
+                    !csr_generate_request_tmp.containsKey("subject_field_values")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+
             String key_usage_type = (String) csr_generate_request_tmp.get("key_usage_type");
             String ca_name = (String) csr_generate_request_tmp.get("ca_name");
             String csr_format = (String) csr_generate_request_tmp.get("csr_format");
             Map<String, String> subject_field_values_tmp = (Map<String, String>) csr_generate_request_tmp
                     .get("subject_field_values");
+            if (!subject_field_values_tmp.containsKey("C") ||
+                    !subject_field_values_tmp.containsKey("CN") ||
+                    !subject_field_values_tmp.containsKey("serialNumber") ||
+                    !subject_field_values_tmp.containsKey("O")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
 
             JSONObject subject_field_values = new JSONObject();
             subject_field_values.put("C", subject_field_values_tmp.get("C"));
@@ -275,6 +319,9 @@ public class TokenController {
             csr_generate_request.put("subject_field_values", subject_field_values);
 
             if (key_usage_type.equalsIgnoreCase("SIGNING")) {
+                if (!csr_generate_request_tmp.containsKey("member_id")) {
+                    return CustomResponse.Response_data(400, "Thieu thong tin");
+                }
                 String member_id = (String) csr_generate_request_tmp.get("member_id");
                 csr_generate_request.put("member_id", member_id);
             }
@@ -291,8 +338,9 @@ public class TokenController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

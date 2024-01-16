@@ -93,8 +93,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -110,8 +111,31 @@ public class ClientController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            if (!body.containsKey("client") ||
+                    !body.containsKey("adapter_data")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
+
             Map<String, String> client_tmp = (Map<String, String>) body.get("client");
+            if (!client_tmp.containsKey("member_name") ||
+                    !client_tmp.containsKey("member_class") ||
+                    !client_tmp.containsKey("member_code") ||
+                    !client_tmp.containsKey("subsystem_code") ||
+                    !client_tmp.containsKey("connection_type")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
+
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
+            if (!adapter_data_tmp.containsKey("organId") ||
+                    !adapter_data_tmp.containsKey("organName") ||
+                    !adapter_data_tmp.containsKey("organAdd") ||
+                    !adapter_data_tmp.containsKey("email") ||
+                    !adapter_data_tmp.containsKey("telephone") ||
+                    !adapter_data_tmp.containsKey("fax") ||
+                    !adapter_data_tmp.containsKey("website")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
+
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
             JSONObject client = new JSONObject();
             client.put("member_name", client_tmp.get("member_name"));
@@ -127,79 +151,47 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
-                System.out.println("-------------------------------1");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                System.out.println("-------------------------------2");
                 JSONObject jsonObject = new JSONObject(jsonResponse);
-                System.out.println("-------------------------------3");
                 String organId = adapter_data_tmp.get("organId");
-                System.out.println("-------------------------------4");
                 String ssId = jsonObject.getString("id");
-                System.out.println("-------------------------------5");
-                String organizationInCharge = adapter_data_tmp.get("organizationInCharge");
-                System.out.println("-------------------------------6");
+                String organizationInCharge = null;
+                if (adapter_data_tmp.containsKey("organizationInCharge")) {
+                    organizationInCharge = adapter_data_tmp.get("organizationInCharge");
+                }
                 String organName = adapter_data_tmp.get("organName");
-                System.out.println("-------------------------------7");
                 String organAdd = adapter_data_tmp.get("organAdd");
-                System.out.println("-------------------------------8");
                 String email = adapter_data_tmp.get("email");
-                System.out.println("-------------------------------9");
                 String telephone = adapter_data_tmp.get("telephone");
-                System.out.println("-------------------------------10");
                 String fax = adapter_data_tmp.get("fax");
-                System.out.println("-------------------------------11");
                 String website = adapter_data_tmp.get("website");
-                System.out.println("-------------------------------12");
                 String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
-                System.out.println("-------------------------------13");
                 String xRoadClient = Utils.SS_ID.replace(':', '/');
-                System.out.println("-------------------------------14");
                 String urlManage = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                         "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
-                System.out.println("-------------------------------15");
                 Map<String, String> headersManage = new HashMap<>();
-                System.out.println("-------------------------------16");
                 headersManage.put("X-Road-Client", xRoadClient);
-                System.out.println("-------------------------------17");
 
-                System.out.println("-------------------------------18");
                 JSONObject jsonPostObjectManage = new JSONObject();
-                System.out.println("-------------------------------19");
                 jsonPostObjectManage.put("organId", organId);
-                System.out.println("-------------------------------20");
                 jsonPostObjectManage.put("ssId", ssId);
-                System.out.println("-------------------------------21");
                 jsonPostObjectManage.put("organizationInCharge", organizationInCharge);
-                System.out.println("-------------------------------22");
                 jsonPostObjectManage.put("organName", organName);
-                System.out.println("-------------------------------23");
                 jsonPostObjectManage.put("organAdd", organAdd);
-                System.out.println("-------------------------------24");
                 jsonPostObjectManage.put("email", email);
-                System.out.println("-------------------------------25");
                 jsonPostObjectManage.put("telephone", telephone);
-                System.out.println("-------------------------------26");
                 jsonPostObjectManage.put("fax", fax);
-                System.out.println("-------------------------------27");
                 jsonPostObjectManage.put("website", website);
-                System.out.println("-------------------------------28");
 
                 StringEntity entityManage = new StringEntity(jsonPostObjectManage.toString(),
                         ContentType.APPLICATION_JSON);
-                System.out.println("-------------------------------29");
 
                 CustomHttpRequest httpRequestManage = new CustomHttpRequest("POST", urlManage, headersManage);
-                System.out.println("-------------------------------30");
                 HttpResponse httpResponseManage = httpRequestManage.request(entityManage);
-                System.out.println("-------------------------------31");
                 if (httpResponseManage.getStatusLine().getStatusCode() == 201) {
-                    System.out.println("-------------------------------32");
                     Organization organization = new Organization();
-                    System.out.println("-------------------------------33");
                     String UUID = Utils.UUID();
-                    System.out.println("-------------------------------34");
                     organization.setId(UUID);
-                    System.out.println("-------------------------------35");
                     organization.setOrganId(organId);
                     organization.setSsId(ssId);
                     organization.setOrganizationInCharge(organizationInCharge);
@@ -209,25 +201,20 @@ public class ClientController {
                     organization.setTelephone(telephone);
                     organization.setFax(fax);
                     organization.setWebsite(website);
-                    System.out.println("-------------------------------36");
                     Organization organizationRes = organizationService.save(organization);
-                    System.out.println("-------------------------------37");
                     jsonObject.put("adapter_data", organizationRes);
-                    System.out.println("-------------------------------38");
                     return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
                             jsonObject.toMap());
                 } else {
-                    System.out.println("-------------------------------xxx1");
                     return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
                             httpResponseManage.toString());
                 }
             } else {
-                System.out.println("-------------------------------xxx2");
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
-            System.out.println("-------------------------------xxx3");
             return CustomResponse.Response_data(500, e.toString());
         }
     }
@@ -254,8 +241,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -272,8 +260,20 @@ public class ClientController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
+            if (!body.containsKey("connection_type") ||
+                    !body.containsKey("adapter_data")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
+            if (!adapter_data_tmp.containsKey("organId") ||
+                    !adapter_data_tmp.containsKey("organName") ||
+                    !adapter_data_tmp.containsKey("organAdd") ||
+                    !adapter_data_tmp.containsKey("email") ||
+                    !adapter_data_tmp.containsKey("telephone") ||
+                    !adapter_data_tmp.containsKey("fax") ||
+                    !adapter_data_tmp.containsKey("website")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("connection_type", body.get("connection_type"));
@@ -289,7 +289,11 @@ public class ClientController {
                 if (checkOrganization.isPresent()) {
                     Organization organization = checkOrganization.get();
                     organization.setOrganId(adapter_data_tmp.get("organId"));
-                    organization.setOrganizationInCharge(adapter_data_tmp.get("organizationInCharge"));
+                    String organizationInCharge = null;
+                    if (adapter_data_tmp.containsKey("organizationInCharge")) {
+                        organizationInCharge = adapter_data_tmp.get("organizationInCharge");
+                    }
+                    organization.setOrganizationInCharge(organizationInCharge);
                     organization.setOrganName(adapter_data_tmp.get("organName"));
                     organization.setOrganAdd(adapter_data_tmp.get("organAdd"));
                     organization.setEmail(adapter_data_tmp.get("email"));
@@ -301,8 +305,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -326,8 +331,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -348,8 +354,9 @@ public class ClientController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -384,8 +391,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -416,8 +424,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -440,8 +449,9 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -454,6 +464,9 @@ public class ClientController {
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("items")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = Utils.SS_CONFIG_URL + "/clients/" + client_id + "/service-clients/" + id + "/access-rights";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
@@ -477,8 +490,9 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -491,6 +505,9 @@ public class ClientController {
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("items")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = Utils.SS_CONFIG_URL + "/clients/" + client_id + "/service-clients/" + id
                     + "/access-rights/delete";
             Map<String, String> headers = Map.ofEntries(
@@ -514,8 +531,9 @@ public class ClientController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -537,8 +555,9 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -560,8 +579,9 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -587,8 +607,9 @@ public class ClientController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -614,8 +635,9 @@ public class ClientController {
 
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -638,8 +660,9 @@ public class ClientController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -660,8 +683,9 @@ public class ClientController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -758,8 +782,9 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         jsonServiceDescriptions.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -777,17 +802,33 @@ public class ClientController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            if (!body.containsKey("type") ||
+                    !body.containsKey("adapter_data") ||
+                    !body.containsKey("url")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             JSONObject jsonPostObject = new JSONObject();
             if (!((String) body.get("type")).equalsIgnoreCase("WSDL")) {
+                if (!body.containsKey("rest_service_code")) {
+                    return CustomResponse.Response_data(400, "Thieu thong tin!");
+                }
                 jsonPostObject.put("rest_service_code", body.get("rest_service_code"));
             }
             jsonPostObject.put("type", body.get("type"));
             jsonPostObject.put("url", body.get("url"));
 
             Map<String, Object> adapter_data_tmp = (Map<String, Object>) body.get("adapter_data");
+            if (!adapter_data_tmp.containsKey("service_description") ||
+                    !adapter_data_tmp.containsKey("service")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             Map<String, String> adapter_data_tmp_service_description = (Map<String, String>) adapter_data_tmp
                     .get("service_description");
             Map<String, String> adapter_data_tmp_service = (Map<String, String>) adapter_data_tmp.get("service");
+            if (!adapter_data_tmp_service_description.containsKey("description") ||
+                    !adapter_data_tmp_service.containsKey("description")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
 
@@ -836,8 +877,9 @@ public class ClientController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
 
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -888,8 +930,9 @@ public class ClientController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

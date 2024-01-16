@@ -130,8 +130,9 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         jsonServiceDescription.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -148,15 +149,33 @@ public class ServiceDescriptionController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
+
+            if (!body.containsKey("type") ||
+                    !body.containsKey("url") ||
+                    !body.containsKey("rest_service_code") ||
+                    !body.containsKey("new_rest_service_code") ||
+                    !body.containsKey("ignore_warnings") ||
+                    !body.containsKey("adapter_data")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+
             String type = (String) body.get("type");
             String url_tmp = (String) body.get("url");
             String rest_service_code = (String) body.get("rest_service_code");
             String new_rest_service_code = (String) body.get("new_rest_service_code");
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
             Map<String, Object> adapter_data_tmp = (Map<String, Object>) body.get("adapter_data");
+            if (!adapter_data_tmp.containsKey("service_description") ||
+                    !adapter_data_tmp.containsKey("service")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
             Map<String, String> adapter_data_tmp_service_description = (Map<String, String>) adapter_data_tmp
                     .get("service_description");
             Map<String, String> adapter_data_tmp_service = (Map<String, String>) adapter_data_tmp.get("service");
+            if (!adapter_data_tmp_service_description.containsKey("description") ||
+                    !adapter_data_tmp_service.containsKey("description")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("type", type);
@@ -175,11 +194,12 @@ public class ServiceDescriptionController {
                 Optional<Organization> checkOrganization = organizationService
                         .findBySsId(jsonObject.getString("client_id"));
                 if (checkOrganization.isPresent()) {
-                    Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService.findBySsId(jsonObject.getString("id"));
+                    Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService
+                            .findBySsId(jsonObject.getString("id"));
                     if (checkServiceDescription.isPresent()) {
                         ServiceDescription serviceDescription = checkServiceDescription.get();
                         serviceDescription.setDescription(adapter_data_tmp_service_description.get("description"));
-    
+
                         List<Service> services_tmp = serviceDescription.getServices();
                         if (!type.equalsIgnoreCase("WSDL")) {
                             Service service = services_tmp.get(0);
@@ -188,13 +208,14 @@ public class ServiceDescriptionController {
                             service.setSsId(serviceSsId);
                             service.setDescription(adapter_data_tmp_service.get("description"));
                             Service serviceRes = serviceService.save(service);
-    
-                            ServiceDescription serviceDescriptionRes = serviceDescriptionService.save(serviceDescription);
-    
+
+                            ServiceDescription serviceDescriptionRes = serviceDescriptionService
+                                    .save(serviceDescription);
+
                             JSONObject adapter_data_service_description = new JSONObject();
                             adapter_data_service_description.put("description", serviceDescriptionRes.getDescription());
                             jsonObject.put("adapter_data", adapter_data_service_description);
-    
+
                             List<Object> objectServices = jsonObject.getJSONArray("services").toList();
                             JSONArray jsonServices = new JSONArray();
                             JSONObject jsonService = new JSONObject(gson.toJson(objectServices.get(0)));
@@ -202,15 +223,16 @@ public class ServiceDescriptionController {
                             adapter_data_service.put("description", serviceRes.getDescription());
                             jsonService.put("adapter_data", adapter_data_service);
                             jsonServices.put(jsonService);
-    
+
                             jsonObject.put("services", jsonServices);
                         }
                     }
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -237,8 +259,9 @@ public class ServiceDescriptionController {
                 }
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -259,8 +282,9 @@ public class ServiceDescriptionController {
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -278,6 +302,10 @@ public class ServiceDescriptionController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            if (!body.containsKey("disabled_notice")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
+            }
+
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("disabled_notice", body.get("disabled_notice"));
 
@@ -288,8 +316,9 @@ public class ServiceDescriptionController {
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

@@ -1,5 +1,6 @@
 package vn.ript.ssadapter.controller.initialize;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -165,15 +166,12 @@ public class ServiceDescriptionController {
             String new_rest_service_code = (String) body.get("new_rest_service_code");
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
             Map<String, Object> adapter_data_tmp = (Map<String, Object>) body.get("adapter_data");
-            if (!adapter_data_tmp.containsKey("service_description") ||
-                    !adapter_data_tmp.containsKey("service")) {
+            if (!adapter_data_tmp.containsKey("service_description")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
             Map<String, String> adapter_data_tmp_service_description = (Map<String, String>) adapter_data_tmp
                     .get("service_description");
-            Map<String, String> adapter_data_tmp_service = (Map<String, String>) adapter_data_tmp.get("service");
-            if (!adapter_data_tmp_service_description.containsKey("description") ||
-                    !adapter_data_tmp_service.containsKey("description")) {
+            if (!adapter_data_tmp_service_description.containsKey("description")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
@@ -189,46 +187,45 @@ public class ServiceDescriptionController {
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                Gson gson = new Gson();
-                JSONObject jsonObject = new JSONObject(jsonResponse);
-                Optional<Organization> checkOrganization = organizationService
-                        .findBySsId(jsonObject.getString("client_id"));
-                if (checkOrganization.isPresent()) {
-                    Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService
-                            .findBySsId(jsonObject.getString("id"));
-                    if (checkServiceDescription.isPresent()) {
-                        ServiceDescription serviceDescription = checkServiceDescription.get();
-                        serviceDescription.setDescription(adapter_data_tmp_service_description.get("description"));
+                String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
+                String xRoadClient = Utils.SS_ID.replace(':', '/');
+                String urlManage = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
+                        "/" + Utils.SS_MANAGE_SERVICE_CODE + "/service-descriptions";
+                Map<String, String> headersManage = new HashMap<>();
+                headersManage.put("X-Road-Client", xRoadClient);
 
-                        List<Service> services_tmp = serviceDescription.getServices();
-                        if (!type.equalsIgnoreCase("WSDL")) {
-                            Service service = services_tmp.get(0);
-                            String serviceSsId = jsonObject.getString("client_id") + ":"
-                                    + ((String) body.get("new_rest_service_code"));
-                            service.setSsId(serviceSsId);
-                            service.setDescription(adapter_data_tmp_service.get("description"));
-                            Service serviceRes = serviceService.save(service);
+                JSONObject jsonPostObjectManage = new JSONObject();
+                jsonPostObjectManage.put("ssId", adapter_data_tmp_service_description.get("ssId"));
+                jsonPostObjectManage.put("description", adapter_data_tmp_service_description.get("description"));
+                StringEntity entityManage = new StringEntity(jsonPostObjectManage.toString(),
+                        ContentType.APPLICATION_JSON);
 
+                CustomHttpRequest httpRequestManage = new CustomHttpRequest("PATCH", urlManage, headersManage);
+                HttpResponse httpResponseManage = httpRequestManage.request(entityManage);
+                if (httpResponseManage.getStatusLine().getStatusCode() == 200) {
+                    JSONObject jsonObject = new JSONObject(jsonResponse);
+                    Optional<Organization> checkOrganization = organizationService
+                            .findBySsId(jsonObject.getString("client_id"));
+                    if (checkOrganization.isPresent()) {
+                        Optional<ServiceDescription> checkServiceDescription = serviceDescriptionService
+                                .findBySsId(jsonObject.getString("id"));
+                        if (checkServiceDescription.isPresent()) {
+                            ServiceDescription serviceDescription = checkServiceDescription.get();
+                            serviceDescription.setDescription(adapter_data_tmp_service_description.get("description"));
                             ServiceDescription serviceDescriptionRes = serviceDescriptionService
                                     .save(serviceDescription);
-
-                            JSONObject adapter_data_service_description = new JSONObject();
-                            adapter_data_service_description.put("description", serviceDescriptionRes.getDescription());
-                            jsonObject.put("adapter_data", adapter_data_service_description);
-
-                            List<Object> objectServices = jsonObject.getJSONArray("services").toList();
-                            JSONArray jsonServices = new JSONArray();
-                            JSONObject jsonService = new JSONObject(gson.toJson(objectServices.get(0)));
-                            JSONObject adapter_data_service = new JSONObject();
-                            adapter_data_service.put("description", serviceRes.getDescription());
-                            jsonService.put("adapter_data", adapter_data_service);
-                            jsonServices.put(jsonService);
-
-                            jsonObject.put("services", jsonServices);
+                            return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                                    serviceDescriptionRes);
+                        } else {
+                            return CustomResponse.Response_data(404, "Khong tim thay service description !");
                         }
+                    } else {
+                        return CustomResponse.Response_data(404, "Khong tim thay don vi !");
                     }
+                } else {
+                    return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
+                            httpResponseManage.toString());
                 }
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonObject.toMap());
             } else {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),

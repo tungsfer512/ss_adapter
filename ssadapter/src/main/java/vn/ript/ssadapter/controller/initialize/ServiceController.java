@@ -1,5 +1,6 @@
 package vn.ript.ssadapter.controller.initialize;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -148,7 +149,10 @@ public class ServiceController {
             String url_tmp = (String) body.get("url");
             Boolean url_all = (Boolean) body.get("url_all");
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
-            if (!adapter_data_tmp.containsKey("description")) {
+            if (!adapter_data_tmp.containsKey("description") ||
+                    !adapter_data_tmp.containsKey("isPublic") ||
+                    !adapter_data_tmp.containsKey("isForCitizen") ||
+                    !adapter_data_tmp.containsKey("type")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
 
@@ -171,6 +175,9 @@ public class ServiceController {
                 if (checkService.isPresent()) {
                     Service service = checkService.get();
                     service.setDescription(adapter_data_tmp.get("description"));
+                    service.setIsPublic(Boolean.valueOf(adapter_data_tmp.get("isPublic")));
+                    service.setIsForCitizen(Boolean.valueOf(adapter_data_tmp.get("isForCitizen")));
+                    service.setType(adapter_data_tmp.get("type"));
                     Service serviceRes = serviceService.save(service);
                     JSONObject adapter_data_service = new JSONObject();
                     adapter_data_service.put("description", serviceRes.getDescription());
@@ -214,7 +221,10 @@ public class ServiceController {
             if (!adapter_data_tmp.containsKey("name") ||
                     !adapter_data_tmp.containsKey("description") ||
                     !adapter_data_tmp.containsKey("inputDescription") ||
-                    !adapter_data_tmp.containsKey("outputDescription")) {
+                    !adapter_data_tmp.containsKey("outputDescription") ||
+                    !adapter_data_tmp.containsKey("isPublic") ||
+                    !adapter_data_tmp.containsKey("isForCitizen") ||
+                    !adapter_data_tmp.containsKey("type")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
 
@@ -240,6 +250,9 @@ public class ServiceController {
                     endpoint.setDescription(adapter_data_tmp.get("description"));
                     endpoint.setInputDescription(adapter_data_tmp.get("inputDescription"));
                     endpoint.setOutputDescription(adapter_data_tmp.get("outputDescription"));
+                    endpoint.setIsPublic(Boolean.valueOf(adapter_data_tmp.get("isPublic")));
+                    endpoint.setIsForCitizen(Boolean.valueOf(adapter_data_tmp.get("isForCitizen")));
+                    endpoint.setType(adapter_data_tmp.get("type"));
                     Endpoint endpointRes = endpointService.save(endpoint);
                     List<Endpoint> endpoints = service.getEndpoints();
                     endpoints.add(endpointRes);

@@ -29,7 +29,7 @@ public class Endpoint {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    private Integer id;
 
     @Column(name = "_ssId", columnDefinition = "text")
     private String ssId;
@@ -51,5 +51,14 @@ public class Endpoint {
 
     @Column(name = "_outputDescription", columnDefinition = "text")
     private String outputDescription;
+
+    @Column(name = "_isPublic", columnDefinition = "text")
+    private Boolean isPublic;
+
+    @Column(name = "_isForCitizen", columnDefinition = "text")
+    private Boolean isForCitizen;
+
+    @Column(name = "_type", columnDefinition = "text")
+    private String type;
 
 }

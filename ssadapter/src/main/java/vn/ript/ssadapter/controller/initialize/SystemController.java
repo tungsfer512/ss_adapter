@@ -194,6 +194,29 @@ public class SystemController {
         }
     }
 
+    @GetMapping("/certificate/export")
+    public ResponseEntity<InputStreamResource> exportTLSCertificate() {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/system/certificate/export";
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/gzip"));
+            String filename = "cert.tar.gz";
+            CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            HttpResponse httpResponse = httpRequest.request();
+            if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                HttpEntity httpEntity = httpResponse.getEntity();
+                InputStreamResource inputStreamResource = new InputStreamResource(httpEntity.getContent());
+                return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), inputStreamResource,
+                        filename);
+            } else {
+                return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), null, null);
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_file(500, null, null);
+        }
+    }
+
     @GetMapping("/timestamping-services")
     public ResponseEntity<Map<String, Object>> getAllTSA() {
         try {

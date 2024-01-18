@@ -44,7 +44,16 @@ public class Service {
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
-	@JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
-	private List<Endpoint> endpoints;
+    @JsonIgnoreProperties(value = { "applications", "hibernateLazyInitializer" })
+    private List<Endpoint> endpoints;
+
+    @Column(name = "_isPublic", columnDefinition = "text")
+    private Boolean isPublic;
+
+    @Column(name = "_isForCitizen", columnDefinition = "text")
+    private Boolean isForCitizen;
+
+    @Column(name = "_type", columnDefinition = "text")
+    private String type;
 
 }

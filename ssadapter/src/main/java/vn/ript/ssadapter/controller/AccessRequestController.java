@@ -167,7 +167,7 @@ public class AccessRequestController {
             return CustomResponse.Response_data(500, e.toString());
         }
     }
-    
+
     @GetMapping("/received")
     public ResponseEntity<Map<String, Object>> getReceivedList(
             @RequestParam(name = "fromId", required = false) String fromId,
@@ -241,8 +241,9 @@ public class AccessRequestController {
                         accessRequestService.saveAccessRequest(accessRequest);
                         return CustomResponse.Response_no_data(204);
                     } else {
+                        String jsonResponseApprove = EntityUtils.toString(httpResponseApprove.getEntity());
                         return CustomResponse.Response_data(httpResponseApprove.getStatusLine().getStatusCode(),
-                                httpResponseApprove.toString());
+                                jsonResponseApprove);
                     }
                 } else {
                     return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
@@ -287,8 +288,9 @@ public class AccessRequestController {
                         accessRequestService.saveAccessRequest(accessRequest);
                         return CustomResponse.Response_no_data(204);
                     } else {
+                        String jsonResponseApprove = EntityUtils.toString(httpResponseApprove.getEntity());
                         return CustomResponse.Response_data(httpResponseApprove.getStatusLine().getStatusCode(),
-                                httpResponseApprove.toString());
+                                jsonResponseApprove);
                     }
                 } else {
                     return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),

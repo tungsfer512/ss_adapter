@@ -296,3 +296,21 @@
         "EDIT_FRIENDLY_NAME"
     ]
 }
+
+{
+    "is_anchor_imported": false,
+    "is_server_code_initialized": false,
+    "is_server_owner_initialized": false,
+    "software_token_init_status": "NOT_INITIALIZED",
+    "enforce_token_pin_policy": false
+} GET https://10.192.116.77:4000/api/v1/initialization/status
+{
+    "valid": true
+} GET https://10.192.116.77:4000/api/v1/notifications/session-status
+
+{
+    "global_conf_valid": false,
+    "global_conf_valid_check_success": true,
+    "soft_token_pin_entered": false,
+    "soft_token_pin_entered_check_success": true
+} GET https://10.192.116.77:4000/api/v1/notifications/alerts

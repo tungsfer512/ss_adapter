@@ -77,8 +77,9 @@ public class ServiceCatalogController {
 
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonMembers.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.getStatusLine());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
@@ -227,12 +228,14 @@ public class ServiceCatalogController {
                     return CustomResponse.Response_data(httpResponseAllow.getStatusLine().getStatusCode(),
                             jsonListService.toMap());
                 } else {
-                    return CustomResponse.Response_data(httpResponseAllow.getStatusLine().getStatusCode(),
-                            httpResponseAllow.getStatusLine() + "----- Loi goi Allowed");
+                    String jsonResponseAllow = EntityUtils.toString(httpResponseAllow.getEntity());
+                return CustomResponse.Response_data(httpResponseAllow.getStatusLine().getStatusCode(),
+                        jsonResponseAllow);
                 }
             } else {
+                String jsonResponseList = EntityUtils.toString(httpResponseList.getEntity());
                 return CustomResponse.Response_data(httpResponseList.getStatusLine().getStatusCode(),
-                        httpResponseList.getStatusLine() + "----- Loi goi List");
+                        jsonResponseList);
             }
         } catch (IOException e) {
             e.printStackTrace();

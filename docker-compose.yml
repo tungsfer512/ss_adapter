@@ -55,22 +55,22 @@ services:
       - ./ssadapter/target:$API_WORK_DIR/target
       - ./ssadapter/libs:$API_WORK_DIR/libs
       - ./ssadapter/:$API_WORK_DIR
-  # ssadapterweb:
-  #   container_name: ssadapterweb
-  #   hostname: ssadapterweb
-  #   env_file:
-  #     - ./.env
-  #   build:
-  #     context: ./web
-  #     dockerfile: Dockerfile
-  #     args:
-  #       - WEB_WORK_DIR=$WEB_WORK_DIR
-  #   ports:
-  #     - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
-  #   volumes:
-  #     - ./web/src:$WEB_WORK_DIR/src
-  #     - ./web/config:$WEB_WORK_DIR/config
-  #   networks:
-  #     ssadapter:
-  #         null
-  #   restart: unless-stopped
+  ssadapterweb:
+    container_name: ssadapterweb
+    hostname: ssadapterweb
+    env_file:
+      - ./.env
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        - WEB_WORK_DIR=$WEB_WORK_DIR
+    ports:
+      - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
+    volumes:
+      - ./web/src:$WEB_WORK_DIR/src
+      - ./web/config:$WEB_WORK_DIR/config
+    networks:
+      ssadapter:
+          null
+    restart: unless-stopped

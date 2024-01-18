@@ -826,8 +826,11 @@ public class ClientController {
                     .get("service_description");
             Map<String, String> adapter_data_tmp_service = (Map<String, String>) adapter_data_tmp.get("service");
             if (!adapter_data_tmp_service_description.containsKey("description") ||
-                    !adapter_data_tmp_service.containsKey("description")) {
-                return CustomResponse.Response_data(400, "Thieu thong tin!");
+                    !adapter_data_tmp_service.containsKey("description") ||
+                    !adapter_data_tmp_service.containsKey("isPublic") ||
+                    !adapter_data_tmp_service.containsKey("isForCitizen") ||
+                    !adapter_data_tmp_service.containsKey("type")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
             StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
@@ -854,6 +857,9 @@ public class ClientController {
                         service.setSsId(serviceSsId);
                         service.setEndpoints(new ArrayList<>());
                         service.setDescription(adapter_data_tmp_service.get("description"));
+                        service.setIsPublic(Boolean.valueOf(adapter_data_tmp_service.get("isPublic")));
+                        service.setIsForCitizen(Boolean.valueOf(adapter_data_tmp_service.get("isForCitizen")));
+                        service.setType(adapter_data_tmp_service.get("type"));
                         Service serviceRes = serviceService.save(service);
                         services_tmp.add(serviceRes);
                         serviceDescription.setServices(services_tmp);

@@ -41,6 +41,7 @@ const FormVanBan = () => {
       }
       let json_data = {
         'toIds': values.to_ids,
+        'fromId': 'CS:GOV:MANAGESS2MC:ABCABC',
         'codeNumber': values.code_number,
         'codeNotation': values.code_notation,
         'promulgationPlace': values.promulgation_place,

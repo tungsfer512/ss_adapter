@@ -44,8 +44,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -68,8 +69,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -92,8 +94,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -135,8 +138,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -155,8 +159,9 @@ public class SystemController {
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -180,11 +185,35 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
+    @GetMapping("/certificate/export")
+    public ResponseEntity<InputStreamResource> exportTLSCertificate() {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/system/certificate/export";
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/gzip"));
+            String filename = "cert.tar.gz";
+            CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            HttpResponse httpResponse = httpRequest.request();
+            if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                HttpEntity httpEntity = httpResponse.getEntity();
+                InputStreamResource inputStreamResource = new InputStreamResource(httpEntity.getContent());
+                return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), inputStreamResource,
+                        filename);
+            } else {
+                return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), null, null);
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_file(500, null, null);
         }
     }
 
@@ -203,8 +232,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
             // return CustomResponse.Response_no_data(200);
         } catch (Exception e) {
@@ -222,6 +252,10 @@ public class SystemController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            if (!body.containsKey("name") ||
+                    !body.containsKey("url")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String name = (String) body.get("name");
             String tsa_url = (String) body.get("url");
 
@@ -241,8 +275,9 @@ public class SystemController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -258,7 +293,10 @@ public class SystemController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
+            if (!body.containsKey("name") ||
+                    !body.containsKey("url")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String name = (String) body.get("name");
             String tsa_url = (String) body.get("url");
 
@@ -273,8 +311,9 @@ public class SystemController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

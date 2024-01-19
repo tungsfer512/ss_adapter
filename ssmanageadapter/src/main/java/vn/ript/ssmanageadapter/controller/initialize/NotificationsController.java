@@ -7,7 +7,6 @@ import org.apache.http.util.EntityUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,19 +15,17 @@ import vn.ript.ssmanageadapter.utils.CustomResponse;
 import vn.ript.ssmanageadapter.utils.Utils;
 
 @RestController
-@RequestMapping("api/v1/initialize/member-classes")
+@RequestMapping("api/v1/initialize/notifications")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
-public class MemberClassController {
+public class NotificationsController {
 
-    @GetMapping("")
-    public ResponseEntity<Map<String, Object>> getAll() {
+    @GetMapping("/alerts")
+    public ResponseEntity<Map<String, Object>> getAlerts() {
         try {
-            String url = Utils.SS_CONFIG_URL + "/member-classes";
+            String url = Utils.SS_CONFIG_URL + "/notifications/alerts";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-                    Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
@@ -44,15 +41,13 @@ public class MemberClassController {
         }
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Map<String, Object>> getByCSId(@PathVariable String id) {
+    @GetMapping("/session-status")
+    public ResponseEntity<Map<String, Object>> getSessionStatus() {
         try {
-            String url = Utils.SS_CONFIG_URL + "/member-classes/" + id;
+            String url = Utils.SS_CONFIG_URL + "/notifications/session-status";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
-                    Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
-
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
@@ -67,4 +62,6 @@ public class MemberClassController {
             return CustomResponse.Response_data(500, e.toString());
         }
     }
+
+
 }

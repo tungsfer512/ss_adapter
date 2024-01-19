@@ -52,4 +52,13 @@ public class Endpoint {
     @Column(name = "_outputDescription", columnDefinition = "text")
     private String outputDescription;
 
+    @Column(name = "_isPublic", columnDefinition = "text")
+    private Boolean isPublic;
+
+    @Column(name = "_isForCitizen", columnDefinition = "text")
+    private Boolean isForCitizen;
+
+    @Column(name = "_type", columnDefinition = "text")
+    private String type;
+
 }

@@ -43,8 +43,9 @@ public class KeyController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -63,8 +64,9 @@ public class KeyController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -102,6 +104,13 @@ public class KeyController {
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"));
+
+            if (!body.containsKey("key_usage_type") ||
+                    !body.containsKey("ca_name") ||
+                    !body.containsKey("csr_format") ||
+                    !body.containsKey("subject_field_values")) {
+                return CustomResponse.Response_file(400, null, null);
+            }
 
             String key_usage_type = (String) body.get("key_usage_type");
             String ca_name = (String) body.get("ca_name");
@@ -188,8 +197,9 @@ public class KeyController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -211,8 +221,9 @@ public class KeyController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -232,8 +243,9 @@ public class KeyController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

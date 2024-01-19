@@ -73,8 +73,9 @@ public class EndpointController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonEndpoint.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -92,12 +93,30 @@ public class EndpointController {
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
 
+            if (!body.containsKey("generated") ||
+                    !body.containsKey("id") ||
+                    !body.containsKey("method") ||
+                    !body.containsKey("path") ||
+                    !body.containsKey("service_code") ||
+                    !body.containsKey("adapter_data")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
+
             Boolean generated = (Boolean) body.get("generated");
             String id_tmp = (String) body.get("id");
             String method = (String) body.get("method");
             String path = (String) body.get("path");
             String service_code = (String) body.get("service_code");
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
+            if (!adapter_data_tmp.containsKey("name") ||
+                    !adapter_data_tmp.containsKey("description") ||
+                    !adapter_data_tmp.containsKey("inputDescription") ||
+                    !adapter_data_tmp.containsKey("outputDescription") ||
+                    !adapter_data_tmp.containsKey("isPublic") ||
+                    !adapter_data_tmp.containsKey("isForCitizen") ||
+                    !adapter_data_tmp.containsKey("type")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("generated", generated);
@@ -122,6 +141,9 @@ public class EndpointController {
                     endpoint.setDescription(adapter_data_tmp.get("description"));
                     endpoint.setInputDescription(adapter_data_tmp.get("inputDescription"));
                     endpoint.setOutputDescription(adapter_data_tmp.get("outputDescription"));
+                    endpoint.setIsPublic(Boolean.valueOf(adapter_data_tmp.get("isPublic")));
+                    endpoint.setIsForCitizen(Boolean.valueOf(adapter_data_tmp.get("isForCitizen")));
+                    endpoint.setType(adapter_data_tmp.get("type"));
                     Endpoint endpointRes = endpointService.save(endpoint);
                     jsonEndpoint.put("adapter_data", endpointRes);
                 } else {
@@ -129,8 +151,9 @@ public class EndpointController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonEndpoint.toMap());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -153,8 +176,9 @@ public class EndpointController {
 
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -192,8 +216,9 @@ public class EndpointController {
                 }
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonArray.toList());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -205,6 +230,9 @@ public class EndpointController {
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("items")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = Utils.SS_CONFIG_URL + "/endpoints/" + id + "/service-clients";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
@@ -214,6 +242,11 @@ public class EndpointController {
             List<Map<String, String>> items = (List<Map<String, String>>) body.get("items");
             JSONArray jsonPostArray = new JSONArray();
             for (Map<String, String> item : items) {
+                if (!item.containsKey("id") ||
+                        !item.containsKey("name") ||
+                        !item.containsKey("service_client_type")) {
+                    return CustomResponse.Response_data(400, "Thieu thong tin!");
+                }
                 String id_tmp = item.get("id");
                 String name = item.get("name");
                 String service_client_type = item.get("service_client_type");
@@ -233,8 +266,9 @@ public class EndpointController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -246,6 +280,9 @@ public class EndpointController {
             @PathVariable String id,
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("items")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = Utils.SS_CONFIG_URL + "/endpoints/" + id + "/service-clients/delete";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
@@ -255,6 +292,11 @@ public class EndpointController {
             List<Map<String, String>> items = (List<Map<String, String>>) body.get("items");
             JSONArray jsonPostArray = new JSONArray();
             for (Map<String, String> item : items) {
+                if (!item.containsKey("id") ||
+                        !item.containsKey("name") ||
+                        !item.containsKey("service_client_type")) {
+                    return CustomResponse.Response_data(400, "Thieu thong tin!");
+                }
                 String id_tmp = item.get("id");
                 String name = item.get("name");
                 String service_client_type = item.get("service_client_type");
@@ -273,8 +315,9 @@ public class EndpointController {
             if (httpResponse.getStatusLine().getStatusCode() == 204) {
                 return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

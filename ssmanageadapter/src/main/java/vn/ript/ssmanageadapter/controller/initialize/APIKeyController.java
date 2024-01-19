@@ -51,6 +51,9 @@ public class APIKeyController {
     @PostMapping("")
     public ResponseEntity<Map<String, Object>> add(@RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("roles")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = "https://localhost:4000/api/v1/api-keys";
             // String data =
             // "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";
@@ -110,6 +113,9 @@ public class APIKeyController {
             @PathVariable Integer id,
             @RequestBody Map<String, Object> body) {
         try {
+            if (!body.containsKey("roles")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
             String url = "https://localhost:4000/api/v1/api-keys/" + id;
             // String data =
             // "\'[\\\"XROAD_SECURITYSERVER_OBSERVER\\\",\\\"XROAD_REGISTRATION_OFFICER\\\",\\\"XROAD_SERVICE_ADMINISTRATOR\\\",\\\"XROAD_SECURITY_OFFICER\\\",\\\"XROAD_SYSTEM_ADMINISTRATOR\\\"]\'";

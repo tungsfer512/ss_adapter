@@ -1,5 +1,6 @@
-const ip3 = 'http://222.252.29.85:17399'; // ip dev
-const ip = 'http://222.252.29.85:17399'; // ip dev
+const ip3 = 'http://192.168.10.73:9996'; // ip dev
+const ip4 = 'http://192.168.10.73:9995'; // ip dev
+const ip = 'http://192.168.10.73:9996'; // ip dev
 
 const ipPayment = 'https://tssv3.aisenote.com/payment'; // ip dev
 
@@ -9,4 +10,4 @@ const ipPayment = 'https://tssv3.aisenote.com/payment'; // ip dev
 // const ip3 = 'https://xettuyen.hvpnvn.edu.vn/api'; // ip vwa
 // const ip = 'https://xettuyen.hvpnvn.edu.vn/api'; // ip vwa
 
-export { ip3, ip, ipPayment };
+export { ip3, ip, ip4, ipPayment };

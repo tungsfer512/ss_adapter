@@ -1,8 +1,8 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescrip3t-eslint/naming-convention */
+/* eslint-disable @typescrip4t-eslint/naming-convention */
 import axios from '@/utils/axios';
-import { ip3 } from '@/utils/ip';
+import { ip4 } from '@/utils/ip';
 
 
 export interface IPayload {
@@ -12,25 +12,31 @@ export interface IPayload {
 }
 
 export const getReceivedEdocList = (headers: any) => {
-    return axios.get(`${ip3}/api/v1/document/edocs/getReceivedEdocList`, {
-      headers: headers
+    return axios.get(`${ip4}/api/v1/document/edocs/getReceivedEdocList`, {
+     headers: {
+      ...headers,
+      organizationId: "CS:GOV:MANAGESS2MC:ABCABC"
+    }
     })
 }
 
 export const getSentEdocList = (headers: any) => {
-    return axios.get(`${ip3}/api/v1/document/edocs/getSentEdocList`, {
-      headers: headers
+    return axios.get(`${ip4}/api/v1/document/edocs/getSentEdocList`, {
+     headers: {
+      ...headers,
+      organizationId: "CS:GOV:MANAGESS2MC:ABCABC"
+    }
     })
 }
 
 export const sendEdoc = (headers: any, payload: any) => {
-    return axios.post(`${ip3}/api/v1/document/edocs/new`, payload, {
+    return axios.post(`${ip4}/api/v1/document/edocs/new`, payload, {
       headers: headers
     })
 }
 
 export const sendStatusEdoc = (headers: any, payload: any) => {
-    return axios.post(`${ip3}/api/v1/document/status/new`, payload, {
+    return axios.post(`${ip4}/api/v1/document/status/new`, payload, {
       headers: headers
     })
 }

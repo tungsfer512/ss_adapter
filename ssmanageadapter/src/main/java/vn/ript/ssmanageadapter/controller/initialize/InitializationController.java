@@ -37,8 +37,9 @@ public class InitializationController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());
@@ -54,6 +55,14 @@ public class InitializationController {
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Content-Type", "application/json"),
                     Map.entry("Accept", "application/json"));
+
+            if (!body.containsKey("owner_member_class") ||
+                    !body.containsKey("owner_member_code") ||
+                    !body.containsKey("security_server_code") ||
+                    !body.containsKey("software_token_pin") ||
+                    !body.containsKey("ignore_warnings")) {
+                return CustomResponse.Response_data(400, "Thieu thong tin!");
+            }
 
             String owner_member_class = (String) body.get("owner_member_class");
             String owner_member_code = (String) body.get("owner_member_code");
@@ -76,8 +85,9 @@ public class InitializationController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(), jsonResponse);
             } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        httpResponse.toString());
+                        jsonResponse);
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

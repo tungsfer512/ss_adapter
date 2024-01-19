@@ -1,5 +1,6 @@
 package vn.ript.mediator.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -147,6 +148,131 @@ public class AccessRequestController {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         jsonResponse);
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
+    @PostMapping("/add")
+    public ResponseEntity<Map<String, Object>> addList(
+            @RequestBody Map<String, Object> body) {
+        try {
+            Integer thanh_cong = 0;
+            List<Map<String, Object>> items = (List<Map<String, Object>>) body.get("items");
+            List<Map<String, Object>> items_fail = new ArrayList<>();
+            JSONArray fail_items = new JSONArray();
+            for (Map<String, Object> item : items) {
+                String toId = null;
+                Integer externalServiceId = null;
+                Integer externalEndpointId = null;
+                String externalId = Utils.UUID();
+
+                JSONObject fail_item = new JSONObject();
+                fail_item.put("item", item);
+
+                if (!item.containsKey("description") ||
+                        !item.containsKey("handleType") ||
+                        !item.containsKey("fromName") ||
+                        !item.containsKey("type")) {
+                    fail_item.put("reason", "Thieu thong tin");
+                    fail_items.put(fail_item);
+                    continue;
+                }
+                String fromId = Utils.SS_ID;
+                String fromName = (String) item.get("fromName");
+                String handleType = (String) item.get("handleType");
+                if (handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
+                    toId = Utils.SS_MANAGE_ID;
+                } else {
+                    toId = (String) item.get("toId");
+                }
+                String description = (String) item.get("description");
+                String type = (String) item.get("type");
+                if (type.equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.SERVICE.ma())) {
+                    if (!item.containsKey("externalServiceId")) {
+                        fail_item.put("reason", "Thieu thong tin");
+                        fail_items.put(fail_item);
+                        continue;
+                    }
+                    externalServiceId = Integer.parseInt((String) item.get("externalServiceId"));
+                } else if (type.equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.ENDPOINT.ma())) {
+                    if (!item.containsKey("externalEndpointId")) {
+                        fail_item.put("reason", "Thieu thong tin");
+                        fail_items.put(fail_item);
+                        continue;
+                    }
+                    externalEndpointId = Integer.parseInt((String) item.get("externalEndpointId"));
+                }
+
+                Optional<Organization> checkFrom = organizationService.findBySsId(fromId);
+                Optional<Organization> checkTo = organizationService.findBySsId(toId);
+                if (!checkFrom.isPresent() || !checkTo.isPresent()) {
+                    fail_item.put("reason", "Khong tim thay don vi");
+                    fail_items.put(fail_item);
+                    continue;
+                }
+
+                String subsystem_code = toId.replace(':', '/');
+                String xRoadClient = fromId.replace(':', '/');
+                String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
+                        "/" + Utils.SS_MANAGE_SERVICE_CODE + "/access-requests";
+                Map<String, String> headers = new HashMap<>();
+                headers.put("X-Road-Client", xRoadClient);
+
+                JSONObject jsonPostObject = new JSONObject();
+                jsonPostObject.put("fromId", fromId);
+                jsonPostObject.put("fromName", fromName);
+                jsonPostObject.put("toId", toId);
+                jsonPostObject.put("externalId", externalId);
+                jsonPostObject.put("type", type);
+                jsonPostObject.put("externalServiceId", externalServiceId);
+                jsonPostObject.put("description", description);
+                jsonPostObject.put("externalEndpointId", externalEndpointId);
+
+                System.out.println(url);
+                System.out.println(jsonPostObject.toString());
+
+                StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+
+                CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
+                HttpResponse httpResponse = httpRequest.request(entity);
+                if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                    AccessRequest accessRequest = new AccessRequest();
+                    accessRequest.setFrom(checkFrom.get());
+                    accessRequest.setFromName(fromName);
+                    accessRequest.setTo(checkTo.get());
+                    accessRequest.setExternalId(externalId);
+                    accessRequest.setType(type);
+                    accessRequest.setExternalServiceId(externalServiceId);
+                    accessRequest.setExternalEndpointId(externalEndpointId);
+                    accessRequest.setDescription(description);
+                    accessRequest.setStatus(Constants.TRANG_THAI_YEU_CAU_CAP_QUYEN.PENDING.ma());
+                    accessRequest.setCreateAt(Utils.DATETIME_NOW());
+                    accessRequest.setUpdateAt(Utils.DATETIME_NOW());
+                    accessRequest.setDeclinedReason(null);
+
+                    accessRequestService.saveAccessRequest(accessRequest);
+                    SimpleMailMessage mailMessage = new SimpleMailMessage();
+
+                    mailMessage.setFrom(sender);
+                    mailMessage.setSubject("YÊU CẦU XIN CẤP QUYỂN MỚI");
+                    mailMessage.setTo(accessRequest.getTo().getEmail());
+                    mailMessage.setText("Có yêu cầu xin cấp quyền mới!");
+
+                    javaMailSender.send(mailMessage);
+                    thanh_cong += 1;
+                } else {
+                    String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                    fail_item.put("reason", new JSONObject(jsonResponse));
+                    fail_items.put(fail_item);
+                    continue;
+                }
+            }
+            if (thanh_cong == items.size()) {
+                return CustomResponse.Response_no_data(201);
+            } else {
+                return CustomResponse.Response_data(400, fail_items.toString());
             }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e.toString());

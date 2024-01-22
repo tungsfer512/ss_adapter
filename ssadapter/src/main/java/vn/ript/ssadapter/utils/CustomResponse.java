@@ -68,6 +68,8 @@ public class CustomResponse<T> {
             } else if (data.startsWith("[")) {
                 JSONArray jsonArray = new JSONArray(data);
                 res.put("data", jsonArray.toList());
+            } else {
+                res.put("data", data.toString());
             }
         } else {
             if (data.startsWith("{")) {
@@ -76,6 +78,12 @@ public class CustomResponse<T> {
             } else if (data.startsWith("[")) {
                 JSONArray jsonArray = new JSONArray(data);
                 res.put("error", jsonArray.toList());
+            } else {
+                JSONObject jsonObject = new JSONObject();
+                JSONObject jsonObject2 = new JSONObject();
+                jsonObject2.put("code", data);
+                jsonObject.put("error", jsonObject2);
+                res.put("error", jsonObject.toMap());
             }
         }
         if (SUCCESS_RESPONSE.contains(status)) {

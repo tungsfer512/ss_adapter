@@ -59,20 +59,24 @@ public class ClientController {
 
     @GetMapping("")
     public ResponseEntity<Map<String, Object>> getAll(
-            @RequestParam(name = "exclude_local", required = false) Boolean exclude_local,
-            @RequestParam(name = "internal_search", required = false) Boolean internal_search,
+            @RequestParam(name = "instance", required = false) String instance,
+            @RequestParam(name = "member_class", required = false) String member_class,
+            @RequestParam(name = "member_code", required = false) String member_code,
             @RequestParam(name = "show_members", required = false) Boolean show_members,
-            @RequestParam(name = "instance", required = false) String instance) {
+            @RequestParam(name = "exclude_local", required = false) Boolean exclude_local,
+            @RequestParam(name = "internal_search", required = false) Boolean internal_search) {
         try {
             String url = Utils.SS_CONFIG_URL + "/clients";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
                     Map.entry("Accept", "application/json"));
             CustomHttpRequest httpRequest = new CustomHttpRequest("GET", url, headers);
+            httpRequest.add_query_param("instance", instance);
+            httpRequest.add_query_param("member_class", member_class);
+            httpRequest.add_query_param("member_code", member_code);
+            httpRequest.add_query_param("show_members", show_members);
             httpRequest.add_query_param("exclude_local", exclude_local);
             httpRequest.add_query_param("internal_search", internal_search);
-            httpRequest.add_query_param("show_members", show_members);
-            httpRequest.add_query_param("instance", instance);
             HttpResponse httpResponse = httpRequest.request();
             if (httpResponse.getStatusLine().getStatusCode() == 200) {
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());

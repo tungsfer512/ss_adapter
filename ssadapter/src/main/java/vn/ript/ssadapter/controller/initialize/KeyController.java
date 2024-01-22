@@ -109,6 +109,7 @@ public class KeyController {
                     !body.containsKey("ca_name") ||
                     !body.containsKey("csr_format") ||
                     !body.containsKey("subject_field_values")) {
+                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
                 return CustomResponse.Response_file(400, null, null);
             }
 
@@ -147,6 +148,9 @@ public class KeyController {
                 return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), inputStreamResource,
                         filename);
             } else {
+                System.out.println("-------------------------------------------------");
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                System.out.println(jsonResponse);
                 return CustomResponse.Response_file(httpResponse.getStatusLine().getStatusCode(), null, null);
             }
         } catch (Exception e) {

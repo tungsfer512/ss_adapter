@@ -102,9 +102,9 @@ public class ContactController {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
-            String subject = (String) body.get("subject");
+            String subject = body.get("subject").toString();
             Object tmp_recipients = body.get("recipients");
-            String message = (String) body.get("message");
+            String message = body.get("message").toString();
 
             Gson gson = new Gson();
             JSONArray jsonArray = new JSONArray(gson.toJson(tmp_recipients));

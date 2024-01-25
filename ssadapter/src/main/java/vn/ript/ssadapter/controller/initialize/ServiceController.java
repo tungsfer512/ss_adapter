@@ -146,7 +146,7 @@ public class ServiceController {
             Boolean ssl_auth_all = (Boolean) body.get("ssl_auth_all");
             Integer timeout = (Integer) body.get("timeout");
             Boolean timeout_all = (Boolean) body.get("timeout_all");
-            String url_tmp = (String) body.get("url");
+            String url_tmp = body.get("url").toString();
             Boolean url_all = (Boolean) body.get("url_all");
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
             if (!adapter_data_tmp.containsKey("description") ||
@@ -214,9 +214,9 @@ public class ServiceController {
                     !body.containsKey("adapter_data")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
-            String method = (String) body.get("method");
-            String path = (String) body.get("path");
-            String service_code = (String) body.get("service_code");
+            String method = body.get("method").toString();
+            String path = body.get("path").toString();
+            String service_code = body.get("service_code").toString();
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
             if (!adapter_data_tmp.containsKey("name") ||
                     !adapter_data_tmp.containsKey("description") ||

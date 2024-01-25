@@ -48,6 +48,31 @@ import vn.ript.ssadapter.utils.Utils;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class ClientController {
 
+    public ResponseEntity<Map<String, Object>> deleteObjectXRoad(String id) {
+        try {
+            String url = Utils.SS_CONFIG_URL + "/clients/" + id;
+            Map<String, String> headers = Map.ofEntries(
+                    Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
+                    Map.entry("Accept", "application/json"));
+            CustomHttpRequest httpRequest = new CustomHttpRequest("DELETE", url, headers);
+            HttpResponse httpResponse = httpRequest.request();
+            if (httpResponse.getStatusLine().getStatusCode() == 204) {
+                Optional<Organization> checkOrganization = organizationService.findBySsId(id);
+                if (checkOrganization.isPresent()) {
+                    Organization organization = checkOrganization.get();
+                    organizationService.deleteById(organization.getId());
+                }
+                return CustomResponse.Response_no_data(httpResponse.getStatusLine().getStatusCode());
+            } else {
+                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+                        jsonResponse);
+            }
+        } catch (Exception e) {
+            return CustomResponse.Response_data(500, e.toString());
+        }
+    }
+
     @Autowired
     OrganizationService organizationService;
 
@@ -155,70 +180,127 @@ public class ClientController {
             CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
             HttpResponse httpResponse = httpRequest.request(entity);
             if (httpResponse.getStatusLine().getStatusCode() == 201) {
+                System.out.println("============================== 1");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+                System.out.println("============================== 2");
                 JSONObject jsonObject = new JSONObject(jsonResponse);
+                System.out.println("============================== 3");
                 String organId = adapter_data_tmp.get("organId");
+                System.out.println("============================== 4");
                 String ssId = jsonObject.getString("id");
+                System.out.println("============================== 5");
                 String organizationInCharge = null;
+                System.out.println("============================== 6");
                 if (adapter_data_tmp.containsKey("organizationInCharge")) {
+                    System.out.println("============================== 7");
                     organizationInCharge = adapter_data_tmp.get("organizationInCharge");
                 }
+                System.out.println("============================== 8");
                 String organName = adapter_data_tmp.get("organName");
+                System.out.println("============================== 9");
                 String organAdd = adapter_data_tmp.get("organAdd");
+                System.out.println("============================== 10");
                 String email = adapter_data_tmp.get("email");
+                System.out.println("============================== 11");
                 String telephone = adapter_data_tmp.get("telephone");
+                System.out.println("============================== 12");
                 String fax = adapter_data_tmp.get("fax");
+                System.out.println("============================== 13");
                 String website = adapter_data_tmp.get("website");
+                System.out.println("============================== 14");
                 String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
+                System.out.println("============================== 15");
                 String xRoadClient = Utils.SS_ID.replace(':', '/');
+                System.out.println("============================== 16");
                 String urlManage = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
                         "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
+                System.out.println("============================== 17");
                 Map<String, String> headersManage = new HashMap<>();
+                System.out.println("============================== 18");
                 headersManage.put("X-Road-Client", xRoadClient);
+                System.out.println("============================== 19");
 
                 JSONObject jsonPostObjectManage = new JSONObject();
+                System.out.println("============================== 20");
                 jsonPostObjectManage.put("organId", organId);
+                System.out.println("============================== 21");
                 jsonPostObjectManage.put("ssId", ssId);
+                System.out.println("============================== 22");
                 jsonPostObjectManage.put("organizationInCharge", organizationInCharge);
+                System.out.println("============================== 23");
                 jsonPostObjectManage.put("organName", organName);
+                System.out.println("============================== 24");
                 jsonPostObjectManage.put("organAdd", organAdd);
+                System.out.println("============================== 25");
                 jsonPostObjectManage.put("email", email);
+                System.out.println("============================== 26");
                 jsonPostObjectManage.put("telephone", telephone);
+                System.out.println("============================== 27");
                 jsonPostObjectManage.put("fax", fax);
+                System.out.println("============================== 28");
                 jsonPostObjectManage.put("website", website);
+                System.out.println("============================== 29");
 
                 StringEntity entityManage = new StringEntity(jsonPostObjectManage.toString(),
                         ContentType.APPLICATION_JSON);
+                System.out.println("============================== 23");
 
                 CustomHttpRequest httpRequestManage = new CustomHttpRequest("POST", urlManage, headersManage);
-                HttpResponse httpResponseManage = httpRequestManage.request(entityManage);
-                if (httpResponseManage.getStatusLine().getStatusCode() == 201) {
-                    Organization organization = new Organization();
-                    String UUID = Utils.UUID();
-                    organization.setId(UUID);
-                    organization.setOrganId(organId);
-                    organization.setSsId(ssId);
-                    organization.setOrganizationInCharge(organizationInCharge);
-                    organization.setOrganName(organName);
-                    organization.setOrganAdd(organAdd);
-                    organization.setEmail(email);
-                    organization.setTelephone(telephone);
-                    organization.setFax(fax);
-                    organization.setWebsite(website);
-                    Organization organizationRes = organizationService.save(organization);
-                    jsonObject.put("adapter_data", organizationRes);
-                    return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
-                            jsonObject.toMap());
-                } else {
-                    return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
-                            httpResponseManage.toString());
+                System.out.println("============================== 24");
+                try {
+                    HttpResponse httpResponseManage = httpRequestManage.request(entityManage);
+                    System.out.println("============================== 25");
+                    if (httpResponseManage.getStatusLine().getStatusCode() == 201) {
+                        System.out.println("============================== 26");
+                        Organization organization = new Organization();
+                        System.out.println("============================== 27");
+                        String UUID = Utils.UUID();
+                        System.out.println("============================== 28");
+                        organization.setId(UUID);
+                        System.out.println("============================== 29");
+                        organization.setOrganId(organId);
+                        System.out.println("============================== 30");
+                        organization.setSsId(ssId);
+                        System.out.println("============================== 31");
+                        organization.setOrganizationInCharge(organizationInCharge);
+                        System.out.println("============================== 32");
+                        organization.setOrganName(organName);
+                        System.out.println("============================== 33");
+                        organization.setOrganAdd(organAdd);
+                        System.out.println("============================== 34");
+                        organization.setEmail(email);
+                        System.out.println("============================== 35");
+                        organization.setTelephone(telephone);
+                        System.out.println("============================== 36");
+                        organization.setFax(fax);
+                        System.out.println("============================== 37");
+                        organization.setWebsite(website);
+                        System.out.println("============================== 38");
+                        Organization organizationRes = organizationService.save(organization);
+                        System.out.println("============================== 39");
+                        jsonObject.put("adapter_data", organizationRes);
+                        System.out.println("============================== 40");
+                        return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
+                                jsonObject.toMap());
+                    } else {
+                        System.out.println("============================== 41");
+                        deleteObjectXRoad(ssId);
+                        return CustomResponse.Response_data(httpResponseManage.getStatusLine().getStatusCode(),
+                                httpResponseManage.toString());
+                    }
+                } catch (Exception e) {
+                    System.out.println("============================== 412");
+                    deleteObjectXRoad(ssId);
+                    return CustomResponse.Response_data(500, e.toString());
                 }
             } else {
+                System.out.println("============================== 42");
                 String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
                 return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
                         jsonResponse);
             }
         } catch (Exception e) {
+            System.out.println("============================== x");
             return CustomResponse.Response_data(500, e.toString());
         }
     }
@@ -812,7 +894,7 @@ public class ClientController {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
             JSONObject jsonPostObject = new JSONObject();
-            if (!((String) body.get("type")).equalsIgnoreCase("WSDL")) {
+            if (!(body.get("type").toString()).equalsIgnoreCase("WSDL")) {
                 if (!body.containsKey("rest_service_code")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin!");
                 }
@@ -854,10 +936,10 @@ public class ClientController {
                     serviceDescription.setOrganization(checkOrganization.get());
 
                     List<Service> services_tmp = new ArrayList<>();
-                    if (!((String) body.get("type")).equalsIgnoreCase("WSDL")) {
+                    if (!(body.get("type").toString()).equalsIgnoreCase("WSDL")) {
                         Service service = new Service();
                         String serviceSsId = jsonObject.getString("client_id") + ":"
-                                + ((String) body.get("rest_service_code"));
+                                + (body.get("rest_service_code").toString());
                         service.setSsId(serviceSsId);
                         service.setEndpoints(new ArrayList<>());
                         service.setDescription(adapter_data_tmp_service.get("description"));

@@ -64,11 +64,11 @@ public class InitializationController {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
 
-            String owner_member_class = (String) body.get("owner_member_class");
-            String owner_member_code = (String) body.get("owner_member_code");
-            String security_server_code = (String) body.get("security_server_code");
-            String software_token_pin = (String) body.get("software_token_pin");
-            String ignore_warnings = (String) body.get("ignore_warnings");
+            String owner_member_class = body.get("owner_member_class").toString();
+            String owner_member_code = body.get("owner_member_code").toString();
+            String security_server_code = body.get("security_server_code").toString();
+            String software_token_pin = body.get("software_token_pin").toString();
+            String ignore_warnings = body.get("ignore_warnings").toString();
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("owner_member_class", owner_member_class);

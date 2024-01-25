@@ -256,8 +256,8 @@ public class SystemController {
                     !body.containsKey("url")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
-            String name = (String) body.get("name");
-            String tsa_url = (String) body.get("url");
+            String name = body.get("name").toString();
+            String tsa_url = body.get("url").toString();
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("name", name);
@@ -297,8 +297,8 @@ public class SystemController {
                     !body.containsKey("url")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin!");
             }
-            String name = (String) body.get("name");
-            String tsa_url = (String) body.get("url");
+            String name = body.get("name").toString();
+            String tsa_url = body.get("url").toString();
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("name", name);

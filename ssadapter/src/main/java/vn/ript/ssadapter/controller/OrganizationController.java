@@ -74,7 +74,7 @@ public class OrganizationController {
             String ssId = body.get("ssId").toString();
             String organizationInCharge = null;
             if (body.containsKey("organizationInCharge")) {
-                organizationInCharge = (String) body.get("organizationInCharge");
+                organizationInCharge = body.get("organizationInCharge").toString();
             }
             String organName = body.get("organName").toString();
             String organAdd = body.get("organAdd").toString();

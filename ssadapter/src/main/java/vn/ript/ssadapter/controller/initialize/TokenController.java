@@ -79,7 +79,7 @@ public class TokenController {
             if (!body.containsKey("name")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String name = (String) body.get("name");
+            String name = body.get("name").toString();
             String url = Utils.SS_CONFIG_URL + "/tokens/" + id;
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
@@ -112,8 +112,8 @@ public class TokenController {
             if (!body.containsKey("old_pin") || !body.containsKey("new_pin")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String old_pin = (String) body.get("old_pin");
-            String new_pin = (String) body.get("new_pin");
+            String old_pin = body.get("old_pin").toString();
+            String new_pin = body.get("new_pin").toString();
             String url = Utils.SS_CONFIG_URL + "/tokens/" + id + "/pin";
             Map<String, String> headers = Map.ofEntries(
                     Map.entry("Authorization", "X-Road-ApiKey token=" + Utils.SS_API_KEY),
@@ -151,7 +151,7 @@ public class TokenController {
             if (!body.containsKey("password")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String password = (String) body.get("password");
+            String password = body.get("password").toString();
 
             JSONObject jsonPostObject = new JSONObject();
             jsonPostObject.put("password", password);
@@ -212,7 +212,7 @@ public class TokenController {
                     !body.containsKey("csr_generate_request")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String key_label = (String) body.get("key_label");
+            String key_label = body.get("key_label").toString();
             Map<String, Object> csr_generate_request_tmp = (Map<String, Object>) body.get("csr_generate_request");
             if (!csr_generate_request_tmp.containsKey("key_usage_type") ||
                     !csr_generate_request_tmp.containsKey("ca_name") ||
@@ -221,9 +221,9 @@ public class TokenController {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
-            String key_usage_type = (String) csr_generate_request_tmp.get("key_usage_type");
-            String ca_name = (String) csr_generate_request_tmp.get("ca_name");
-            String csr_format = (String) csr_generate_request_tmp.get("csr_format");
+            String key_usage_type = csr_generate_request_tmp.get("key_usage_type").toString();
+            String ca_name = csr_generate_request_tmp.get("ca_name").toString();
+            String csr_format = csr_generate_request_tmp.get("csr_format").toString();
             Map<String, String> subject_field_values_tmp = (Map<String, String>) csr_generate_request_tmp
                     .get("subject_field_values");
             if (!subject_field_values_tmp.containsKey("C") ||
@@ -248,7 +248,7 @@ public class TokenController {
                 if (!csr_generate_request_tmp.containsKey("member_id")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin");
                 }
-                String member_id = (String) csr_generate_request_tmp.get("member_id");
+                String member_id = csr_generate_request_tmp.get("member_id").toString();
                 csr_generate_request.put("member_id", member_id);
             }
 
@@ -286,7 +286,7 @@ public class TokenController {
                     !body.containsKey("csr_generate_request")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String key_label = (String) body.get("key_label");
+            String key_label = body.get("key_label").toString();
             Map<String, Object> csr_generate_request_tmp = (Map<String, Object>) body.get("csr_generate_request");
             if (!csr_generate_request_tmp.containsKey("key_usage_type") ||
                     !csr_generate_request_tmp.containsKey("ca_name") ||
@@ -295,9 +295,9 @@ public class TokenController {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
-            String key_usage_type = (String) csr_generate_request_tmp.get("key_usage_type");
-            String ca_name = (String) csr_generate_request_tmp.get("ca_name");
-            String csr_format = (String) csr_generate_request_tmp.get("csr_format");
+            String key_usage_type = csr_generate_request_tmp.get("key_usage_type").toString();
+            String ca_name = csr_generate_request_tmp.get("ca_name").toString();
+            String csr_format = csr_generate_request_tmp.get("csr_format").toString();
             Map<String, String> subject_field_values_tmp = (Map<String, String>) csr_generate_request_tmp
                     .get("subject_field_values");
             if (!subject_field_values_tmp.containsKey("C") ||
@@ -322,7 +322,7 @@ public class TokenController {
                 if (!csr_generate_request_tmp.containsKey("member_id")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin");
                 }
-                String member_id = (String) csr_generate_request_tmp.get("member_id");
+                String member_id = csr_generate_request_tmp.get("member_id").toString();
                 csr_generate_request.put("member_id", member_id);
             }
 

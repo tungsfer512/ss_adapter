@@ -160,10 +160,10 @@ public class ServiceDescriptionController {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
 
-            String type = (String) body.get("type");
-            String url_tmp = (String) body.get("url");
-            String rest_service_code = (String) body.get("rest_service_code");
-            String new_rest_service_code = (String) body.get("new_rest_service_code");
+            String type = body.get("type").toString();
+            String url_tmp = body.get("url").toString();
+            String rest_service_code = body.get("rest_service_code").toString();
+            String new_rest_service_code = body.get("new_rest_service_code").toString();
             Boolean ignore_warnings = (Boolean) body.get("ignore_warnings");
             Map<String, Object> adapter_data_tmp = (Map<String, Object>) body.get("adapter_data");
             if (!adapter_data_tmp.containsKey("service_description")) {

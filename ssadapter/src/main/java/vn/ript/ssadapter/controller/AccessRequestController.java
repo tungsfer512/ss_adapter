@@ -67,25 +67,25 @@ public class AccessRequestController {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
             String fromId = Utils.SS_ID;
-            String fromName = (String) body.get("fromName");
-            String handleType = (String) body.get("handleType");
+            String fromName = body.get("fromName").toString();
+            String handleType = body.get("handleType").toString();
             if (handleType.equalsIgnoreCase(Constants.LOAI_XU_LY_YEU_CAU_CAP_QUYEN.MANAGE.ma())) {
                 toId = Utils.SS_MANAGE_ID;
             } else {
-                toId = (String) body.get("toId");
+                toId = body.get("toId").toString();
             }
-            String description = (String) body.get("description");
-            String type = (String) body.get("type");
+            String description = body.get("description").toString();
+            String type = body.get("type").toString();
             if (type.equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.SERVICE.ma())) {
                 if (!body.containsKey("externalServiceId")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin");
                 }
-                externalServiceId = Integer.parseInt((String) body.get("externalServiceId"));
+                externalServiceId = Integer.parseInt(body.get("externalServiceId").toString());
             } else if (type.equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.ENDPOINT.ma())) {
                 if (!body.containsKey("externalEndpointId")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin");
                 }
-                externalEndpointId = Integer.parseInt((String) body.get("externalEndpointId"));
+                externalEndpointId = Integer.parseInt(body.get("externalEndpointId").toString());
             }
 
             Optional<Organization> checkFrom = organizationService.findBySsId(fromId);
@@ -311,7 +311,7 @@ public class AccessRequestController {
         try {
             String declinedReason = null;
             if (body.containsKey("declinedReason")) {
-                declinedReason = (String) body.get("declinedReason");
+                declinedReason = body.get("declinedReason").toString();
             }
             Optional<AccessRequest> checkAccessRequest = accessRequestService.findById(id);
             if (!checkAccessRequest.isPresent()) {

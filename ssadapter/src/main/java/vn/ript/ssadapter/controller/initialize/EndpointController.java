@@ -103,10 +103,10 @@ public class EndpointController {
             }
 
             Boolean generated = (Boolean) body.get("generated");
-            String id_tmp = (String) body.get("id");
-            String method = (String) body.get("method");
-            String path = (String) body.get("path");
-            String service_code = (String) body.get("service_code");
+            String id_tmp = body.get("id").toString();
+            String method = body.get("method").toString();
+            String path = body.get("path").toString();
+            String service_code = body.get("service_code").toString();
             Map<String, String> adapter_data_tmp = (Map<String, String>) body.get("adapter_data");
             if (!adapter_data_tmp.containsKey("name") ||
                     !adapter_data_tmp.containsKey("description") ||

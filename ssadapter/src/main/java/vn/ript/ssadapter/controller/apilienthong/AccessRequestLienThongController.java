@@ -57,12 +57,12 @@ public class AccessRequestLienThongController {
                     !body.containsKey("type")) {
                 return CustomResponse.Response_data(400, "Thieu thong tin");
             }
-            String fromId = (String) body.get("fromId");
-            String fromName = (String) body.get("fromName");
-            String toId = (String) body.get("toId");
-            String externalId = (String) body.get("externalId");
-            String description = (String) body.get("description");
-            String type = (String) body.get("type");
+            String fromId = body.get("fromId").toString();
+            String fromName = body.get("fromName").toString();
+            String toId = body.get("toId").toString();
+            String externalId = body.get("externalId").toString();
+            String description = body.get("description").toString();
+            String type = body.get("type").toString();
             if (type.equalsIgnoreCase(Constants.LOAI_YEU_CAU_CAP_QUYEN.SERVICE.ma())) {
                 if (!body.containsKey("externalServiceId")) {
                     return CustomResponse.Response_data(400, "Thieu thong tin");
@@ -140,7 +140,7 @@ public class AccessRequestLienThongController {
         try {
             String declinedReason = null;
             if (body.containsKey("declinedReason")) {
-                declinedReason = (String) body.get("declinedReason");
+                declinedReason = body.get("declinedReason").toString();
             }
             Optional<AccessRequest> checkAccessRequest = accessRequestService.findByExternalId(externalId);
             if (!checkAccessRequest.isPresent()) {

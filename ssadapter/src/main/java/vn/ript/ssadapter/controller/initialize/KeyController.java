@@ -109,13 +109,13 @@ public class KeyController {
                     !body.containsKey("ca_name") ||
                     !body.containsKey("csr_format") ||
                     !body.containsKey("subject_field_values")) {
-                        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
+                System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++++");
                 return CustomResponse.Response_file(400, null, null);
             }
 
-            String key_usage_type = (String) body.get("key_usage_type");
-            String ca_name = (String) body.get("ca_name");
-            String csr_format = (String) body.get("csr_format");
+            String key_usage_type = body.get("key_usage_type").toString();
+            String ca_name = body.get("ca_name").toString();
+            String csr_format = body.get("csr_format").toString();
             Map<String, String> subject_field_values_tmp = (Map<String, String>) body.get("subject_field_values");
 
             JSONObject subject_field_values = new JSONObject();
@@ -132,7 +132,7 @@ public class KeyController {
             jsonPostObject.put("subject_field_values", subject_field_values);
 
             if (key_usage_type.equalsIgnoreCase("SIGNING")) {
-                String member_id = (String) body.get("member_id");
+                String member_id = body.get("member_id").toString();
                 jsonPostObject.put("member_id", member_id);
             }
             String filename = Utils.UUID() + "." + csr_format.toLowerCase();

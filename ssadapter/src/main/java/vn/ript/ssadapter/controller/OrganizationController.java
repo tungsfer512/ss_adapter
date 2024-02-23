@@ -83,29 +83,29 @@ public class OrganizationController {
             String fax = body.get("fax").toString();
             String website = body.get("website").toString();
 
-            String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
-            String xRoadClient = Utils.SS_ID.replace(':', '/');
-            String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
-                    "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
-            Map<String, String> headers = new HashMap<>();
-            headers.put("X-Road-Client", xRoadClient);
+            // String subsystem_code = Utils.SS_MANAGE_ID.replace(':', '/');
+            // String xRoadClient = Utils.SS_ID.replace(':', '/');
+            // String url = Utils.SS_BASE_URL + "/r1/" + subsystem_code +
+            //         "/" + Utils.SS_MANAGE_SERVICE_CODE + "/organizations";
+            // Map<String, String> headers = new HashMap<>();
+            // headers.put("X-Road-Client", xRoadClient);
 
-            JSONObject jsonPostObject = new JSONObject();
-            jsonPostObject.put("organId", organId);
-            jsonPostObject.put("ssId", ssId);
-            jsonPostObject.put("organizationInCharge", organizationInCharge);
-            jsonPostObject.put("organName", organName);
-            jsonPostObject.put("organAdd", organAdd);
-            jsonPostObject.put("email", email);
-            jsonPostObject.put("telephone", telephone);
-            jsonPostObject.put("fax", fax);
-            jsonPostObject.put("website", website);
+            // JSONObject jsonPostObject = new JSONObject();
+            // jsonPostObject.put("organId", organId);
+            // jsonPostObject.put("ssId", ssId);
+            // jsonPostObject.put("organizationInCharge", organizationInCharge);
+            // jsonPostObject.put("organName", organName);
+            // jsonPostObject.put("organAdd", organAdd);
+            // jsonPostObject.put("email", email);
+            // jsonPostObject.put("telephone", telephone);
+            // jsonPostObject.put("fax", fax);
+            // jsonPostObject.put("website", website);
 
-            StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
+            // StringEntity entity = new StringEntity(jsonPostObject.toString(), ContentType.APPLICATION_JSON);
 
-            CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
-            HttpResponse httpResponse = httpRequest.request(entity);
-            if (httpResponse.getStatusLine().getStatusCode() == 201) {
+            // CustomHttpRequest httpRequest = new CustomHttpRequest("POST", url, headers);
+            // HttpResponse httpResponse = httpRequest.request(entity);
+            // if (httpResponse.getStatusLine().getStatusCode() == 201) {
 
                 String UUID = Utils.UUID();
                 organization.setId(UUID);
@@ -120,11 +120,11 @@ public class OrganizationController {
                 organization.setWebsite(website);
                 Organization organizationRes = organizationService.save(organization);
                 return CustomResponse.Response_data(201, organizationRes);
-            } else {
-                String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
-                return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
-                        jsonResponse);
-            }
+            // } else {
+            //     String jsonResponse = EntityUtils.toString(httpResponse.getEntity());
+            //     return CustomResponse.Response_data(httpResponse.getStatusLine().getStatusCode(),
+            //             jsonResponse);
+            // }
         } catch (Exception e) {
             return CustomResponse.Response_data(500, e);
         }

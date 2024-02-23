@@ -8,17 +8,18 @@ services:
   ssadapterdbhost:
     container_name: ssadapterdbhost
     hostname: ssadapterdbhost
-    image: postgres:12
+    image: postgres:14
     env_file:
       - ./.env
     ports:
       - $POSTGRES_EXTERNAL_PORT:$POSTGRES_INTERNAL_PORT
     networks:
-      ssadapter:
-          null
+      ssadapter: null
     restart: unless-stopped
     volumes:
-      - $MOUNT_PGDATA:$PGDATA
+      - $MOUNT_PGDATA_1:$PGDATA_1
+      - $MOUNT_PGDATA_2:$PGDATA_2
+
   ssadapterapi:
     container_name: ssadapterapi
     hostname: ssadapterapi
@@ -41,13 +42,18 @@ services:
         - MAIL_PASSWORD=$MAIL_PASSWORD
         - MAIL_PROPERTIES_MAIL_SMTP_AUTH=$MAIL_PROPERTIES_MAIL_SMTP_AUTH
         - MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE=$MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE
+        - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_CLIENT_ID
+        - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATION_GRANT_TYPE=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_AUTHORIZATION_GRANT_TYPE
+        - SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE=$SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_KEYCLOAK_SCOPE
+        - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI=$SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_ISSUER_URI
+        - SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE=$SPRING_SECURITY_OAUTH2_CLIENT_PROVIDER_KEYCLOAK_USER_NAME_ATTRIBUTE
+        - SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI=$SPRING_SECURITY_OAUTH2_RESOURCESERVER_JWT_ISSUER_URI
     depends_on:
       - ssadapterdbhost
     ports:
       - $SERVER_EXTERNAL_PORT:$SERVER_INTERNAL_PORT
     networks:
-      ssadapter:
-          null
+      ssadapter: null
     restart: unless-stopped
     volumes:
       - ./ssadapter/src/main/:$API_WORK_DIR/src/main
@@ -55,22 +61,21 @@ services:
       - ./ssadapter/target:$API_WORK_DIR/target
       - ./ssadapter/libs:$API_WORK_DIR/libs
       - ./ssadapter/:$API_WORK_DIR
-  ssadapterweb:
-    container_name: ssadapterweb
-    hostname: ssadapterweb
-    env_file:
-      - ./.env
-    build:
-      context: ./web
-      dockerfile: Dockerfile
-      args:
-        - WEB_WORK_DIR=$WEB_WORK_DIR
-    ports:
-      - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
-    volumes:
-      - ./web/src:$WEB_WORK_DIR/src
-      - ./web/config:$WEB_WORK_DIR/config
-    networks:
-      ssadapter:
-          null
-    restart: unless-stopped
+  # ssadapterweb:
+  #   container_name: ssadapterweb
+  #   hostname: ssadapterweb
+  #   env_file:
+  #     - ./.env
+  #   build:
+  #     context: ./web
+  #     dockerfile: Dockerfile
+  #     args:
+  #       - WEB_WORK_DIR=$WEB_WORK_DIR
+  #   ports:
+  #     - $WEB_EXTERNAL_PORT:$WEB_INTERNAL_PORT
+  #   volumes:
+  #     - ./web/src:$WEB_WORK_DIR/src
+  #     - ./web/config:$WEB_WORK_DIR/config
+  #   networks:
+  #     ssadapter: null
+  #   restart: unless-stopped

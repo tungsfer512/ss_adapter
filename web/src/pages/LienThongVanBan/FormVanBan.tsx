@@ -40,7 +40,7 @@ const FormVanBan = () => {
         payload.append('files', file);
       }
       let json_data = {
-        'fromId': 'CS:GOV:MANAGESS2MC:MANAGEMENT',
+        'fromId': 'CS:GOV:SS1MC:SS1SUB1',
         'toIds': values.to_ids,
         'codeNumber': values.code_number,
         'codeNotation': values.code_notation,

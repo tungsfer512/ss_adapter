@@ -1,183 +1,183 @@
-// [
-//     {
-//         "organizationId": "CS:GOV:MANAGESS2MC:ABCABC",
-//         "ssId": "78",
-//         "description": "Mo ta 78"
-//     },
-//     {
-//         "serviceDescriptionId": 1,
-//         "ssId": "CS:GOV:MANAGESS2MC:ABCABC:1237823",
-//         "description": "Mo ta 1CS:GOV:MANAGESS2MC:ABCABC:1237823"
-//     },
-//     {
-//         "serviceId": 1,
-//         "ssId": "1",
-//         "name": "Ten 1",
-//         "path": "Ten 1",
-//         "method": "Ten 1",
-//         "description": "Mo ta 1",
-//         "inputDescription": "Mo ta đau vao 1",
-//         "outputDescription": "Mo ta dau ra 1"
-//     },
-//     {
-//         "organId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
-//         "ssId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
-//         "organizationInCharge": "",
-//         "organName": "SS1 Subsystem 1",
-//         "organAdd": "SS1 Subsystem 1 Address",
-//         "email": "ss1sub1@gmail.com",
-//         "telephone": "0123456789",
-//         "fax": "0123456789",
-//         "website": "ss1sub1.com.vn"
-//     },
-//     {
-//         "codeNumber": "123",
-//         "codeNotation": "NQ-CP",
-//         "promulgationDatePlace": "Ha Noi",
-//         "promulgationDate": "2023/12/15",
-//         "documentTypeId": 1,
-//         "subject": "Nghi Quyet 20",
-//         "content": "Mo ta nghi quyet 20",
-//         "otherInfoPageAmount": 12,
-//         "steeringType": 1,
-//         "businessBussinessDocType": 2,
-//         "businessBussinessDocReason": "abcabc",
-//         "businessDocumentId": "abcabc",
-//         "isPublic": true,
-//         "enable": true
-//     },
-//     {
-//         "type": 1,
-//         "typeDetail": "Bao cao",
-//         "typeName": "Mo ta bao cao"
-//     },
-//     {
-//         "codeNumber": "123",
-//         "codeNotation": "NQ-CP",
-//         "promulgationDatePlace": "Ha Noi",
-//         "promulgationDate": "2023/12/20",
-//         "documentTypeId": 1,
-//         "subject": "ABC",
-//         "content": "Mo ta nghi quyet 20",
-//         "otherInfoPageAmount": 12,
-//         "steeringType": 2,
-//         "isPublic": false,
-//         "enable": true,
-//         "attachmentDescriptionList": [
-//             "abc",
-//             "xyz"
-//         ],
-//         "allowedOrganizations": [
-//             "CS:GOV:MANAGESS2MC:ABCABC"
-//         ]
-//     },
-//     {
-//         "documentCatalogId": "b33622f1-eab8-4ad9-955e-fa324827e074",
-//         "organizationId": "CS:GOV:MANAGESS2MC:MEMBER4SC",
-//         "description": "Member 4 xin quyen truy cap file"
-//     }
-// ]
-// [
-//     {
-//         "id": 1,
-//         "organization": {
-//             "id": "b33417dc-af5a-45dd-bb51-40f25d59ca23",
-//             "organId": "CS:GOV:MANAGESS2MC:ABCABC",
-//             "ssId": "CS:GOV:MANAGESS2MC:ABCABC",
-//             "organizationInCharge": "",
-//             "organName": "SS1 Subsystem 1",
-//             "organAdd": "SS1 Subsystem 1 Address",
-//             "email": "ss1sub1@gmail.com",
-//             "telephone": "0123456789",
-//             "fax": "0123456789",
-//             "website": "ss1sub1.com.vn"
-//         },
-//         "type": "service/endpoint",
-//         "service": {
-//             "endpoints": [
-//                 {
-//                     "path": "**",
-//                     "method": "*",
-//                     "generated": true,
-//                     "service_code": "lienthongvanban",
-//                     "id": "218"
-//                 },
-//                 {
-//                     "path": "/adsk",
-//                     "method": "GET",
-//                     "generated": false,
-//                     "service_code": "lienthongvanban",
-//                     "id": "284"
-//                 },
-//                 {
-//                     "path": "/adsad",
-//                     "method": "POST",
-//                     "generated": false,
-//                     "service_code": "lienthongvanban",
-//                     "id": "285"
-//                 },
-//                 {
-//                     "path": "/bnkmvbn",
-//                     "method": "PATCH",
-//                     "generated": false,
-//                     "service_code": "lienthongvanban",
-//                     "id": "286"
-//                 },
-//                 {
-//                     "path": "/sczxczx",
-//                     "method": "OPTIONS",
-//                     "generated": false,
-//                     "service_code": "lienthongvanban",
-//                     "id": "287"
-//                 }
-//             ],
-//             "adapter_data": {
-//                 "id": 2,
-//                 "ssId": 123,
-//                 "description": "",
-//                 "endpoints": [
-//                     {
-//                         "id": 1,
-//                         "ssId": 284,
-//                         "name": "",
-//                         "method": "",
-//                         "path": "",
-//                         "description": "",
-//                         "inputDescription": "",
-//                         "outputDescription": "",
-//                     }
-//                 ],
-//             },
-//             "service_code": "lienthongvanban",
-//             "id": "CS:GOV:MANAGESS2MC:ABCABC:lienthongvanban",
-//             "ssl_auth": false,
-//             "timeout": 60,
-//             "url": "http://192.168.10.73:9994/api/lienthong/v1",
-//             "full_service_code": "lienthongvanban"
-//         }, // neu type == service
-//         "endpoint": {
-//             "path": "/adsk",
-//             "adapter_data": {
-//                 "id": 1,
-//                 "ssId": 284,
-//                 "name": "",
-//                 "method": "",
-//                 "path": "",
-//                 "description": "",
-//                 "inputDescription": "",
-//                 "outputDescription": "",
-//             },
-//             "method": "GET",
-//             "generated": false,
-//             "service_code": "lienthongvanban",
-//             "id": "284"
-//         }, // neu type == endpoint
-//         "description": "mo ta",
-//         "status": "pending/approved/declined",
-//         "createAt": "yyyy/MM/dd HH:mm:ss",
-//         "updateAt": "yyyy/MM/dd HH:mm:ss"
-//     }
-// ]
+[
+    {
+        "organizationId": "CS:GOV:MANAGESS2MC:ABCABC",
+        "ssId": "78",
+        "description": "Mo ta 78"
+    },
+    {
+        "serviceDescriptionId": 1,
+        "ssId": "CS:GOV:MANAGESS2MC:ABCABC:1237823",
+        "description": "Mo ta 1CS:GOV:MANAGESS2MC:ABCABC:1237823"
+    },
+    {
+        "serviceId": 1,
+        "ssId": "1",
+        "name": "Ten 1",
+        "path": "Ten 1",
+        "method": "Ten 1",
+        "description": "Mo ta 1",
+        "inputDescription": "Mo ta đau vao 1",
+        "outputDescription": "Mo ta dau ra 1"
+    },
+    {
+        "organId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
+        "ssId": "CS:GOV:MANAGESS2MC:MANAGEMENT",
+        "organizationInCharge": "",
+        "organName": "SS1 Subsystem 1",
+        "organAdd": "SS1 Subsystem 1 Address",
+        "email": "ss1sub1@gmail.com",
+        "telephone": "0123456789",
+        "fax": "0123456789",
+        "website": "ss1sub1.com.vn"
+    },
+    {
+        "codeNumber": "123",
+        "codeNotation": "NQ-CP",
+        "promulgationDatePlace": "Ha Noi",
+        "promulgationDate": "2023/12/15",
+        "documentTypeId": 1,
+        "subject": "Nghi Quyet 20",
+        "content": "Mo ta nghi quyet 20",
+        "otherInfoPageAmount": 12,
+        "steeringType": 1,
+        "businessBussinessDocType": 2,
+        "businessBussinessDocReason": "abcabc",
+        "businessDocumentId": "abcabc",
+        "isPublic": true,
+        "enable": true
+    },
+    {
+        "type": 1,
+        "typeDetail": "Cong van",
+        "typeName": "Mo ta Cong van"
+    },
+    {
+        "codeNumber": "123",
+        "codeNotation": "NQ-CP",
+        "promulgationDatePlace": "Ha Noi",
+        "promulgationDate": "2023/12/20",
+        "documentTypeId": 1,
+        "subject": "ABC",
+        "content": "Mo ta nghi quyet 20",
+        "otherInfoPageAmount": 12,
+        "steeringType": 2,
+        "isPublic": false,
+        "enable": true,
+        "attachmentDescriptionList": [
+            "abc",
+            "xyz"
+        ],
+        "allowedOrganizations": [
+            "CS:GOV:MANAGESS2MC:ABCABC"
+        ]
+    },
+    {
+        "documentCatalogId": "b33622f1-eab8-4ad9-955e-fa324827e074",
+        "organizationId": "CS:GOV:MANAGESS2MC:MEMBER4SC",
+        "description": "Member 4 xin quyen truy cap file"
+    }
+]
+[
+    {
+        "id": 1,
+        "organization": {
+            "id": "b33417dc-af5a-45dd-bb51-40f25d59ca23",
+            "organId": "CS:GOV:MANAGESS2MC:ABCABC",
+            "ssId": "CS:GOV:MANAGESS2MC:ABCABC",
+            "organizationInCharge": "",
+            "organName": "SS1 Subsystem 1",
+            "organAdd": "SS1 Subsystem 1 Address",
+            "email": "ss1sub1@gmail.com",
+            "telephone": "0123456789",
+            "fax": "0123456789",
+            "website": "ss1sub1.com.vn"
+        },
+        "type": "service/endpoint",
+        "service": {
+            "endpoints": [
+                {
+                    "path": "**",
+                    "method": "*",
+                    "generated": true,
+                    "service_code": "lienthongvanban",
+                    "id": "218"
+                },
+                {
+                    "path": "/adsk",
+                    "method": "GET",
+                    "generated": false,
+                    "service_code": "lienthongvanban",
+                    "id": "284"
+                },
+                {
+                    "path": "/adsad",
+                    "method": "POST",
+                    "generated": false,
+                    "service_code": "lienthongvanban",
+                    "id": "285"
+                },
+                {
+                    "path": "/bnkmvbn",
+                    "method": "PATCH",
+                    "generated": false,
+                    "service_code": "lienthongvanban",
+                    "id": "286"
+                },
+                {
+                    "path": "/sczxczx",
+                    "method": "OPTIONS",
+                    "generated": false,
+                    "service_code": "lienthongvanban",
+                    "id": "287"
+                }
+            ],
+            "adapter_data": {
+                "id": 2,
+                "ssId": 123,
+                "description": "",
+                "endpoints": [
+                    {
+                        "id": 1,
+                        "ssId": 284,
+                        "name": "",
+                        "method": "",
+                        "path": "",
+                        "description": "",
+                        "inputDescription": "",
+                        "outputDescription": "",
+                    }
+                ],
+            },
+            "service_code": "lienthongvanban",
+            "id": "CS:GOV:MANAGESS2MC:ABCABC:lienthongvanban",
+            "ssl_auth": false,
+            "timeout": 60,
+            "url": "http://192.168.10.73:9994/api/lienthong/v1",
+            "full_service_code": "lienthongvanban"
+        }, // neu type == service
+        "endpoint": {
+            "path": "/adsk",
+            "adapter_data": {
+                "id": 1,
+                "ssId": 284,
+                "name": "",
+                "method": "",
+                "path": "",
+                "description": "",
+                "inputDescription": "",
+                "outputDescription": "",
+            },
+            "method": "GET",
+            "generated": false,
+            "service_code": "lienthongvanban",
+            "id": "284"
+        }, // neu type == endpoint
+        "description": "mo ta",
+        "status": "pending/approved/declined",
+        "createAt": "yyyy/MM/dd HH:mm:ss",
+        "updateAt": "yyyy/MM/dd HH:mm:ss"
+    }
+]
 {
     "id": "0",
     "name": "softToken-0",

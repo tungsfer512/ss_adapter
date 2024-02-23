@@ -15,7 +15,7 @@ export const getReceivedEdocList = (headers: any) => {
   return axios.get(`${ip4}/api/v1/document/edocs/getReceivedEdocList`, {
     headers: {
       ...headers,
-      organizationId: "CS:GOV:MANAGESS2MC:MANAGEMENT"
+      organizationId: "CS:GOV:SS1MC:SS1SUB1"
     }
   })
 }
@@ -24,7 +24,7 @@ export const getSentEdocList = (headers: any) => {
   return axios.get(`${ip4}/api/v1/document/edocs/getSentEdocList`, {
     headers: {
       ...headers,
-      organizationId: "CS:GOV:MANAGESS2MC:MANAGEMENT"
+      organizationId: "CS:GOV:SS1MC:SS1SUB1"
     }
   })
 }
@@ -33,7 +33,7 @@ export const sendEdoc = (headers: any, payload: any) => {
   return axios.post(`${ip4}/api/v1/document/edocs/new`, payload, {
     headers: {
       ...headers,
-      organizationId: "CS:GOV:MANAGESS2MC:MANAGEMENT"
+      organizationId: "CS:GOV:SS1MC:SS1SUB1"
     }
   })
 }
